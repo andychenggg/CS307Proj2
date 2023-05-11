@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>THE FORUM Login</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <style>
+    body {
+      background-color: #f6f8fa;
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      height: 100vh;
+    }
+
+    .login-wrapper {
+      width: 400px;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 4px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+
+    .logo {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .form-group label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .form-group input {
+      width: 90%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      outline: none;
+      text-align: center;
+    }
+
+    .form-group input[type="text"],
+    .form-group input[type="password"] {
+      width: 90%;
+      margin: 0 auto; /* 水平居中 */
+    }
+
+    .form-group input[type="submit"] {
+      background-color: #24292e;
+      color: #fff;
+      cursor: pointer;
+      text-align: center;
+      margin: 0 auto; /* 水平居中 */
+    }
+
+    .form-group input[type="submit"]:hover {
+      background-color: #1c2125;
+    }
+
+    .form-group .text-small {
+      font-size: 12px;
+      color: #586069;
+    }
+  </style>
+</head>
+<body>
+<div class="login-wrapper">
+  <h1 class="logo">
+    <img src="/Images/Logo.png" alt="TheForum" style="width: 120px; height: auto;">
+  </h1>
+  <form action="/login" method="post">
+    <div class="form-group">
+      <label for="username">Username</label>
+      <input type="text" id="username" name="username" required>
+    </div>
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" required>
+    </div>
+    <span th:if="${error}" style="color: red" th:text="${error}"></span><br>
+    <div class="form-group">
+      <input type="submit"  value="Log In" onclick="submitForm()">
+    </div>
+    <div class="form-group">
+      <p class="text-small">Don't have an account? <a href="/signup">Sign up</a></p>
+    </div>
+  </form>
+</div>
+<script>
+  function submitForm(event) {
+    event.preventDefault(); // 阻止表单的默认提交行为
+
+    const username = document.getElementById("username").value;
+    const password = document.getElementById("password").value;
+
+    const user = {
+      username: username,
+      password: password
+    };
+
+    $.ajax({
+      type: "POST",
+      url: "/login", // 指定后端接收请求的URL
+      data: JSON.stringify(user),
+      contentType: "application/json",
+      success: function(response) {
+        // 请求成功的处理逻辑
+        console.log("Login successful");
+        console.log(response);
+      },
+      error: function(error) {
+        // 请求失败的处理逻辑
+        console.log("Login failed");
+        console.log(error);
+      }
+    });
+  }
+</script>
+</body>
+</html>
