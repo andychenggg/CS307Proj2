@@ -40,6 +40,15 @@ public interface UserMapper extends BaseMapper<Users> {
     @Insert("insert into users values (#{userid}, #{username}, #{password}, #{registrationtime}, #{phone})")
     int addUser(String userid, String username, String password, LocalDateTime registrationtime, String phone);
 
+    @Insert("insert into likes values (#{postid}, #{likerid})")
+    int likePost(String postid, String likerid);
+
+    @Insert("insert into favorites values(#{postid}, #{collectorid})")
+    int collectPost(String postid, String collectorid);
+
+    @Insert("insert into shares values(#{postid}, #{shareid})")
+    int sharePost(String postid, String shareid);
+
     @Delete("delete from users where id=#{userid")
     int deleteById(String id);
 }
