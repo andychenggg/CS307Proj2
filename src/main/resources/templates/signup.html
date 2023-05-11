@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>THE FORUM signup</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <style>
+    body {
+      background-color: #f6f8fa;
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      height: 100vh;
+    }
+
+    .login-wrapper {
+      width: 400px;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 4px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+
+    .logo {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .form-group label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .form-group input {
+      width: 90%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      outline: none;
+      text-align: center;
+    }
+
+    .form-group input[type="text"],
+    .form-group input[type="password"],
+    .form-group input[type="phone"]{
+      width: 90%;
+      margin: 0 auto; /* 水平居中 */
+    }
+
+    .form-group input[type="submit"] {
+      background-color: #24292e;
+      color: #fff;
+      cursor: pointer;
+      text-align: center;
+      margin: 0 auto; /* 水平居中 */
+    }
+
+    .form-group input[type="submit"]:hover {
+      background-color: #1c2125;
+    }
+
+    .form-group .text-small {
+      font-size: 12px;
+      color: #586069;
+    }
+  </style>
+</head>
+<body>
+<div class="login-wrapper">
+  <h1 class="logo">
+    <img src="/Images/Logo.png" alt="TheForum" style="width: 120px; height: auto;">
+  </h1>
+  <form action="/signup" method="post" style="margin: 10px;">
+    <div class="form-group">
+      <label for="username">Username</label>
+      <input type="text" id="username" name="username" required>
+    </div>
+    <span th:if="${repetitiveUsername}" style="color: red" th:text="${repetitiveUsername}"></span><br>
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" required>
+    </div>
+    <span th:if="${invalidPassword}" style="color: red" th:text="${invalidPassword}"></span><br>
+    <div class="form-group">
+      <label for="phone">Phone</label>
+      <input type="text" id="phone" name="phone" required>
+    </div>
+<!--    <span th:if="${invalidPhone}" style="color: red; margin: 5px" th:text="${invalidPhone}"></span><br>-->
+    <span th:if="${invalidPhone}" style="color: red; margin: 5px; vertical-align: top;" th:text="${invalidPhone}"></span><br>
+
+    <div class="form-group">
+      <input type="submit"  value="Sign Up" onclick="submitForm()">
+    </div>
+    <div class="form-group">
+      <p class="text-small">Already have an account? <a href="/login">Log in</a></p>
+    </div>
+  </form>
+</div>
+<script>
+  function submitForm(event) {
+
+    event.preventDefault(); // 阻止表单的默认提交行为
+
+    const username = document.getElementById("username").value;
+    const password = document.getElementById("password").value;
+    const phone = document.getElementById("phone").value;
+
+    const formData = {
+      username: username,
+      password: password,
+      phone: phone
+    };
+
+    $.ajax({
+      type: "POST",
+      url: "/signup", // 指定后端接收请求的URL
+      data: JSON.stringify(formData),
+      contentType: "application/json",
+      success: function(response) {
+        // 请求成功的处理逻辑
+        console.log("Signup successful");
+        console.log(response);
+      },
+      error: function(error) {
+        // 请求失败的处理逻辑
+        console.log("Signup failed");
+        console.log(error);
+      }
+    });
+  }
+</script>
+</body>
+</html>
