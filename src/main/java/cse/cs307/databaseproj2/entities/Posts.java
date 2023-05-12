@@ -15,8 +15,6 @@ public class Posts {
     @TableField(exist = false)
     private String country;
     @TableField(exist = false)
-    private List<FirstReplies> firstRepliesList;
-    @TableField(exist = false)
     private List<String> postCategories;
     @TableField(exist = false)
     private List<Users> favorites;
@@ -81,14 +79,6 @@ public class Posts {
         this.country = country;
     }
 
-    public List<FirstReplies> getFirstRepliesList() {
-        return firstRepliesList;
-    }
-
-    public void setFirstRepliesList(
-        List<FirstReplies> firstRepliesList) {
-        this.firstRepliesList = firstRepliesList;
-    }
 
     public List<String> getPostCategories() {
         return postCategories;
@@ -132,7 +122,6 @@ public class Posts {
             ", authorId='" + authorId + '\'' +
             ", city='" + city + '\'' +
             ", country='" + country + '\'' +
-            ", firstRepliesList=" + firstRepliesList +
             ", postCategories=" + postCategories +
             ", favorites=" + favorites +
             ", shares=" + shares +
