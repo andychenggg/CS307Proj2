@@ -1,19 +1,25 @@
 <template>
     <div class="header">
-        <div style="display: flex;justify-content: flex-start;">
+        <div style="width:30%; display: flex;justify-content: flex-start;">
             <img src="/Images/Logo.png" alt="The Forum Logo" style="width: 70px; height: 50px;
       margin: 10px;">
             <div class="logo">The Forum</div>
-        </div>
-        <div class="nav" style=" justify-content: flex-end; align-items: center; ">
-            <el-button type="primary">Setting</el-button>
-            <el-button type="primary">Log out</el-button>
+        </div >
+        <div class="nav" >
+            <el-input v-model="input" placeholder="请输入内容" style="width: 100%"></el-input>
+            <el-button type="primary" style="height: 40px">Search</el-button>
+<!--            <el-button type="primary">Log out</el-button>-->
         </div>
     </div>
 </template>
 
 <script>
     export default {
+        data() {
+            return {
+                input: ''
+            }
+        },
         methods: {
             deleteCookie() {
                 document.cookie = "loginId=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
@@ -24,8 +30,15 @@
 </script>
 
 <style scoped>
+
+    body{
+        background-color: #ffffff;
+        width: 100%;
+    }
     .header {
         background-color: #ffffff;
+        border: 1px #1c2125;
+        width: 100%;
         display: flex;
         justify-content: space-between;
     }
@@ -35,27 +48,16 @@
         font-weight: bold;
         display: flex;
         margin-left: 10px;
+        margin-right: 10px;
         justify-content: center;
         align-items: center;
     }
 
     .nav {
         display: flex;
-        justify-content: flex-end;
+        align-items: center;
+        justify-content: flex-start;
+        margin: 0;
     }
 
-    .button {
-        font-size: 15px;
-        font-weight: bold;
-        background-color: transparent;
-        width: 80px;
-        height: 40px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        color: #206E1D;
-        border: 2px solid #206E1D;
-        border-radius: 2px;
-        margin: 10px;
-    }
 </style>
