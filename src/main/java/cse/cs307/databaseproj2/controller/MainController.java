@@ -3,6 +3,7 @@ package cse.cs307.databaseproj2.controller;
 import cse.cs307.databaseproj2.entities.Users;
 import cse.cs307.databaseproj2.mapper.UserMapper;
 import cse.cs307.databaseproj2.util.CookieManager;
+import io.swagger.annotations.Api;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -48,11 +49,16 @@ public class MainController {
     public String indexToHomepage() {
         return "redirect:/homepage";
     }
+
+    @GetMapping("/test1")
+    @ResponseBody
+    public String test1(){
+        return "hello";
+    }
+
     @GetMapping("/homepage")
     public String demo(HttpServletRequest request){
-//        for(Cookie ck: request.getCookies()){
-//            System.err.println(ck.getName()+" "+ck.getValue()+" "+ck.getMaxAge());
-//        }
+        // localhost:8080/homepage
         String userId = CookieManager.findCurrentUser(request);
         if(userId == null) {
             return "homepage";
