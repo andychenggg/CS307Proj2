@@ -94,4 +94,10 @@ public class CookieManager {
         response.addCookie(cookie);
     }
 
+    public static void deleteCookie(HttpServletResponse response, String cookieName){
+        Cookie cookie = new Cookie(cookieName, null);
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
+    }
+
 }

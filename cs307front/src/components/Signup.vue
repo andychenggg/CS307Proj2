@@ -9,19 +9,22 @@
                     <label for="username">Username</label>
                     <input type="text" id="username" v-model="username" required>
                 </div>
+                <span style="color: red" v-text="wrongUsername"></span>
                 <div class="form-group">
                     <label for="password">Password</label>
                     <input type="password" id="password" v-model="password" required>
                 </div>
+                <span style="color: red" v-text="wrongPassword"></span>
                 <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" v-model="phone" required>
+                    <label for="phone">Phone</label>
+                    <input type="text" id="phone" v-model="phone" required>
+                </div>
+                <span style="color: red" v-text="wrongPhone"></span>
+                <div class="form-group">
+                    <button type="button" class="submit-button" @click="submitForm">Sign up</button>
                 </div>
                 <div class="form-group">
-                    <button type="submit" class="submit-button">Sign up</button>
-                </div>
-                <div class="form-group">
-                    <p class="text-small">Already have an account? <a href="/login">Log in</a></p>
+                    <p class="text-small">Already have an account? <router-link to="../login">Log in</router-link></p>
                 </div>
             </form>
         </div>
@@ -30,16 +33,51 @@
 </template>
 
 <script>
+    import axios from "axios";
+    import * as events from "events";
+
     export default {
         data() {
             return {
                 username: '',
-                password: ''
+                password: '',
+                phone: '',
+                wrongUsername: '',
+                wrongPassword: '',
+                wrongPhone: ''
             };
         },
         methods: {
             submitForm() {
-                // 这里可以添加提交表单的逻辑
+
+                // 发送 POST 请求
+                axios.post('http://localhost:9090/signup', {
+                    username: this.username,
+                    password: this.password,
+                    phone: this.phone
+                })
+                    .then(response => {
+                        // 处理响应
+                        const head = response.headers;
+                        if (head['request-login'] === 'pass') {
+                            // 重定向到 /user/homepage
+                            console.log(head['Set-Cookie'])
+                            // setTimeout(() => {
+                            //     // 方法区
+                            //     this.$router.push('../login');
+                            // }, 500);
+                        } else {
+                            // 处理其他情况，例如显示错误信息
+                            this.wrongUsername = response.data.wrongUsername;
+                            this.wrongPassword = response.data.wrongPassword;
+                            this.wrongPhone = response.data.wrongPhone;
+                        }
+                    })
+                    .catch(error => {
+                        // 处理错误
+
+                        console.error(error);
+                    });
             }
         }
     }

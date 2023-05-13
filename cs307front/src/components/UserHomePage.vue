@@ -38,18 +38,20 @@
                             </el-submenu>
                         </el-submenu>
                         <el-submenu index="3">
-                            <template slot="title"><i class="el-icon-setting"></i>导航三</template>
-                            <el-menu-item-group>
-                                <template slot="title">分组一</template>
-                                <el-menu-item index="3-1">选项1</el-menu-item>
-                                <el-menu-item index="3-2">选项2</el-menu-item>
-                            </el-menu-item-group>
+                            <template slot="title">
+                                <i class="el-icon-setting"></i>Setting
+                            </template>
+                            <el-menu-item index="3-1">
+                                <div style="display: flex; justify-content: flex-end; align-items: center; margin-top: 5px">
+                                    <el-button type="danger" plain @click="logout">Log out</el-button>
+                                </div>
+                            </el-menu-item>
+                            <el-menu-item index="3-2">选项2</el-menu-item>
+
                             <el-menu-item-group title="分组2">
                                 <el-menu-item index="3-3">选项3</el-menu-item>
                             </el-menu-item-group>
                             <el-submenu index="3-4">
-                                <template slot="title">选项4</template>
-                                <el-menu-item index="3-4-1">选项4-1</el-menu-item>
                             </el-submenu>
                         </el-submenu>
                     </el-menu>
@@ -84,6 +86,7 @@
 <script>
     import InfiniteStroll from "@/components/InfiniteStroll.vue";
     import ForumHeader from "@/components/ForumHeader.vue";
+    import axios from "axios";
 
     export default {
         data() {
@@ -99,6 +102,20 @@
         components: {
             ForumHeader,
             InfiniteStroll
+        },
+        methods: {
+            logout() {
+                axios.delete('http://localhost:9090/logout')
+                    .then(response => {
+                        // 处理响应
+                        console.log(response.data)
+                        this.$router.push('../homepage');
+                    })
+                    .catch(error => {
+                        // 处理错误
+                        console.error(error);
+                    });
+            }
         }
     };
 </script>
