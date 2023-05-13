@@ -7,7 +7,8 @@
         </div >
         <div class="nav" >
             <el-input v-model="input" placeholder="请输入内容" style="width: 100%"></el-input>
-            <el-button type="primary" style="height: 40px">Search</el-button>
+            <el-button type="primary" icon="el-icon-search">搜索</el-button>
+<!--            <el-button type="primary" style="height: 40px">Search</el-button>-->
 <!--            <el-button type="primary">Log out</el-button>-->
         </div>
     </div>

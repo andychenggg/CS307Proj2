@@ -13,28 +13,54 @@
                     <label for="password">Password</label>
                     <input type="password" id="password" v-model="password" required>
                 </div>
+                <span style="color: red" v-text="wrongMessage"></span>
                 <div class="form-group">
-                    <button type="submit" class="submit-button">Log in</button>
+                    <button type="button" class="submit-button" @click="submitForm">Log in</button>
                 </div>
                 <div class="form-group">
-                    <p class="text-small">Don't have an account? <a href="/signup">Sign up</a></p>
+                    <p class="text-small">Don't have an account? <router-link to="../signup">Sign up</router-link></p>
                 </div>
+<!--                <div class="form-group">-->
+<!--                    <p class="text-small">Don't have an account? <a href="../signup">Sign up</a></p>-->
+<!--                </div>-->
             </form>
         </div>
     </div>
 </template>
 
 <script>
+    import axios from 'axios';
+    // import router from "../router/index.js";
     export default {
         data() {
             return {
                 username: '',
-                password: ''
+                password: '',
+                wrongMessage: ''
             };
         },
         methods: {
             submitForm() {
-                // 这里可以添加提交表单的逻辑
+                // 发送 POST 请求
+                axios.post('http://localhost:9090/login', {
+                    username: this.username,
+                    password: this.password
+                })
+                    .then(response => {
+                        // 处理响应
+                        const head = response.headers;
+                        if (head['request-login'] === 'pass') {
+                            // 重定向到 /user/homepage
+                            this.$router.push('../user/homepage');
+                        } else {
+                            // 处理其他情况，例如显示错误信息
+                            this.wrongMessage = response.data
+                        }
+                    })
+                    .catch(error => {
+                        // 处理错误
+                        console.error(error);
+                    });
             }
         }
     }
