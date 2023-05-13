@@ -12,7 +12,8 @@
     }
 
     .header {
-      background-color: #07ECA0;
+      background-image: url("/images/header.gif") ;
+      /*background-color: #FC9445;*/
       color: #000000;
       display: flex;
       justify-content: space-between;
@@ -70,9 +71,29 @@
       background-color: #f0f0f0;
     }
 
-    .main-content {
+    .container {
       width: 80%;
-      overflow-y: scroll;
+      display: flex;
+      flex-direction: column;
+    }
+
+
+    .main-content {
+      /*height: 80%;*/
+      overflow-y: auto;
+      border: 1px solid #ccc;
+    }
+
+    /* 隐藏滚动条 */
+    .main-content::-webkit-scrollbar {
+      width: 0.5em;
+      background-color: #f5f5f5;
+    }
+
+    .box {
+      padding: 20px;
+      margin-bottom: 10px;
+      background-color: #f0f0f0;
     }
 
     /* 添加样式 */
@@ -95,16 +116,6 @@
 <!--      <button class="button">Setting</button>-->
     </div>
   </div>
-<!--  <div class="logo">-->
-<!--    <img src="../images/Logo.png"  alt="The Forum Logo" style="width: 70px; height: 50px;-->
-<!--      margin-right: 10px; border: 1px solid black;">-->
-<!--    <div>The Forum</div>-->
-<!--  </div>-->
-<!--  <div class="nav">-->
-<!--    <a href="/login">登录</a>-->
-<!--    <a href="/signup">注册</a>-->
-<!--  </div>-->
-<!--</div>-->
 <div class="content-wrapper">
   <div class="sidebar">
     <ul>
@@ -116,9 +127,56 @@
       <li><a href="#">要闻榜</a></li>
     </ul>
   </div>
-  <div class="main-content">
-    <!-- 这里是可滚动的内容 -->
+  <div class="container">
+    <div class="main-content" id="content">
+      <!-- 这里是可滚动的内容 -->
+    </div>
+<!--    <div class="pagination" id="pagination"></div>-->
   </div>
+
+  <script>
+    const contentDiv = document.getElementById('content');
+    // const paginationDiv = document.getElementById('pagination');
+    const totalPages = 5; // 总页数
+    let currentPage = 1; // 当前页数
+    const itemsPerPage = 50; // 每页显示的条目数
+    let loadedItems = 0; // 已加载的条目数
+
+    // 加载指定页数的内容
+    function loadContent(page) {
+      for (let i = 1; i <= itemsPerPage; i++) {
+        const div = document.createElement('div');
+        div.className = 'box';
+        div.innerText = 'Content ' + (loadedItems + i);
+        contentDiv.appendChild(div);
+      }
+      loadedItems += itemsPerPage;
+    }
+
+    // 添加初始内容
+    loadContent(currentPage);
+
+    // 监听滚动事件
+    window.addEventListener('scroll', function () {
+      // 判断滚动到底部
+      if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+        // 加载下一页内容
+        currentPage++;
+        if (currentPage <= totalPages) {
+          loadContent(currentPage);
+        }
+      }
+    });
+
+    // // 添加分页链接
+    // for (let page = 1; page <= totalPages; page++) {
+    //   const link = document.createElement('a');
+    //   link.href = '#';
+    //   link.innerText = 'Page ' + page;
+    //   paginationDiv.appendChild(link);
+    // }
+  </script>
+
 </div>
 <script>
   function deleteCookie() {
