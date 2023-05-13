@@ -25,4 +25,6 @@ public interface PostMapper {
     Posts findFavoritePosts(String collectorid);
 
 
+
+
 }
