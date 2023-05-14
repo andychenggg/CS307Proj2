@@ -5,6 +5,7 @@ import Login from "@/components/Login.vue";
 import Signup from "@/components/Signup.vue";
 import HomePage from "@/components/HomePage.vue";
 import UserHomePage from "@/components/UserHomePage.vue";
+import postDetail from "@/components/PostDetail.vue";
 Vue.use(VueRouter)
 
 const router = new VueRouter({
@@ -17,7 +18,8 @@ const router = new VueRouter({
         { path: '/homepage', component: HomePage},
         {
             path: '/user/homepage', component: UserHomePage
-        }
+        },
+        { path: '/user/homepage/postDetail', component: postDetail}
     ]
 })
 
