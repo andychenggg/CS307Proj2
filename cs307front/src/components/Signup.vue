@@ -62,10 +62,8 @@
                         if (head['request-login'] === 'pass') {
                             // 重定向到 /user/homepage
                             console.log(head['Set-Cookie'])
-                            // setTimeout(() => {
-                            //     // 方法区
-                            //     this.$router.push('../login');
-                            // }, 500);
+                            // 重定向到 /user/homepage
+                            this.$router.push('../user/homepage');
                         } else {
                             // 处理其他情况，例如显示错误信息
                             this.wrongUsername = response.data.wrongUsername;
