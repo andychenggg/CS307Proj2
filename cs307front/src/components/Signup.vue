@@ -35,6 +35,7 @@
 <script>
     import axios from "axios";
     import * as events from "events";
+    import config from "vue/src/core/config";
 
     export default {
         data() {
@@ -55,6 +56,8 @@
                     username: this.username,
                     password: this.password,
                     phone: this.phone
+                }, {
+                    withCredentials: true
                 })
                     .then(response => {
                         // 处理响应
