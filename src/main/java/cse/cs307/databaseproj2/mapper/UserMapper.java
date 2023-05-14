@@ -56,7 +56,7 @@ public interface UserMapper extends BaseMapper<Users> {
     @Delete("delete from followedby where userID = '#{userid}' and followigid = '#{followigid}';")
     int deFollowOthers(String userid, String followigid);
 
-    @Select("insert into posts(postid, title, content, postingtime, authorid, city, senderid, anonymous, accesslevel) values();")
+//    @Select("insert into posts(postid, title, content, postingtime, authorid, city, senderid, anonymous, accesslevel) values();")
 
     @Delete("delete from users where id=#{userid")
     int deleteById(String id);
