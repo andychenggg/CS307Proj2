@@ -2,7 +2,6 @@ package cse.cs307.databaseproj2.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import cse.cs307.databaseproj2.entities.Posts;
-import cse.cs307.databaseproj2.entities.Posts;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
