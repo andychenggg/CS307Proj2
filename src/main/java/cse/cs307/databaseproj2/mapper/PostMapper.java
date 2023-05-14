@@ -12,17 +12,17 @@ public interface PostMapper extends BaseMapper<Posts> {
 
     @Select("select *\n" +
             "from posts\n" +
-            "where postid in (select postid from likes where likerid = '#{likerid}');")
+            "where postid in (select postid from likes where likerid = #{likerid});")
     Posts findLikePosts(String likerid);
 
     @Select("select *\n" +
             "from posts\n" +
-            "where postid in (select postid from shares where sharerid = '#{sharerid}');")
+            "where postid in (select postid from shares where sharerid = #{sharerid});")
     Posts findSharePosts(String sharerid);
 
     @Select("select *\n" +
             "from posts\n" +
-            "where postid in (select postid from shares where collectorid = '#{collectorid}');")
+            "where postid in (select postid from shares where collectorid = #{collectorid});")
     Posts findFavoritePosts(String collectorid);
 
 
