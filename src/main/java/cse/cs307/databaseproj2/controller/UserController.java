@@ -50,11 +50,14 @@ public class UserController {
         }
     }
 
-    @PostMapping("/user/homepage/post")
+
+
+    @GetMapping("/user/homepage/")
     @ResponseBody
     public String operatePost(HttpServletRequest request, HttpServletResponse response){
         return "success";
     }
+
 
 
 }

@@ -45,6 +45,8 @@
                 axios.post('http://localhost:9090/login', {
                     username: this.username,
                     password: this.password
+                }, {
+                    withCredentials: true
                 })
                     .then(response => {
                         // 处理响应
