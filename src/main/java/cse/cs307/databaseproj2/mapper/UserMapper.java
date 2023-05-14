@@ -50,6 +50,14 @@ public interface UserMapper extends BaseMapper<Users> {
     @Insert("insert into shares values(#{postid}, #{shareid})")
     int sharePost(String postid, String shareid);
 
+    @Insert("insert into followedby(userID, FollowigID) values(#{userid}, #{followigid});")
+    int followOthers(String userid, String followingid);
+
+    @Delete("delete from followedby where userID = '#{userid}' and followigid = '#{followigid}';")
+    int deFollowOthers(String userid, String followigid);
+
+    @Select("insert into posts(postid, title, content, postingtime, authorid, city, senderid, anonymous, accesslevel) values();")
+
     @Delete("delete from users where id=#{userid")
     int deleteById(String id);
 }
