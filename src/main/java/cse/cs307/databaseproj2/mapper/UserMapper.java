@@ -41,7 +41,6 @@ public interface UserMapper extends BaseMapper<Users> {
     int findFollowed(String userid);
     //按理应该不包括密码，如果后续需要不包括密码，可以参照这个userid, username, registrationtime, phone
 
-
     @Update("update users set username=#{username}, phone=#{phone}")
     int update(Users user);
 
