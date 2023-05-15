@@ -6,6 +6,37 @@ Question:
 在我转发post的时候，需要我在posts这张表里新增一行，这一行其他部分和被转发的post一样，然后senderid 变成转发者的id么？这样好像不符合posts里的postid地主键约束。
 已解决
 
+Question:
+![image](https://github.com/andychenggg/CS307Proj2/assets/119112896/bc912ae9-2603-4832-a520-01f
+ERROR in ./src/components/Signup.vue?vue&type=script&lang=js& (./node_modules/babel-loader/lib/index.js??clonedRuleSet-40.use[0]!./node_modules/@vue/vue-loader-v15/lib/index.js??vue-loader-options!./src/components/Signup.vue?vue&type=script&lang=js&) 4:0-41
+Module not found: Error: Package path ./src/core/config is not exported from package C:\Users\Wiki\IdeaProjects\CS307Proj2\cs307front\node_modules\vue (see exports field in C:\Users\Wiki\IdeaProjects\CS307Proj2\cs307front\node_modules\vue\package.json)        
+ @ ./src/components/Signup.vue?vue&type=script&lang=js& 1:0-200 1:216-219 1:221-418 1:221-418
+ @ ./src/components/Signup.vue 2:0-58 3:0-53 3:0-53 10:2-8
+ @ ./src/router/index.js 5:0-45 25:15-21
+ @ ./src/main.js 5:0-36 12:2-8
+webpack compiled with 1 error
+b1ba9205f)
+问题好像是C:\Users\Wiki\IdeaProjects\CS307Proj2\cs307front\node_modules\vue\package.json 文件中的 exports 字段， ./src/core/config 不在导出的模块列表中。
+导出模块为
+"exports": {
+    ".": {
+      "import": {
+        "node": "./dist/vue.runtime.mjs",
+        "default": "./dist/vue.runtime.esm.js"
+      },
+      "require": "./dist/vue.runtime.common.js",
+      "types": "./types/index.d.ts"
+    },
+    "./compiler-sfc": {
+      "import": "./compiler-sfc/index.mjs",
+      "require": "./compiler-sfc/index.js"
+    },
+    "./dist/*": "./dist/*",
+    "./types/*": "./types/*",
+    "./package.json": "./package.json"
+  }
+
+
 ## todo: 
 - 将postid，replyid设置为自增
 - 删除posts中accessLevel
