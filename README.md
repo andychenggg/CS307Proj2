@@ -35,6 +35,14 @@ b1ba9205f)
     "./package.json": "./package.json"
   }
 
+Question: 
+todo里面的内容需要我来完善么
+
+Question:
+需不需要我将“后端向数据库的查询操作：”这一部分的内容补充
+
+Question:
+post和postdetail的模子已经有了，但我现在没法儿进入网站，需要解决上面提到的问题
 
 ## todo: 
 - 将postid，replyid设置为自增
