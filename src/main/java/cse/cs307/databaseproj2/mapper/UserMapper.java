@@ -35,6 +35,13 @@ public interface UserMapper extends BaseMapper<Users> {
         "where u.userid = #{id};")
     List<Users> findFollowing(String id);
 
+    @Select("select *\n" +
+            "from users\n" +
+            "where userid in (select followigid from followedby where userid = #{userid});")
+    int findFollowed(String userid);
+    //按理应该不包括密码，如果后续需要不包括密码，可以参照这个userid, username, registrationtime, phone
+
+
     @Update("update users set username=#{username}, phone=#{phone}")
     int update(Users user);
 
@@ -55,8 +62,6 @@ public interface UserMapper extends BaseMapper<Users> {
 
     @Delete("delete from followedby where userID = '#{userid}' and followigid = '#{followigid}';")
     int deFollowOthers(String userid, String followigid);
-
-//    @Select("insert into posts(postid, title, content, postingtime, authorid, city, senderid, anonymous, accesslevel) values();")
 
     @Delete("delete from users where id=#{userid")
     int deleteById(String id);
