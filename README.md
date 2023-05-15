@@ -7,7 +7,6 @@ Question:
 已解决
 
 Question:
-![image](https://github.com/andychenggg/CS307Proj2/assets/119112896/bc912ae9-2603-4832-a520-01f
 ERROR in ./src/components/Signup.vue?vue&type=script&lang=js& (./node_modules/babel-loader/lib/index.js??clonedRuleSet-40.use[0]!./node_modules/@vue/vue-loader-v15/lib/index.js??vue-loader-options!./src/components/Signup.vue?vue&type=script&lang=js&) 4:0-41
 Module not found: Error: Package path ./src/core/config is not exported from package C:\Users\Wiki\IdeaProjects\CS307Proj2\cs307front\node_modules\vue (see exports field in C:\Users\Wiki\IdeaProjects\CS307Proj2\cs307front\node_modules\vue\package.json)        
  @ ./src/components/Signup.vue?vue&type=script&lang=js& 1:0-200 1:216-219 1:221-418 1:221-418
