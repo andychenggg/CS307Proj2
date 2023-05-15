@@ -48,13 +48,15 @@ public interface UserMapper extends BaseMapper<Users> {
     int addUser(String userid, String username, String password, LocalDateTime registrationtime, String phone);
 
     @Insert("insert into likes values (#{postid}, #{likerid})")
-    int likePost(String postid, String likerid);
+    int likePost(long postid, String likerid);
 
     @Insert("insert into favorites values(#{postid}, #{collectorid})")
-    int collectPost(String postid, String collectorid);
+    int collectPost(long postid, String collectorid);
 
     @Insert("insert into shares values(#{postid}, #{shareid})")
-    int sharePost(String postid, String shareid);
+    int sharePost(long postid, String shareid);
+
+
 
     @Insert("insert into followedby(userID, FollowigID) values(#{userid}, #{followigid});")
     int followOthers(String userid, String followingid);

@@ -105,7 +105,9 @@
         },
         methods: {
             logout() {
-                axios.delete('http://localhost:9090/logout')
+                axios.delete('http://localhost:9090/logout', {
+                    withCredentials: true
+                })
                     .then(response => {
                         // 处理响应
                         console.log(response.data)

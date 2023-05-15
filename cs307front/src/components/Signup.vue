@@ -35,6 +35,7 @@
 <script>
     import axios from "axios";
     import * as events from "events";
+    import config from "vue/src/core/config";
 
     export default {
         data() {
@@ -55,6 +56,8 @@
                     username: this.username,
                     password: this.password,
                     phone: this.phone
+                }, {
+                    withCredentials: true
                 })
                     .then(response => {
                         // 处理响应
@@ -62,10 +65,8 @@
                         if (head['request-login'] === 'pass') {
                             // 重定向到 /user/homepage
                             console.log(head['Set-Cookie'])
-                            // setTimeout(() => {
-                            //     // 方法区
-                            //     this.$router.push('../login');
-                            // }, 500);
+                            // 重定向到 /user/homepage
+                            this.$router.push('../user/homepage');
                         } else {
                             // 处理其他情况，例如显示错误信息
                             this.wrongUsername = response.data.wrongUsername;
