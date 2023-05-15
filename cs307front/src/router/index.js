@@ -24,6 +24,7 @@ const router = new VueRouter({
 })
 
 import axios from 'axios';
+// 路由拦截
 router.beforeEach((to, from, next) => {
     if (to.path === '/login' || to.path === '/signup' || to.path === '/homepage') {
         // 向目标服务器发送 GET 请求

@@ -12,6 +12,8 @@ public class Posts {
     private LocalDateTime postingTime;
     private String authorId;
     private String city;
+    private String senderId;
+    private boolean anonymous;
     @TableField(exist = false)
     private String country;
     @TableField(exist = false)
@@ -79,6 +81,22 @@ public class Posts {
         this.country = country;
     }
 
+
+    public String getSenderId() {
+        return senderId;
+    }
+
+    public void setSenderId(String senderId) {
+        this.senderId = senderId;
+    }
+
+    public boolean isAnonymous() {
+        return anonymous;
+    }
+
+    public void setAnonymous(boolean anonymous) {
+        this.anonymous = anonymous;
+    }
 
     public List<String> getPostCategories() {
         return postCategories;
