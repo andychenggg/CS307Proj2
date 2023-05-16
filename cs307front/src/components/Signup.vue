@@ -35,7 +35,6 @@
 <script>
     import axios from "axios";
     import * as events from "events";
-    import config from "vue/src/core/config";
 
     export default {
         data() {

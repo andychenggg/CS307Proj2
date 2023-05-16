@@ -22,5 +22,11 @@
     "> 1%",
     "last 2 versions",
     "not dead"
-  ]
+  ],
+  "exports": {
+    "node": {
+      "import": "./src/router/index.js",
+      "require": "./src/router/index.js"
+    }
+  }
 }
