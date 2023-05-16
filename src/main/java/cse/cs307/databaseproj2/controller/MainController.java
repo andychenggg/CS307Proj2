@@ -200,11 +200,4 @@ public class MainController {
         return "Success logout";
     }
 
-
-
-    @GetMapping("/user/following")
-    @ResponseBody
-    public List<Users> findAllFollowing(){
-        return userMapper.findFollowing("951405199501172335");
-    }
 }

@@ -19,11 +19,26 @@ public class Posts {
     @TableField(exist = false)
     private List<String> postCategories;
     @TableField(exist = false)
-    private List<Users> favorites;
+    private String authorName;
+
     @TableField(exist = false)
-    private List<Users> shares;
-    @TableField(exist = false)
-    private List<Users> likes;
+    private String senderName;
+
+    public String getSenderName() {
+        return senderName;
+    }
+
+    public void setSenderName(String senderName) {
+        this.senderName = senderName;
+    }
+
+    public String getAuthorName() {
+        return authorName;
+    }
+
+    public void setAuthorName(String authorName) {
+        this.authorName = authorName;
+    }
 
     public long getPostId() {
         return postId;
@@ -106,29 +121,6 @@ public class Posts {
         this.postCategories = postCategories;
     }
 
-    public List<Users> getFavorites() {
-        return favorites;
-    }
-
-    public void setFavorites(List<Users> favorites) {
-        this.favorites = favorites;
-    }
-
-    public List<Users> getShares() {
-        return shares;
-    }
-
-    public void setShares(List<Users> shares) {
-        this.shares = shares;
-    }
-
-    public List<Users> getLikes() {
-        return likes;
-    }
-
-    public void setLikes(List<Users> likes) {
-        this.likes = likes;
-    }
 
     @Override
     public String toString() {
@@ -141,9 +133,6 @@ public class Posts {
             ", city='" + city + '\'' +
             ", country='" + country + '\'' +
             ", postCategories=" + postCategories +
-            ", favorites=" + favorites +
-            ", shares=" + shares +
-            ", likes=" + likes +
             '}';
     }
 }
