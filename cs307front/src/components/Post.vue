@@ -1,11 +1,10 @@
 <template>
-    <div class="post">
+    <div class="container">
         <div class="username">
-            <label>{{ label }}</label>
+            <label>{{ "helloWorld" }}</label>
         </div>
         <div class="content">
-            <!-- 可填充的内容 -->
-            <slot></slot>
+            <textarea class="content-textarea" placeholder="content"></textarea>
         </div>
         <div class="details">
             <button @click="toggleContent">{{ buttonText }}</button>
@@ -30,7 +29,7 @@ export default {
     methods: {
         toggleContent() {
             this.showContent = !this.showContent;
-            this.buttonText = this.showContent ? '收起' : '展开';
+            this.buttonText = this.showContent ? 'contract' : 'details';
         },
     },
     props: {
@@ -46,6 +45,32 @@ export default {
 .container {
     border: 1px solid #ccc;
     padding: 10px;
+}
+
+.username {
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+
+.content {
+    margin-bottom: 10px;
+}
+
+.details {
+    text-align: center;
+}
+.container {
+    border: 1px solid #ccc;
+    padding: 10px;
+}
+
+.content-textarea {
+    width: 100%;
+    height: 150px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    resize: vertical; /* 可垂直调整大小 */
 }
 
 .top {
