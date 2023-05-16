@@ -1,13 +1,17 @@
 <template>
     <div class="container">
         <div class="main-content" id="content">
+            <Post label="post"></Post>
             <!-- 这里是可滚动的内容 -->
         </div>
     </div>
 </template>
 
 <script>
+    import Post from "@/components/Post.vue";
+
     export default {
+        components: {Post},
         mounted() {
             const contentDiv = document.getElementById('content');
             const totalPages = 5; // 总页数
@@ -44,6 +48,7 @@
     };
 </script>
 
+
 <style scoped>
     .container {
         width: 80%;
@@ -53,7 +58,7 @@
 
     .main-content {
         overflow-y: auto;
-        border: 1px solid #ccc;
+        border: 10px solid #ccc;
     }
 
     .box {
