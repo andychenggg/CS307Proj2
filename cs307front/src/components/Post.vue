@@ -10,7 +10,7 @@
         <div class="details">
             <button @click="toggleContent">{{ buttonText }}</button>
             <div v-show="showContent">
-                <PostDetail></PostDetail>
+                <PostDetail label="postDetail"></PostDetail>
             </div>
         </div>
     </div>
