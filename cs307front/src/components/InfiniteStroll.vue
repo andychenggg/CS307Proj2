@@ -2,7 +2,7 @@
     <div class="scroll-container" @scroll="handleScroll">
         <ul>
             <li v-for="item in items" :key="item">{{ item }}</li>
-            <Post></Post>
+            <Post label="Post"></Post>
         </ul>
     </div>
 </template>

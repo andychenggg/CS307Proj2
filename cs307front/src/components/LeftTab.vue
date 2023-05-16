@@ -1,23 +1,69 @@
 <template>
-    <div class="sidebar">
-        <ul>
-            <li><a href="#">热门微博</a></li>
-            <li><a href="#">热门榜单</a></li>
-            <li><a href="#">话题榜</a></li>
-            <li><a href="#">热搜榜</a></li>
-            <li><a href="#">文娱榜</a></li>
-            <li><a href="#">要闻榜</a></li>
-        </ul>
+    <div>
+        <el-container>
+            <el-aside style="background-color: rgb(238, 241, 246)">
+                <el-menu :default-openeds="['1', '3']">
+                    <el-submenu index="1">
+                        <template slot="title"><i class="el-icon-message"></i>homepage</template>
+                        <el-menu-item index="1-1">
+                            <el-button type="text">homepage</el-button>
+                        </el-menu-item>
+                    </el-submenu>
+                    <el-submenu index="2">
+                        <template slot="title"><i class="el-icon-menu"></i>Post</template>
+                        <el-menu-item index="2-1">
+                            <el-button type="text">post</el-button>
+                        </el-menu-item>
+                    </el-submenu>
+                    <el-submenu index="3">
+                        <template slot="title">
+                            <i class="el-icon-document"></i>Record
+                        </template>
+                        <el-menu-item index="3-1">
+                            <el-button type="text">yourLike</el-button>
+                        </el-menu-item>
+                        <el-menu-item index="3-2">
+                            <el-button type="text">yourFavorite</el-button>
+                        </el-menu-item>
+                        <el-menu-item index="3-3">
+                            <el-button type="text">yourPost</el-button>
+                        </el-menu-item>
+                        <el-menu-item index="3-4">
+                            <el-button type="text">yourComment</el-button>
+                        </el-menu-item>
+                    </el-submenu>
+                    <el-submenu index="4">
+                        <template slot="title">
+                            <i class="el-icon-user"></i>User
+                        </template>
+                        <el-menu-item index="4-1">
+                            <div style="display: flex; justify-content: flex-end; align-items: center; margin-top: 5px">
+                                <el-button type="text">follow/unfollow</el-button>
+                            </div>
+                        </el-menu-item>
+                        <el-menu-item index="4-2">
+                            <div style="display: flex; justify-content: flex-end; align-items: center; margin-top: 5px">
+                                <el-button type="danger" plain size="small" @click="logout">Log out</el-button>
+                            </div>
+                        </el-menu-item>
+                    </el-submenu>
+                </el-menu>
+            </el-aside>
+        </el-container>
     </div>
 </template>
 
 <script>
-    export default {};
+    import InfiniteStroll from "@/components/InfiniteStroll.vue";
+
+    export default {
+        components: {InfiniteStroll}
+    };
 </script>
 
 <style scoped>
     .sidebar {
-        width: 20%;
+        width: 100%;
         background-color: #f0f0f0;
     }
 </style>
