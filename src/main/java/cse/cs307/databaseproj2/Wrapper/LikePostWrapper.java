@@ -4,9 +4,9 @@ public class LikePostWrapper {
     // 帖子id
     private long postId;
     // 点赞者id
-    private String likerId;
+    private long likerId;
 
-    public LikePostWrapper(long postId, String likerId) {
+    public LikePostWrapper(long postId, long likerId) {
         this.postId = postId;
         this.likerId = likerId;
     }
@@ -19,11 +19,11 @@ public class LikePostWrapper {
         this.postId = postId;
     }
 
-    public String getLikerId() {
+    public long getLikerId() {
         return likerId;
     }
 
-    public void setLikerId(String likerId) {
+    public void setLikerId(long likerId) {
         this.likerId = likerId;
     }
 }

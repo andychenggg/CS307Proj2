@@ -37,6 +37,7 @@
                 let scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight;
                 let bottom = scrollHeight - scrollTop - windowHeight;
                 if (bottom < scrollHeight * 0.02) {
+
                     this.loadMore();
                 }
             }

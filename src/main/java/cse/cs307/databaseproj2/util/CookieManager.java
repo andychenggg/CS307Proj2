@@ -17,16 +17,17 @@ public class CookieManager {
      * @param request
      * @return
      */
-    public static String findCurrentUser(HttpServletRequest request){
+    public static long findCurrentUser(HttpServletRequest request){
         Cookie[] cookies = request.getCookies();
         if (cookies != null) {
             for (Cookie cookie : cookies) {
+                System.err.println(cookie.getName()+" "+cookie.getValue());
                 if(cookie.getName().equals("loginId")){
-                    return cookie.getValue();
+                    return Long.parseLong(cookie.getValue());
                 }
             }
         }
-        return null;
+        return -1;
     }
 
     /**

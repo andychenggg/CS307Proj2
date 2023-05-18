@@ -1,6 +1,6 @@
 # CS307Proj2
 
-现存问题和没做的事：
+## QUESTIONS
 
 Question:
 在我转发post的时候，需要我在posts这张表里新增一行，这一行其他部分和被转发的post一样，然后senderid 变成转发者的id么？这样好像不符合posts里的postid地主键约束。
@@ -20,11 +20,14 @@ Question:
 post和postdetail的模子已经有了，但我现在没法儿进入网站，需要解决上面提到的问题
 --已解决
 
-## todo: 
-- 将postid，replyid设置为自增
-- 删除posts中accessLevel
-- 将插入replies数据的代码中的postid设置为对应的值，即使是reply-to-reply
+## TODO: 
+5/17: CJL
 
+完成前后端的规范设置；
+
+完成后端和数据库的请求方法设置；
+
+完成前端的homepage.vue向后端发送请求的连通性测试
 
 ## 更新习惯
 每天开始做proj时从main分支pull下来
@@ -81,3 +84,98 @@ axios.get('http://localhost:9090/login', {
 -------------------------------------------- bonus ---------------------------------------------------
 
 ## 前端向后端请求规范
+- 注册用户，登录 -- 已完成
+- 点赞，收藏，转发，发送post请求
+```json lines
+// 点赞
+{
+    postId: ...,
+    favorId: ...
+}
+// 收藏
+{
+    postId: ...,
+    likerId: ...
+}
+// 转发
+{
+    postId: ...,
+    shareId: ...
+}
+```
+- 查看点赞，收藏，转发
+```json lines
+// 查看点赞
+{
+    postId: 任意值,
+    favorId: ...
+}
+// 查看收藏
+http://localhost:9090/user/favor?userId=1
+// 查看转发
+{
+    postId: 任意值,
+    shareId: ...
+}
+// 前端拿到的数据的形式
+[
+    {
+        postId: ...,
+        title: ...,
+        content: ...,
+        postingTime: ...,
+        authorId: ...,
+        city: ...,
+        senderId: ...,
+        anonymous: ...,
+        country: ...,
+        postCategories: ...,
+        authorName: ...,
+        senderName: ...
+    },
+    {
+        ...: ...
+    }
+]
+```
+- 关注，取关用户
+```json lines
+//发送post
+{
+    userId: ...,
+    followigId: ...
+}
+//发送delete请求
+{
+    userId: ...,
+    followigId: ...
+}
+```
+- 查看关注列表
+```json lines
+// 发送get
+{
+  userId: ...,
+  followigId: 任意值
+}
+```
+- 发布帖子, 评论：
+```json lines
+//发送post请求，请求体为
+// 具体请查看PostMapper.insertNewPost
+{
+  ...: ...
+}
+// 具体请查看RepliesMapper.addReply
+//replyId 和 authorName 不需要填写
+{
+  ...: ...
+}
+```
+- 查看自己发布的贴子, 评论
+```json lines
+// 发送get请求
+{
+  authorId: ...
+}
+```

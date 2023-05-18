@@ -10,20 +10,34 @@ public class Posts {
     private String title;
     private String content;
     private LocalDateTime postingTime;
-    private String authorId;
+    private long authorId;
     private String city;
-    private String senderId;
+    private long senderId;
     private boolean anonymous;
-    @TableField(exist = false)
     private String country;
     @TableField(exist = false)
     private List<String> postCategories;
     @TableField(exist = false)
-    private List<Users> favorites;
+    private String authorName;
+
     @TableField(exist = false)
-    private List<Users> shares;
-    @TableField(exist = false)
-    private List<Users> likes;
+    private String senderName;
+
+    public String getSenderName() {
+        return senderName;
+    }
+
+    public void setSenderName(String senderName) {
+        this.senderName = senderName;
+    }
+
+    public String getAuthorName() {
+        return authorName;
+    }
+
+    public void setAuthorName(String authorName) {
+        this.authorName = authorName;
+    }
 
     public long getPostId() {
         return postId;
@@ -57,11 +71,11 @@ public class Posts {
         this.postingTime = postingTime;
     }
 
-    public String getAuthorId() {
+    public long getAuthorId() {
         return authorId;
     }
 
-    public void setAuthorId(String authorId) {
+    public void setAuthorId(long authorId) {
         this.authorId = authorId;
     }
 
@@ -82,11 +96,11 @@ public class Posts {
     }
 
 
-    public String getSenderId() {
+    public long getSenderId() {
         return senderId;
     }
 
-    public void setSenderId(String senderId) {
+    public void setSenderId(long senderId) {
         this.senderId = senderId;
     }
 
@@ -106,29 +120,6 @@ public class Posts {
         this.postCategories = postCategories;
     }
 
-    public List<Users> getFavorites() {
-        return favorites;
-    }
-
-    public void setFavorites(List<Users> favorites) {
-        this.favorites = favorites;
-    }
-
-    public List<Users> getShares() {
-        return shares;
-    }
-
-    public void setShares(List<Users> shares) {
-        this.shares = shares;
-    }
-
-    public List<Users> getLikes() {
-        return likes;
-    }
-
-    public void setLikes(List<Users> likes) {
-        this.likes = likes;
-    }
 
     @Override
     public String toString() {
@@ -141,9 +132,6 @@ public class Posts {
             ", city='" + city + '\'' +
             ", country='" + country + '\'' +
             ", postCategories=" + postCategories +
-            ", favorites=" + favorites +
-            ", shares=" + shares +
-            ", likes=" + likes +
             '}';
     }
 }
