@@ -111,10 +111,7 @@ axios.get('http://localhost:9090/login', {
     favorId: ...
 }
 // 查看收藏
-{
-    postId: 任意值,
-    likerId: ...
-}
+http://localhost:9090/user/favor?userId=1
 // 查看转发
 {
     postId: 任意值,
