@@ -5,8 +5,8 @@
       <div class="leftTab-wrapper" style="width: 30%;">
         <LeftTab></LeftTab>
       </div>
-      <div class="postContainer-wrapper" style="width: 120%;">
-        <PostContainer></PostContainer>
+      <div class="User-wrapper" style="width: 70%;">
+        <User></User>
       </div>
     </div>
   </div>
@@ -15,14 +15,17 @@
 <script>
 import ForumHeader from './ForumHeader.vue';
 import LeftTab from './LeftTab.vue';
-import PostContainer from './PostContainer.vue';
+import User from './User.vue';
+import Post from './Post.vue';
 
 export default {
   components: {
     ForumHeader,
     LeftTab,
-    PostContainer
+    User,
+    Post
   }
+
 };
 </script>
 
@@ -51,6 +54,14 @@ body {
 }
 
 .postContainer-wrapper {
+  height: 100%;
+}
+
+.postPost-wrapper {
+  height: 100%;
+}
+
+.User-wrapper {
   height: 100%;
 }
 
