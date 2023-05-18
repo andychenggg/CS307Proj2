@@ -13,9 +13,9 @@ import org.springframework.stereotype.Repository;
 public interface RepliesMapper extends BaseMapper<Replies> {
     @Insert("insert into replies(toreplyid, topostid, content, stars, authorid, anonymous) " +
         "VALUES (#{toreplyid}, #{topostid}, #{content}, #{stars}, #{authorid}, #{anonymous})")
-    int addReply(long toreplyid, long topostid, String content, int stars, String authorid, boolean anonymous);
+    int addReply(long toreplyid, long topostid, String content, int stars, long authorid, boolean anonymous);
 
     @Select("select r.*, u.username authorName\n" +
         "   from replies r join users u on u.userid = r.authorid where u.userid = #{authorId);")
-    List<Replies> searchRepliesByAuthorId(String authorId);
+    List<Replies> searchRepliesByAuthorId(long authorId);
 }

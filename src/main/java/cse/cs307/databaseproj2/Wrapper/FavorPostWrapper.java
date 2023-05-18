@@ -4,9 +4,9 @@ public class FavorPostWrapper {
     // 帖子id
     private long postId;
     // 收藏者id
-    private String favorId;
+    private long favorId;
 
-    public FavorPostWrapper(long postId, String favorId) {
+    public FavorPostWrapper(long postId, long favorId) {
         this.postId = postId;
         this.favorId = favorId;
     }
@@ -19,11 +19,11 @@ public class FavorPostWrapper {
         this.postId = postId;
     }
 
-    public String getFavorId() {
+    public long getFavorId() {
         return favorId;
     }
 
-    public void setFavorId(String favorId) {
+    public void setFavorId(long favorId) {
         this.favorId = favorId;
     }
 }

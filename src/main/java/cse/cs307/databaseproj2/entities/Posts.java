@@ -10,11 +10,10 @@ public class Posts {
     private String title;
     private String content;
     private LocalDateTime postingTime;
-    private String authorId;
+    private long authorId;
     private String city;
-    private String senderId;
+    private long senderId;
     private boolean anonymous;
-    @TableField(exist = false)
     private String country;
     @TableField(exist = false)
     private List<String> postCategories;
@@ -72,11 +71,11 @@ public class Posts {
         this.postingTime = postingTime;
     }
 
-    public String getAuthorId() {
+    public long getAuthorId() {
         return authorId;
     }
 
-    public void setAuthorId(String authorId) {
+    public void setAuthorId(long authorId) {
         this.authorId = authorId;
     }
 
@@ -97,11 +96,11 @@ public class Posts {
     }
 
 
-    public String getSenderId() {
+    public long getSenderId() {
         return senderId;
     }
 
-    public void setSenderId(String senderId) {
+    public void setSenderId(long senderId) {
         this.senderId = senderId;
     }
 

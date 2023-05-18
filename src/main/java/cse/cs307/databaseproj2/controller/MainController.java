@@ -67,8 +67,8 @@ public class MainController {
     @GetMapping("/homepage")
     public String demo(HttpServletRequest request){
         // localhost:8080/homepage
-        String userId = CookieManager.findCurrentUser(request);
-        if(userId == null) {
+        long userId = CookieManager.findCurrentUser(request);
+        if(userId == -1) {
             return "homepage";
         }
         else{
@@ -88,9 +88,9 @@ public class MainController {
     @ResponseBody
     public String login(HttpServletRequest request, HttpServletResponse response){
 
-        String userId = CookieManager.findCurrentUser(request);
+        long userId = CookieManager.findCurrentUser(request);
         System.err.println(userId);
-        if(userId == null) {
+        if(userId == -1) {
             response.setHeader("request-login", "failed");
             response.setHeader("Access-Control-Expose-Headers", "request-login");
             return "login";
@@ -136,8 +136,8 @@ public class MainController {
     @GetMapping("/signup")
     @ResponseBody
     public String signup(HttpServletRequest request, HttpServletResponse response){
-        String userId = CookieManager.findCurrentUser(request);
-        if(userId == null) {
+        long userId = CookieManager.findCurrentUser(request);
+        if(userId == -1) {
             response.setHeader("request-login", "failed");
             response.setHeader("Access-Control-Expose-Headers", "request-login");
 
