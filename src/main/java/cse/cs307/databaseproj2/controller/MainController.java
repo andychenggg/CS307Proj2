@@ -173,10 +173,8 @@ public class MainController {
 
         }
         if(success){
-            long allocateId = 10000000000000000L+userMapper.selectCount(null);
-            user.setUserid(String.valueOf(allocateId));
             user.setRegistrationtime(LocalDateTime.now());
-            userMapper.insert(user);
+            userMapper.addUser(user.getUsername(), user.getPassword(), user.getRegistrationtime(), user.getPhone());
             CookieManager.addCookie(response, "loginId", user.getUserid(), 3600);
 
             response.setHeader("request-login", "pass");

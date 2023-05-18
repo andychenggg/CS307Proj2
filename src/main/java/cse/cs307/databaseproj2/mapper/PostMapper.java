@@ -17,17 +17,15 @@ public interface PostMapper extends BaseMapper<Posts> {
     Posts findPostById(long postid);
 
 
-    @Select("select p.*, u.username authorname, v.username sendername, c.country " +
+    @Select("select p.*, u.username authorname, v.username sendername " +
         "from posts p join users u on p.authorid = u.userid join users v on p.senderid = v.userid "+
-        "join cities c on p.city = c.city "+
         "where postid <= #{lastPostId} and postid > #{lastPostId} - #{limit} order by postid desc;")
     // replace also provide the username
     List<Posts> findPostByIdWithUsernamePageByPage(long lastPostId, int limit);
     @Select("select max(postid) from posts;")
     long findMaxPostId();
-    @Select("select p.*, u.username authorname, v.username sendername, c.country " +
+    @Select("select p.*, u.username authorname, v.username sendername " +
         "from posts p join users u on p.authorid = u.userid join users v on p.senderid = v.userid "+
-        "join cities c on p.city = c.city "+
         "where p.authorid = #{authorid} order by postid desc;")
     List<Posts> findMyPosts(String authorid);
 
@@ -44,23 +42,19 @@ public interface PostMapper extends BaseMapper<Posts> {
     int addCity(String city, String country);
     @Insert("insert into categories(category) values #{category}")
     int addCate(String category);
-    @Select("select categoryid from categories where ;")
 
-    @Select("select p.*, u.username authorname, v.username sendername, c.country " +
-        "from posts p join users u on p.authorid = u.userid join users v on p.senderid = v.userid " +
-        "join cities c on p.city = c.city "+
+    @Select("select p.*, u.username authorname, v.username sendername" +
+        "from posts p join users u on p.authorid = u.userid join users v on p.senderid = v.userid "+
         "where likerid = #{likerid};")
     List<Posts> findLikePosts(String likerid);
 
-    @Select("select p.*, u.username authorname, v.username sendername, c.country " +
-        "from posts p join users u on p.authorid = u.userid join users v on p.senderid = v.userid " +
-        "join cities c on p.city = c.city "+
+    @Select("select p.*, u.username authorname, v.username sendername " +
+        "from posts p join users u on p.authorid = u.userid join users v on p.senderid = v.userid "+
         "where sharerid = #{sharerid};")
     List<Posts> findSharePosts(String sharerid);
 
-    @Select("select p.*, u.username authorname, v.username sendername, c.country " +
-        "from posts p join users u on p.authorid = u.userid join users v on p.senderid = v.userid " +
-        "join cities c on p.city = c.city "+
+    @Select("select p.*, u.username authorname, v.username sendername " +
+        "from posts p join users u on p.authorid = u.userid join users v on p.senderid = v.userid "+
         "where collectorid = #{collectorid};")
     List<Posts> findFavoritePosts(String collectorid);
 
