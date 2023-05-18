@@ -27,36 +27,36 @@ public interface PostMapper extends BaseMapper<Posts> {
     @Select("select p.*, u.username authorname, v.username sendername " +
         "from posts p join users u on p.authorid = u.userid join users v on p.senderid = v.userid "+
         "where p.authorid = #{authorid} order by postid desc;")
-    List<Posts> findMyPosts(String authorid);
+    List<Posts> findMyPosts(long authorid);
 
 
 
     @Select("select category from categories join postcategory p on categories.categoryid = p.categoryid where p.postid = #{postid};")
     List<String> findPostCate(long postid);
 
-    @Insert("insert into posts(title, content, postingtime, authorid, city, senderid, anonymous) " +
-        "values (#{title}, #{content}, #{postingtime}, #{authorid}, #{city}, #{senderid}, #{anonymous})")
-    int insertNewPost(String title, String content, LocalDateTime postingtime, String authorid, String city,String senderid, boolean anonymous);
+    @Insert("insert into posts(title, content, postingtime, authorid, city, country, senderid, anonymous) " +
+        "values (#{title}, #{content}, #{postingtime}, #{authorid}, #{city}, #{country}, #{senderid}, #{anonymous})")
+    int insertNewPost(String title, String content, LocalDateTime postingtime, long authorid, String city, String country, long senderid, boolean anonymous);
     /* 待修改*/
-    @Insert("insert into cities values(#{city}, #{country})")
-    int addCity(String city, String country);
     @Insert("insert into categories(category) values #{category}")
     int addCate(String category);
 
-    @Select("select p.*, u.username authorname, v.username sendername" +
-        "from posts p join users u on p.authorid = u.userid join users v on p.senderid = v.userid "+
-        "where likerid = #{likerid};")
-    List<Posts> findLikePosts(String likerid);
+    @Select("select p.*, u.username authorname, v.username sendername\n" +
+        "        from posts p join users u on p.authorid = u.userid join users v on p.senderid = v.userid\n" +
+        "        join likes f on f.postid = p.postid\n" +
+        "        where likerid = #{likerid};")
+    List<Posts> findLikePosts(long likerid);
+
+    @Select("select p.*, u.username authorname, v.username sendername\n" +
+        "        from posts p join users u on p.authorid = u.userid join users v on p.senderid = v.userid\n" +
+        "        where authorid != senderid and senderid = #{sharerid};")
+    List<Posts> findSharePosts(long sharerid);
 
     @Select("select p.*, u.username authorname, v.username sendername " +
         "from posts p join users u on p.authorid = u.userid join users v on p.senderid = v.userid "+
-        "where sharerid = #{sharerid};")
-    List<Posts> findSharePosts(String sharerid);
-
-    @Select("select p.*, u.username authorname, v.username sendername " +
-        "from posts p join users u on p.authorid = u.userid join users v on p.senderid = v.userid "+
+        "join favorites f on f.postid = p.postid "+
         "where collectorid = #{collectorid};")
-    List<Posts> findFavoritePosts(String collectorid);
+    List<Posts> findFavoritePosts(long collectorid);
 
 
 }

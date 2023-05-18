@@ -4,9 +4,9 @@ public class SharePostWrapper {
     // 帖子id
     private long postId;
     // 收藏者id
-    private String shareId;
+    private long shareId;
 
-    public SharePostWrapper(long postId, String shareId) {
+    public SharePostWrapper(long postId, long shareId) {
         this.postId = postId;
         this.shareId = shareId;
     }
@@ -19,11 +19,11 @@ public class SharePostWrapper {
         this.postId = postId;
     }
 
-    public String getShareId() {
+    public long getShareId() {
         return shareId;
     }
 
-    public void setShareId(String shareId) {
+    public void setShareId(long shareId) {
         this.shareId = shareId;
     }
 }

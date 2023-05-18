@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -52,8 +53,8 @@ public class UserController {
             return postMapper.findPostByIdWithUsernamePageByPage(prw.getLastPostId(), prw.getLimit());
     }
 
-    @GetMapping("/user/homepage/post")
-    public List<Posts> findMyPost(@RequestBody String authorId, HttpServletRequest request, HttpServletResponse response){
+    @GetMapping("/user/homepage/post/receive")
+    public List<Posts> findMyPost(@RequestBody long authorId, HttpServletRequest request, HttpServletResponse response){
 //        System.err.println(userId);
         // update the validity
         CookieManager.updateCookieValidity(request, response, "loginId");
@@ -67,13 +68,12 @@ public class UserController {
             // update the validity
             CookieManager.updateCookieValidity(request, response, "loginId");
             // select the post
-            postMapper.addCity(posts.getCity(), posts.getCountry());
             return postMapper.insertNewPost(posts.getTitle(), posts.getContent(),
-                posts.getPostingTime(), posts.getAuthorId(), posts.getCity(), posts.getSenderId(), posts.isAnonymous());
+                posts.getPostingTime(), posts.getAuthorId(), posts.getCity(), posts.getCountry(), posts.getSenderId(), posts.isAnonymous());
     }
 
     @GetMapping("/user/homepage/replies/receive")
-    public List<Replies> findMyReplies(@RequestBody String authorId, HttpServletRequest request, HttpServletResponse response){
+    public List<Replies> findMyReplies(@RequestBody long authorId, HttpServletRequest request, HttpServletResponse response){
 //        System.err.println(userId);
         // update the validity
         CookieManager.updateCookieValidity(request, response, "loginId");
@@ -119,40 +119,46 @@ public class UserController {
         Posts posts = postMapper.findPostById(spw.getPostId());
         userMapper.sharePost(spw.getPostId(), spw.getShareId());
         postMapper.insertNewPost(posts.getTitle(), posts.getContent(), posts.getPostingTime(),
-            posts.getAuthorId(), posts.getCity(),
+            posts.getAuthorId(), posts.getCity(), posts.getCountry(),
             spw.getShareId(), posts.isAnonymous());
         CookieManager.updateCookieValidity(request, response, "loginId");
         return "success";
     }
 
     @GetMapping("/user/like")
-    public List<Posts> checkLikes(@RequestBody LikePostWrapper lpw, HttpServletRequest request, HttpServletResponse response){
+    public List<Posts> checkLikes(@RequestParam long userId, HttpServletRequest request, HttpServletResponse response){
         CookieManager.updateCookieValidity(request, response, "loginId");
-        List<Posts> posts = postMapper.findLikePosts(lpw.getLikerId());
+        List<Posts> posts = postMapper.findLikePosts(userId);
         posts.forEach(e -> {
             e.setPostCategories(postMapper.findPostCate(e.getPostId()));
         });
-        return null;
+        return posts;
     }
 
     @GetMapping("/user/favor")
-    public List<Posts> checkFavors(@RequestBody FavorPostWrapper fpw, HttpServletRequest request, HttpServletResponse response){
-        CookieManager.updateCookieValidity(request, response, "loginId");
-        List<Posts> posts = postMapper.findFavoritePosts(fpw.getFavorId());
-        posts.forEach(e -> {
-            e.setPostCategories(postMapper.findPostCate(e.getPostId()));
-        });
-        return posts;
+    public List<Posts> checkFavors(@RequestParam long userId, HttpServletRequest request, HttpServletResponse response){
+        if(userId == CookieManager.findCurrentUser(request)) {
+            CookieManager.updateCookieValidity(request, response, "loginId");
+            List<Posts> posts = postMapper.findFavoritePosts(userId);
+            posts.forEach(e -> {
+                e.setPostCategories(postMapper.findPostCate(e.getPostId()));
+            });
+            return posts;
+        }
+        return null;
     }
 
     @GetMapping("/user/share")
-    public List<Posts> checkShares(@RequestBody SharePostWrapper spw, HttpServletRequest request, HttpServletResponse response){
-        CookieManager.updateCookieValidity(request, response, "loginId");
-        List<Posts> posts = postMapper.findSharePosts(spw.getShareId());
-        posts.forEach(e -> {
-            e.setPostCategories(postMapper.findPostCate(e.getPostId()));
-        });
-        return posts;
+    public List<Posts> checkShares(@RequestParam long userId, HttpServletRequest request, HttpServletResponse response){
+        if(userId == CookieManager.findCurrentUser(request)) {
+            CookieManager.updateCookieValidity(request, response, "loginId");
+            List<Posts> posts = postMapper.findSharePosts(userId);
+            posts.forEach(e -> {
+                e.setPostCategories(postMapper.findPostCate(e.getPostId()));
+            });
+            return posts;
+        }
+        return null;
     }
 
     // follow someone
@@ -170,9 +176,13 @@ public class UserController {
     }
 
     @GetMapping("/user/follow")
-    public List<Users> findFollow(@RequestBody FollowUserWrapper fuw, HttpServletRequest request, HttpServletResponse response){
-        CookieManager.updateCookieValidity(request, response, "loginId");
-        return userMapper.findFollowing(fuw.getUserId());
+    public List<Users> findFollow(@RequestParam long userId, HttpServletRequest request, HttpServletResponse response){
+        if(userId == CookieManager.findCurrentUser(request)){
+
+            CookieManager.updateCookieValidity(request, response, "loginId");
+            return userMapper.findFollowing(userId);
+        }
+        return null;
     }
 
 

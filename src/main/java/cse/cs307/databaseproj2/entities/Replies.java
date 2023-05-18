@@ -9,8 +9,7 @@ public class Replies {
     private long toPostId;
     private String content;
     private int stars;
-    private String authorId;
-    private String postId;
+    private long authorId;
     private boolean isAnonymous;
 
     @TableField(exist = false)
@@ -71,33 +70,24 @@ public class Replies {
         this.stars = stars;
     }
 
-    public String getAuthorId() {
+    public long getAuthorId() {
         return authorId;
     }
 
-    public void setAuthorId(String authorId) {
+    public void setAuthorId(long authorId) {
         this.authorId = authorId;
-    }
-
-    public String getPostId() {
-        return postId;
-    }
-
-    public void setPostId(String postId) {
-        this.postId = postId;
     }
 
     public Replies() {
     }
 
     public Replies(long replyId, long toReplyId, long toPostId, String content, int stars,
-                   String authorId, String postId) {
+                   long authorId) {
         this.replyId = replyId;
         this.toReplyId = toReplyId;
         this.toPostId = toPostId;
         this.content = content;
         this.stars = stars;
         this.authorId = authorId;
-        this.postId = postId;
     }
 }
