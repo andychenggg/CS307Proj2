@@ -127,12 +127,15 @@ public class UserController {
 
     @GetMapping("/user/like")
     public List<Posts> checkLikes(@RequestParam long userId, HttpServletRequest request, HttpServletResponse response){
-        CookieManager.updateCookieValidity(request, response, "loginId");
-        List<Posts> posts = postMapper.findLikePosts(userId);
-        posts.forEach(e -> {
-            e.setPostCategories(postMapper.findPostCate(e.getPostId()));
-        });
-        return posts;
+        if(userId == CookieManager.findCurrentUser(request)) {
+            CookieManager.updateCookieValidity(request, response, "loginId");
+            List<Posts> posts = postMapper.findLikePosts(userId);
+            posts.forEach(e -> {
+                e.setPostCategories(postMapper.findPostCate(e.getPostId()));
+            });
+            return posts;
+        }
+        return null;
     }
 
     @GetMapping("/user/favor")
