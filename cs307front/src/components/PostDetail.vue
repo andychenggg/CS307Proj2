@@ -16,9 +16,9 @@
         </div>
         <div class="bottom">
             <div class="button-container">
-                <button @click="handleAction('share')">转发</button>
-                <button @click="handleAction('like')">点赞</button>
-                <button @click="handleAction('favorite')">收藏</button>
+                <button @click="handleAction('share')">share</button>
+                <button @click="handleAction('like')">like</button>
+                <button @click="handleAction('favorite')">favorite</button>
             </div>
         </div>
         <div class="comment">

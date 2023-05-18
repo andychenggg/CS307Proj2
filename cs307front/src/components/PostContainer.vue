@@ -1,6 +1,6 @@
 <template>
-    <div className="container">
-        <div className="main-content" id="content">
+    <div class="container">
+        <div class="main-content" id="content">
         </div>
     </div>
 </template>
@@ -53,7 +53,7 @@ export default {
 
 <style scoped>
 .container {
-    width: 60%;
+    width: 100%;
     display: flex;
     flex-direction: column;
 }

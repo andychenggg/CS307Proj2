@@ -1,8 +1,8 @@
 <template>
-    <div>
-        <el-container>
-            <el-aside style="background-color: rgb(238, 241, 246)">
-                <el-menu :default-openeds="['1', '3']">
+    <div class ="wrapper">
+        <el-container class="el-container-wrapper">
+            <el-aside class="el-aside-wrapper" style="background-color: rgb(238, 241, 246)">
+                <el-menu :default-openeds="['1', '4']">
                     <el-submenu index="1">
                         <template slot="title"><i class="el-icon-message"></i>homepage</template>
                         <el-menu-item index="1-1">
@@ -54,16 +54,23 @@
 </template>
 
 <script>
-    import InfiniteStroll from "@/components/InfiniteStroll.vue";
-
-    export default {
-        components: {InfiniteStroll}
-    };
+    // import InfiniteStroll from "@/components/InfiniteStroll.vue";
+    //
+    // export default {
+    //     components: {InfiniteStroll}
+    // };
 </script>
 
 <style scoped>
-    .sidebar {
-        width: 100%;
-        background-color: #f0f0f0;
+    .wrapper{
+      width: 100%;
+    }
+
+    .el-container-wrapper{
+      width: inherit;
+    }
+
+    .el-aside-wrapper{
+      width: inherit;
     }
 </style>
