@@ -6,13 +6,13 @@
                     <el-submenu index="1">
                         <template slot="title"><i class="el-icon-message"></i>homepage</template>
                         <el-menu-item index="1-1">
-                            <el-button type="primary" plain>homepage</el-button>
+                            <el-button type="primary" plain class="same_length_button">homepage</el-button>
                         </el-menu-item>
                     </el-submenu>
                     <el-submenu index="2">
                         <template slot="title"><i class="el-icon-menu"></i>Post</template>
                         <el-menu-item index="2-1">
-                            <el-button type="primary" plain>post</el-button>
+                            <el-button type="primary" plain class="same_length_button">post</el-button>
                         </el-menu-item>
                     </el-submenu>
                     <el-submenu index="3">
@@ -20,16 +20,16 @@
                             <i class="el-icon-document"></i>Record
                         </template>
                         <el-menu-item index="3-1">
-                            <el-button type="primary" plain>yourLike</el-button>
+                            <el-button type="primary" plain class="same_length_button">yourLike</el-button>
                         </el-menu-item>
                         <el-menu-item index="3-2">
-                            <el-button type="primary" plain>yourFavorite</el-button>
+                            <el-button type="primary" plain class="same_length_button">yourFavorite</el-button>
                         </el-menu-item>
                         <el-menu-item index="3-3">
-                            <el-button type="primary" plain>yourPost</el-button>
+                            <el-button type="primary" plain class="same_length_button">yourPost</el-button>
                         </el-menu-item>
                         <el-menu-item index="3-4">
-                            <el-button type="primary" plain>yourComment</el-button>
+                            <el-button type="primary" plain class="same_length_button">yourComment</el-button>
                         </el-menu-item>
                     </el-submenu>
                     <el-submenu index="4">
@@ -37,14 +37,10 @@
                             <i class="el-icon-user"></i>User
                         </template>
                         <el-menu-item index="4-1">
-                            <div style="display: flex; justify-content: flex-end; align-items: center; margin-top: 5px">
-                                <el-button type="primary" plain>follow/unfollow</el-button>
-                            </div>
+                            <el-button type="primary" plain class="same_length_button">follow/unfollow</el-button>
                         </el-menu-item>
-                        <el-menu-item index="4-2">
-                            <div style="display: flex; justify-content: flex-end; align-items: center; margin-top: 5px">
-                                <el-button type="danger" plain @click="logout">Log out</el-button>
-                            </div>
+                        <el-menu-item index="4-2" >
+                            <el-button type="danger" plain @click="logout" class="same_length_button">Log out</el-button>
                         </el-menu-item>
                     </el-submenu>
                 </el-menu>
@@ -82,6 +78,10 @@
     .sidebar {
         width: 100%;
         background-color: #f0f0f0;
+    }
+
+    .same_length_button{
+        width: 140px;
     }
 
 </style>
