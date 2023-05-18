@@ -40,7 +40,7 @@ public class UserController {
     @Autowired
     private RepliesMapper repliesMapper;
 
-    @GetMapping("/user/homepage")
+    @GetMapping("/homepage/post")
     public List<Posts> findPostInPage(@RequestBody PostsRequestWrapper prw, HttpServletRequest request, HttpServletResponse response){
 //        System.err.println(userId);
             // update the validity
@@ -52,7 +52,7 @@ public class UserController {
             return postMapper.findPostByIdWithUsernamePageByPage(prw.getLastPostId(), prw.getLimit());
     }
 
-    @GetMapping("/user/homepage/")
+    @GetMapping("/user/homepage/post")
     public List<Posts> findMyPost(@RequestBody String authorId, HttpServletRequest request, HttpServletResponse response){
 //        System.err.println(userId);
         // update the validity
@@ -61,7 +61,7 @@ public class UserController {
         return postMapper.findMyPosts(authorId);
     }
 
-    @PostMapping("/user/homepage/post")
+    @PostMapping("/user/homepage/post/send")
     public int sendPosts(@RequestBody Posts posts, HttpServletRequest request, HttpServletResponse response){
 //        System.err.println(userId);
             // update the validity
@@ -72,7 +72,7 @@ public class UserController {
                 posts.getPostingTime(), posts.getAuthorId(), posts.getCity(), posts.getSenderId(), posts.isAnonymous());
     }
 
-    @GetMapping("/user/homepage/")
+    @GetMapping("/user/homepage/replies/receive")
     public List<Replies> findMyReplies(@RequestBody String authorId, HttpServletRequest request, HttpServletResponse response){
 //        System.err.println(userId);
         // update the validity
@@ -81,7 +81,7 @@ public class UserController {
         return repliesMapper.searchRepliesByAuthorId(authorId);
     }
 
-    @PostMapping("/user/homepage/replies")
+    @PostMapping("/user/homepage/replies/send")
     public int sendReplies(@RequestBody Replies replies, HttpServletRequest request, HttpServletResponse response){
 //        System.err.println(userId);
         // update the validity
@@ -94,12 +94,6 @@ public class UserController {
 
 
 
-    @GetMapping("/user/homepage/")
-    public String operatePost(HttpServletRequest request, HttpServletResponse response){
-
-
-        return "success";
-    }
 
     // 点赞
     @PostMapping("/user/like")
@@ -151,7 +145,7 @@ public class UserController {
         return posts;
     }
 
-    @GetMapping("/user/favor")
+    @GetMapping("/user/share")
     public List<Posts> checkShares(@RequestBody SharePostWrapper spw, HttpServletRequest request, HttpServletResponse response){
         CookieManager.updateCookieValidity(request, response, "loginId");
         List<Posts> posts = postMapper.findSharePosts(spw.getShareId());

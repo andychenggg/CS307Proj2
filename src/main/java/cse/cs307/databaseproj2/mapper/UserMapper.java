@@ -47,8 +47,8 @@ public interface UserMapper extends BaseMapper<Users> {
     @Update("update users set username=#{username}, phone=#{phone}")
     int update(Users user);
 
-    @Insert("insert into users values (#{userid}, #{username}, #{password}, #{registrationtime}, #{phone})")
-    int addUser(String userid, String username, String password, LocalDateTime registrationtime, String phone);
+    @Insert("insert into users(username, password, registrationtime, phone) values (#{username}, #{password}, #{registrationtime}, #{phone})")
+    int addUser(String username, String password, LocalDateTime registrationtime, String phone);
 
     @Insert("insert into likes values (#{postid}, #{likerid})")
     int likePost(long postid, String likerid);
