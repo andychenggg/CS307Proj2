@@ -30,7 +30,7 @@ public interface UserMapper extends BaseMapper<Users> {
     Users findById(long id);
 
     @Select("select username from users where userid=#{id}")
-    Users findNameById(long id);
+    String findNameById(long id);
 
     @Select("select * from users where username = #{username};")
     Users findByUsername(String username);
