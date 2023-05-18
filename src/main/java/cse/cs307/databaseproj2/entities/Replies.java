@@ -15,6 +15,28 @@ public class Replies {
     @TableField(exist = false)
     private String authorName;
 
+    @TableField(exist = false)
+    private String toUserId;
+
+    @TableField(exist = false)
+    private String toUserName;
+
+    public String getToUserId() {
+        return toUserId;
+    }
+
+    public void setToUserId(String toUserId) {
+        this.toUserId = toUserId;
+    }
+
+    public String getToUserName() {
+        return toUserName;
+    }
+
+    public void setToUserName(String toUserName) {
+        this.toUserName = toUserName;
+    }
+
     public boolean isAnonymous() {
         return isAnonymous;
     }

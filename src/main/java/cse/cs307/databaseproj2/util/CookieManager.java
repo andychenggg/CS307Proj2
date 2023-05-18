@@ -21,6 +21,7 @@ public class CookieManager {
         Cookie[] cookies = request.getCookies();
         if (cookies != null) {
             for (Cookie cookie : cookies) {
+                System.err.println(cookie.getName()+" "+cookie.getValue());
                 if(cookie.getName().equals("loginId")){
                     return Long.parseLong(cookie.getValue());
                 }

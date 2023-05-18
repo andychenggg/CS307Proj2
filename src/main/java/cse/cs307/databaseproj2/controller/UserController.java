@@ -45,51 +45,67 @@ public class UserController {
     public List<Posts> findPostInPage(@RequestBody PostsRequestWrapper prw, HttpServletRequest request, HttpServletResponse response){
 //        System.err.println(userId);
             // update the validity
-            CookieManager.updateCookieValidity(request, response, "loginId");
+
             // select the post
-            if(prw.getLastPostId() == -1){
+            if (prw.getLastPostId() == -1) {
                 prw.setLastPostId(postMapper.findMaxPostId());
             }
-            return postMapper.findPostByIdWithUsernamePageByPage(prw.getLastPostId(), prw.getLimit());
+            return postMapper.findPostByIdWithUsernamePageByPage(prw.getLastPostId(),
+                prw.getLimit());
     }
 
-    @GetMapping("/user/homepage/post/receive")
-    public List<Posts> findMyPost(@RequestBody long authorId, HttpServletRequest request, HttpServletResponse response){
-//        System.err.println(userId);
-        // update the validity
-        CookieManager.updateCookieValidity(request, response, "loginId");
-        // select the post
-        return postMapper.findMyPosts(authorId);
-    }
-
-    @PostMapping("/user/homepage/post/send")
-    public int sendPosts(@RequestBody Posts posts, HttpServletRequest request, HttpServletResponse response){
-//        System.err.println(userId);
+    @GetMapping("/user/homepage/post")
+    public List<Posts> findMyPost(@RequestParam long senderId, HttpServletRequest request, HttpServletResponse response){
+        System.err.println(CookieManager.findCurrentUser(request));
+        if(senderId == CookieManager.findCurrentUser(request)) {
             // update the validity
             CookieManager.updateCookieValidity(request, response, "loginId");
             // select the post
-            return postMapper.insertNewPost(posts.getTitle(), posts.getContent(),
-                posts.getPostingTime(), posts.getAuthorId(), posts.getCity(), posts.getCountry(), posts.getSenderId(), posts.isAnonymous());
+            return postMapper.findMyPosts(senderId);
+        }
+        return null;
     }
 
-    @GetMapping("/user/homepage/replies/receive")
-    public List<Replies> findMyReplies(@RequestBody long authorId, HttpServletRequest request, HttpServletResponse response){
+    @PostMapping("/user/homepage/post")
+    public int sendPosts(@RequestBody Posts posts, HttpServletRequest request, HttpServletResponse response) {
 //        System.err.println(userId);
         // update the validity
-        CookieManager.updateCookieValidity(request, response, "loginId");
-        // select the post
-        return repliesMapper.searchRepliesByAuthorId(authorId);
+        if (posts.getSenderId() == CookieManager.findCurrentUser(request)) {
+            CookieManager.updateCookieValidity(request, response, "loginId");
+            // select the post
+            return postMapper.insertNewPost(posts.getTitle(), posts.getContent(),
+                posts.getPostingTime(), posts.getAuthorId(), posts.getCity(), posts.getCountry(),
+                posts.getSenderId(), posts.isAnonymous());
+
+        }
+        return -1;
     }
 
-    @PostMapping("/user/homepage/replies/send")
+    @GetMapping("/user/homepage/replies")
+    public List<Replies> findMyReplies(@RequestParam long authorId, HttpServletRequest request, HttpServletResponse response){
+//        System.err.println(userId);
+        // update the validity
+        if(authorId == CookieManager.findCurrentUser(request)) {
+            CookieManager.updateCookieValidity(request, response, "loginId");
+            // select the post
+            return repliesMapper.searchRepliesByAuthorId(authorId);
+        }
+        return null;
+    }
+
+    @PostMapping("/user/homepage/replies")
     public int sendReplies(@RequestBody Replies replies, HttpServletRequest request, HttpServletResponse response){
 //        System.err.println(userId);
         // update the validity
-        CookieManager.updateCookieValidity(request, response, "loginId");
-        // select the replies
-        return repliesMapper.addReply(replies.getToReplyId(), replies.getToPostId(), replies.getContent(),
-            replies.getStars(), replies.getAuthorId(),
-            replies.isAnonymous());
+        if(replies.getAuthorId() == CookieManager.findCurrentUser(request)) {
+            CookieManager.updateCookieValidity(request, response, "loginId");
+            // select the replies
+            return repliesMapper.addReply(replies.getToReplyId(), replies.getToPostId(),
+                replies.getContent(),
+                replies.getStars(), replies.getAuthorId(),
+                replies.isAnonymous());
+        }
+        return -1;
     }
 
 
@@ -98,31 +114,43 @@ public class UserController {
     // 点赞
     @PostMapping("/user/like")
     public String likePost(@RequestBody LikePostWrapper lpw, HttpServletRequest request, HttpServletResponse response){
-        userMapper.likePost(lpw.getPostId(), lpw.getLikerId());
 
-        CookieManager.updateCookieValidity(request, response, "loginId");
-        return "success";
+        if(lpw.getLikerId() == CookieManager.findCurrentUser(request)) {
+            userMapper.likePost(lpw.getPostId(), lpw.getLikerId());
+
+            CookieManager.updateCookieValidity(request, response, "loginId");
+            return "success";
+        }
+        return "failed";
     }
 
     // 收藏
     @PostMapping("/user/favor")
     public String favorPost(@RequestBody FavorPostWrapper fpw, HttpServletRequest request,HttpServletResponse response){
-        userMapper.collectPost(fpw.getPostId(), fpw.getFavorId());
 
-        CookieManager.updateCookieValidity(request, response, "loginId");
-        return "success";
+        if(fpw.getFavorId() == CookieManager.findCurrentUser(request)) {
+            userMapper.collectPost(fpw.getPostId(), fpw.getFavorId());
+
+            CookieManager.updateCookieValidity(request, response, "loginId");
+            return "success";
+        }
+        return null;
     }
 
     // 转发
     @PostMapping("/user/share")
     public String sharePost(@RequestBody SharePostWrapper spw, HttpServletRequest request, HttpServletResponse response){
-        Posts posts = postMapper.findPostById(spw.getPostId());
-        userMapper.sharePost(spw.getPostId(), spw.getShareId());
-        postMapper.insertNewPost(posts.getTitle(), posts.getContent(), posts.getPostingTime(),
-            posts.getAuthorId(), posts.getCity(), posts.getCountry(),
-            spw.getShareId(), posts.isAnonymous());
-        CookieManager.updateCookieValidity(request, response, "loginId");
-        return "success";
+
+        if(spw.getShareId() == CookieManager.findCurrentUser(request)) {
+            Posts posts = postMapper.findPostById(spw.getPostId());
+            userMapper.sharePost(spw.getPostId(), spw.getShareId());
+            postMapper.insertNewPost(posts.getTitle(), posts.getContent(), posts.getPostingTime(),
+                posts.getAuthorId(), posts.getCity(), posts.getCountry(),
+                spw.getShareId(), posts.isAnonymous());
+            CookieManager.updateCookieValidity(request, response, "loginId");
+            return "success";
+        }
+        return null;
     }
 
     @GetMapping("/user/like")
@@ -167,15 +195,21 @@ public class UserController {
     // follow someone
     @PostMapping("/user/follow")
     public int follow(@RequestBody FollowUserWrapper fuw, HttpServletRequest request, HttpServletResponse response){
-        CookieManager.updateCookieValidity(request, response, "loginId");
-        return userMapper.followOthers(fuw.getUserId(), fuw.getFollowigId());
+        if(fuw.getUserId() == CookieManager.findCurrentUser(request)) {
+            CookieManager.updateCookieValidity(request, response, "loginId");
+            return userMapper.followOthers(fuw.getUserId(), fuw.getFollowigId());
+        }
+        return -1;
     }
 
 
     @DeleteMapping("/user/follow")
     public int unfollow(@RequestBody FollowUserWrapper fuw, HttpServletRequest request, HttpServletResponse response){
-        CookieManager.updateCookieValidity(request, response, "loginId");
-        return userMapper.deFollowOthers(fuw.getUserId(), fuw.getFollowigId());
+        if(fuw.getUserId() == CookieManager.findCurrentUser(request)) {
+            CookieManager.updateCookieValidity(request, response, "loginId");
+            return userMapper.deFollowOthers(fuw.getUserId(), fuw.getFollowigId());
+        }
+        return -1;
     }
 
     @GetMapping("/user/follow")
