@@ -15,7 +15,9 @@ public interface RepliesMapper extends BaseMapper<Replies> {
         "VALUES (#{toreplyid}, #{topostid}, #{content}, #{stars}, #{authorid}, #{anonymous})")
     int addReply(long toreplyid, long topostid, String content, int stars, long authorid, boolean anonymous);
 
-    @Select("select r.*, u.username authorName\n" +
-        "   from replies r join users u on u.userid = r.authorid where u.userid = #{authorId);")
+    @Select("select r.*, u.username authorName, w.userid touserid, w.username tousername\n" +
+        "        from replies r join users u on u.userid = r.authorid\n" +
+        "        join replies v on r.toreplyid = v.replyid\n" +
+        "        join users w on w.userid = v.authorid where r.authorid = #{authorId};")
     List<Replies> searchRepliesByAuthorId(long authorId);
 }

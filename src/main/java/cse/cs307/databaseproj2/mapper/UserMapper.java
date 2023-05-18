@@ -22,6 +22,9 @@ import org.springframework.stereotype.Repository;
 public interface UserMapper extends BaseMapper<Users> {
 
 
+
+    @Select("select userid from users where username = #{username};")
+    long findIdByUsername(String username);
     //here
     @Select("select * from users where userid=#{id}")
     Users findById(long id);
@@ -31,6 +34,8 @@ public interface UserMapper extends BaseMapper<Users> {
 
     @Select("select * from users where username = #{username};")
     Users findByUsername(String username);
+
+
 
     @Select("select v.userid, v.username, v.RegistrationTime, v.Phone from users u\n" +
         "join FollowedBy FB on u.userID = FB.userid\n" +

@@ -46,14 +46,14 @@ public class MainController {
     }
     // hello
     @GetMapping("/test")
+    @ResponseBody
     public String test(HttpServletRequest request, HttpServletResponse rs) throws IOException {
-        Cookie c=  new Cookie("bbb", "aa");
-        c.setMaxAge(60);
+        Cookie c=  new Cookie("loginId", null);
+        c.setMaxAge(0);
         rs.addCookie(c);
         for(Cookie ck: request.getCookies()){
             System.err.println(ck.getName()+" "+ck.getValue()+" "+ck.getMaxAge());
         }
-        rs.sendRedirect("homepage");
         return "homepage";
     }
 
@@ -115,8 +115,8 @@ public class MainController {
             System.out.println((Object) null);
         }
         if (u != null && u.checkPass(user.getPassword())) {
-
-            CookieManager.addCookie(response, "loginId", u.getUserid(), 3600);
+            System.err.println(String.valueOf(userMapper.findIdByUsername(user.getUsername())));
+            CookieManager.addCookie(response, "loginId", String.valueOf(userMapper.findIdByUsername(user.getUsername())), 3600);
             response.setHeader("request-login", "pass");
             response.setHeader("Access-Control-Expose-Headers", "request-login");
             response.setHeader("Access-Control-Allow-Credentials", "true");
@@ -175,7 +175,7 @@ public class MainController {
         if(success){
             user.setRegistrationtime(LocalDateTime.now());
             userMapper.addUser(user.getUsername(), user.getPassword(), user.getRegistrationtime(), user.getPhone());
-            CookieManager.addCookie(response, "loginId", user.getUserid(), 3600);
+            CookieManager.addCookie(response, "loginId", String.valueOf(userMapper.findIdByUsername(user.getUsername())), 3600);
 
             response.setHeader("request-login", "pass");
             response.setHeader("Access-Control-Expose-Headers", "request-login");
@@ -193,7 +193,8 @@ public class MainController {
 
     @DeleteMapping("/logout")
     @ResponseBody
-    public String logout(HttpServletResponse response){
+    public String logout(HttpServletRequest request, HttpServletResponse response){
+//        long userId = CookieManager.findCurrentUser(request);
         CookieManager.deleteCookie(response, "loginId");
         return "Success logout";
     }
