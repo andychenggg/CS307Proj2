@@ -5,19 +5,17 @@
         <option value="all">allUsers</option>
         <option value="following">followedUsers</option>
       </select>
-      <input type="text" placeholder="Search users by username" style="width: 400px" v-model="searchText" />
+      <input type="text" placeholder="Search users by username" style="width: 400px" v-model="searchText"/>
       <button type="button" style="margin-left: 3px" @click="search">搜索</button>
     </div>
     <div style="display: flex; justify-content: space-around; flex-wrap: wrap">
-      <div style="width: 330px; margin-top: 10px; border: 1px solid #ccc; padding: 10px; border-radius: 5px;" v-for="user in filteredUsers" :key="user.id">
-        <div style="text-align: left; margin-bottom: 10px">
-          <span style="font-weight: bold; font-size: 16px">{{ user.nickname }}</span>
-          <el-switch
-              v-model="user.following"
-              active-color="#13ce66"
-              inactive-color="#ff4949"
-              @change="toggleFollow(user)"
-          ></el-switch>
+      <div style="width: 330px; margin-top: 10px; border: 1px solid #ccc; padding: 10px; border-radius: 5px;"
+           v-for="user in filteredUsers" :key="user.id">
+        <div style="display: flex; text-align: left; margin-bottom: 10px">
+          <div style="font-weight: bold; font-size: 16px">{{ user.nickname }}</div>
+          <div style="width: 10px"></div>
+          <el-switch v-model="user.following" active-color="#13ce66" inactive-color="#ff4949" active-text="follow" inactive-text="unfollow"
+                     @change="toggleFollow(user)"></el-switch>
         </div>
         <div>
           <div style="display: flex; align-items: center; margin-bottom: 10px">
@@ -80,7 +78,7 @@ export default {
   },
   methods: {
     toggleFollow(user) {
-      user.following = !user.following;
+      return !user.following;
     },
     search() {
       // Perform additional search logic if needed
