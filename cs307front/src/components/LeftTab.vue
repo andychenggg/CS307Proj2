@@ -58,7 +58,7 @@
                 currentPage: 'homepage'
             };
         },
-        components: {InfiniteStroll},
+        components: {},
         methods: {
             logout() {
                 axios.delete('http://localhost:9090/logout', {
