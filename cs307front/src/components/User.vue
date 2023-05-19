@@ -12,7 +12,12 @@
       <div style="width: 330px; margin-top: 10px; border: 1px solid #ccc; padding: 10px; border-radius: 5px;" v-for="user in filteredUsers" :key="user.id">
         <div style="text-align: left; margin-bottom: 10px">
           <span style="font-weight: bold; font-size: 16px">{{ user.nickname }}</span>
-          <button style="float: right; padding: 3px 8px; color: #ff0509; background-color: #fff; border: 1px solid #ff0509; border-radius: 3px; cursor: pointer" @click="toggleFollow(user)">{{ user.following ? 'Unfollow' : 'Follow' }}</button>
+          <el-switch
+              v-model="user.following"
+              active-color="#13ce66"
+              inactive-color="#ff4949"
+              @change="toggleFollow(user)"
+          ></el-switch>
         </div>
         <div>
           <div style="display: flex; align-items: center; margin-bottom: 10px">
