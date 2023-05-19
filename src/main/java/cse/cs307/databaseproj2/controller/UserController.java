@@ -1,5 +1,6 @@
 package cse.cs307.databaseproj2.controller;
 
+import com.maxmind.geoip2.exception.GeoIp2Exception;
 import cse.cs307.databaseproj2.Wrapper.FavorPostWrapper;
 import cse.cs307.databaseproj2.Wrapper.FollowUserWrapper;
 import cse.cs307.databaseproj2.Wrapper.LikePostWrapper;
@@ -12,6 +13,8 @@ import cse.cs307.databaseproj2.mapper.PostMapper;
 import cse.cs307.databaseproj2.mapper.RepliesMapper;
 import cse.cs307.databaseproj2.mapper.UserMapper;
 import cse.cs307.databaseproj2.util.CookieManager;
+import cse.cs307.databaseproj2.util.GeoIPService;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 import javax.servlet.http.Cookie;
@@ -21,6 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,6 +36,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:8080")
 public class UserController {
     @Autowired
     private UserMapper userMapper;
@@ -68,15 +73,18 @@ public class UserController {
     }
 
     @PostMapping("/user/homepage/post")
-    public int sendPosts(@RequestBody Posts posts, HttpServletRequest request, HttpServletResponse response) {
+    public int sendPosts(@RequestBody Posts posts, HttpServletRequest request, HttpServletResponse response)
+        throws IOException, GeoIp2Exception {
 //        System.err.println(userId);
         // update the validity
         if (posts.getSenderId() == CookieManager.findCurrentUser(request)) {
             CookieManager.updateCookieValidity(request, response, "loginId");
             // select the post
+            String [] locations = GeoIPService.getLocation(posts.getIp());
+
             return postMapper.insertNewPost(posts.getTitle(), posts.getContent(),
-                LocalDateTime.now(), posts.getAuthorId(), posts.getCity(), posts.getCountry(),
-                posts.getSenderId(), posts.isAnonymous());
+                LocalDateTime.now(), CookieManager.findCurrentUser(request), locations[1], locations[0],
+                CookieManager.findCurrentUser(request), posts.isAnonymous());
 
         }
         return -1;
@@ -214,11 +222,11 @@ public class UserController {
     }
 
     @GetMapping("/user/follow")
-    public List<Users> findFollow(@RequestParam long userId, HttpServletRequest request, HttpServletResponse response){
-        if(userId == CookieManager.findCurrentUser(request)){
+    public List<Users> findFollow(HttpServletRequest request, HttpServletResponse response){
+        if(-1 != CookieManager.findCurrentUser(request)){
 
             CookieManager.updateCookieValidity(request, response, "loginId");
-            return userMapper.findFollowing(userId);
+            return userMapper.findFollowing(CookieManager.findCurrentUser(request));
         }
         return null;
     }

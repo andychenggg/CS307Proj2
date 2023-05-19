@@ -116,9 +116,17 @@
                     const latitude = position.coords.latitude;
                     const longitude = position.coords.longitude;
                 });
+                let ip;
+                axios.get('https://api.ipify.org?format=json')
+                    .then(response => {
+                        ip = response.data.ip;
+                    });
                 axios.post("localhost:9090/user/homepage/post", {
                     title: this.article.title,
                     anonymous: this.anonymous_value === 'Anonymous',
+                    content: this.article.mdContent,
+                    ip: ip,
+                    postCategories: this.article.dynamicTags
 
                 }, {
                     withCredentials: true

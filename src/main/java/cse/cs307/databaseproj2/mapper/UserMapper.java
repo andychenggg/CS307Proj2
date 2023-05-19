@@ -37,10 +37,15 @@ public interface UserMapper extends BaseMapper<Users> {
 
 
 
-    @Select("select v.userid, v.username, v.RegistrationTime, v.Phone from users u\n" +
-        "join FollowedBy FB on u.userID = FB.userid\n" +
-        "join users v on v.userid = FB.followigid\n" +
-        "where u.userid = #{id};")
+    @Select("SELECT users.userid, username, registrationtime, phone,\n" +
+        "       CASE\n" +
+        "           WHEN followedby.userid IS NOT NULL THEN true\n" +
+        "           ELSE false\n" +
+        "       END AS is_followed\n" +
+        "FROM users\n" +
+        "LEFT JOIN followedby\n" +
+        "ON users.userid = followedby.followigid\n" +
+        "AND followedby.userid = #{id};")
     List<Users> findFollowing(long id);
 
     @Select("select *\n" +
