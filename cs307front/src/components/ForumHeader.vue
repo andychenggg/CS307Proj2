@@ -8,17 +8,23 @@
         <div class="nav" >
             <el-input v-model="input" placeholder="请输入内容" style="width: 100%"></el-input>
             <el-button type="primary" icon="el-icon-search">搜索</el-button>
-<!--            <el-button type="primary" style="height: 40px">Search</el-button>-->
-<!--            <el-button type="primary">Log out</el-button>-->
+
+        <!--            add a div-->
+            <div v-if="username" class="name">
+                {{ username }}
+            </div>
         </div>
     </div>
 </template>
 
 <script>
+    import axios from "axios";
+
     export default {
         data() {
             return {
-                input: ''
+                input: '',
+                username: null
             }
         },
         methods: {
@@ -26,6 +32,19 @@
                 document.cookie = "loginId=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
                 window.location.href = "http://localhost:8080/homepage";
             }
+        },
+        created() {
+            axios.get('http://localhost:9090/current_user', {
+                withCredentials: true
+            })
+                .then(response => {
+                    // 处理响应
+                    this.username = response.data;
+                })
+                .catch(error => {
+                    // 处理错误
+                    console.error(error);
+                });
         }
     };
 </script>
@@ -59,6 +78,13 @@
         align-items: center;
         justify-content: flex-start;
         margin: 0;
+    }
+
+    .name {
+        font-size: 20px;
+        font-weight: bold;
+        margin-left: 10px;
+        margin-right: 10px;
     }
 
 </style>

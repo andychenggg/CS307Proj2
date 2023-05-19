@@ -84,6 +84,14 @@ public class MainController {
         return list;
     }
 
+    @GetMapping("/current_user")
+    @ResponseBody
+    public String findCurrentUser(HttpServletRequest request){
+        long id = CookieManager.findCurrentUser(request);
+
+        return userMapper.findNameById(id);
+    }
+
     @GetMapping("/login")
     @ResponseBody
     public String login(HttpServletRequest request, HttpServletResponse response){
