@@ -12,6 +12,7 @@ import cse.cs307.databaseproj2.mapper.PostMapper;
 import cse.cs307.databaseproj2.mapper.RepliesMapper;
 import cse.cs307.databaseproj2.mapper.UserMapper;
 import cse.cs307.databaseproj2.util.CookieManager;
+import java.time.LocalDateTime;
 import java.util.List;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -74,7 +75,7 @@ public class UserController {
             CookieManager.updateCookieValidity(request, response, "loginId");
             // select the post
             return postMapper.insertNewPost(posts.getTitle(), posts.getContent(),
-                posts.getPostingTime(), posts.getAuthorId(), posts.getCity(), posts.getCountry(),
+                LocalDateTime.now(), posts.getAuthorId(), posts.getCity(), posts.getCountry(),
                 posts.getSenderId(), posts.isAnonymous());
 
         }

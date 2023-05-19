@@ -3,10 +3,11 @@
         <ForumHeader></ForumHeader>
         <div class="content-wrapper">
             <div class="leftTab-wrapper">
-                <LeftTab></LeftTab>
+                <LeftTab @page-change="handlePageChange"></LeftTab>
             </div>
-            <div class="postContainer-wrapper">
-                <PostContainer></PostContainer>
+            <div class="postContainer-wrapper" >
+                <PostContainer v-if="isHomePage"></PostContainer>
+                <PostArticle v-if="isPost"></PostArticle>
             </div>
         </div>
     </div>
@@ -17,12 +18,33 @@
 import ForumHeader from './ForumHeader.vue';
 import LeftTab from './LeftTab.vue';
 import PostContainer from './PostContainer.vue';
+import PostArticle from './PostArticle.vue'
 
 export default {
     components: {
         ForumHeader,
         LeftTab,
-        PostContainer
+        PostContainer,
+        PostArticle
+    },
+    data() {
+        return {
+            currentPage: 'homepage',
+        };
+    },
+    computed: {
+        isHomePage() {
+            return this.currentPage === 'homepage';
+        },
+        isPost() {
+            return this.currentPage === 'post';
+        }
+    },
+    methods: {
+        handlePageChange(newPage) {
+            this.currentPage = newPage;
+            console.log(newPage)
+        }
     }
 };
 </script>
@@ -52,7 +74,7 @@ body{
 }
 
 .postContainer-wrapper{
-    width: 70%;
+    width: 120%;
     height: 100%;
 }
 
