@@ -8,24 +8,29 @@
             <div class="postContainer-wrapper" >
                 <PostContainer v-if="isHomePage"></PostContainer>
                 <PostArticle v-if="isPost"></PostArticle>
+                
+        <User></User>
             </div>
         </div>
-    </div>
+  </div>
 </template>
-
 
 <script>
 import ForumHeader from './ForumHeader.vue';
 import LeftTab from './LeftTab.vue';
 import PostContainer from './PostContainer.vue';
-import PostArticle from './PostArticle.vue'
+import PostArticle from './PostArticle.vue';
+import User from './User.vue';
+import Post from './Post.vue';
 
 export default {
     components: {
         ForumHeader,
         LeftTab,
         PostContainer,
-        PostArticle
+        PostArticle,
+    User,
+    Post
     },
     data() {
         return {
@@ -48,35 +53,43 @@ export default {
     }
 };
 </script>
+
 <style>
-body{
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    height: 100%;
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
 }
 
-.wrapper{
-    width: 100%;
-    height: 100%;
+.wrapper {
+  width: 100%;
+  height: 100%;
 }
 
 .content-wrapper {
-    display: flex;
-    flex-direction: row;
-    height: 100vh;
-    width: 100%;
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+  width: 100%;
 }
 
-.leftTab-wrapper{
-    width: 30%;
-    height: 100%;
+.leftTab-wrapper {
+  height: 100%;
 }
+
 
 .postContainer-wrapper{
     width: 120%;
     height: 100%;
 }
 
+.postPost-wrapper {
+  height: 100%;
+}
+
+.User-wrapper {
+  height: 100%;
+}
 
 </style>
