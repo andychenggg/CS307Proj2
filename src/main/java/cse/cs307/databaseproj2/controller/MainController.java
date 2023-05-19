@@ -1,8 +1,10 @@
 package cse.cs307.databaseproj2.controller;
 
+import com.maxmind.geoip2.exception.GeoIp2Exception;
 import cse.cs307.databaseproj2.entities.Users;
 import cse.cs307.databaseproj2.mapper.UserMapper;
 import cse.cs307.databaseproj2.util.CookieManager;
+import cse.cs307.databaseproj2.util.GeoIPService;
 import io.swagger.annotations.Api;
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -39,9 +41,11 @@ public class MainController {
     @Autowired
     private UserMapper userMapper;
 
-    @PostMapping("/test2")
+    @GetMapping("/test2")
     @ResponseBody
-    public Users test2(HttpServletRequest request, HttpServletResponse rs) throws IOException {
+    public Users test2(HttpServletRequest request, HttpServletResponse rs)
+        throws IOException, GeoIp2Exception {
+        System.err.println(GeoIPService.getLocation(""));
         return userMapper.findByUsername("holiday");
     }
     // hello
