@@ -220,19 +220,19 @@ public class UserController {
     // follow someone
     @PostMapping("/user/follow")
     public int follow(@RequestBody FollowUserWrapper fuw, HttpServletRequest request, HttpServletResponse response){
-        if(fuw.getUserId() == CookieManager.findCurrentUser(request)) {
+        if(-1 != CookieManager.findCurrentUser(request)) {
             CookieManager.updateCookieValidity(request, response, "loginId");
-            return userMapper.followOthers(fuw.getUserId(), fuw.getFollowigId());
+            return userMapper.followOthers(CookieManager.findCurrentUser(request), fuw.getFollowigId());
         }
         return -1;
     }
 
 
     @DeleteMapping("/user/follow")
-    public int unfollow(@RequestBody FollowUserWrapper fuw, HttpServletRequest request, HttpServletResponse response){
-        if(fuw.getUserId() == CookieManager.findCurrentUser(request)) {
+    public int unfollow(@RequestParam("followigid") long followigid, HttpServletRequest request, HttpServletResponse response){
+        if(-1 != CookieManager.findCurrentUser(request)) {
             CookieManager.updateCookieValidity(request, response, "loginId");
-            return userMapper.deFollowOthers(fuw.getUserId(), fuw.getFollowigId());
+            return userMapper.deFollowOthers(CookieManager.findCurrentUser(request), followigid);
         }
         return -1;
     }

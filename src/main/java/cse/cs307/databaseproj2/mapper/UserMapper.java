@@ -72,9 +72,9 @@ public interface UserMapper extends BaseMapper<Users> {
 
 
     @Insert("insert into followedby(userID, FollowigID) values(#{userid}, #{followigid});")
-    int followOthers(long userid, long followingid);
+    int followOthers(long userid, long followigid);
 
-    @Delete("delete from followedby where userID = '#{userid}' and followigid = '#{followigid}';")
+    @Delete("delete from followedby where userID = #{userid} and followigid = #{followigid};")
     int deFollowOthers(long userid, long followigid);
 
     @Delete("delete from users where id=#{userid")

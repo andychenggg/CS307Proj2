@@ -8,7 +8,7 @@
       <div class="postContainer-wrapper">
         <PostContainer v-if="isHomePage"></PostContainer>
         <PostArticle v-if="isPost"></PostArticle>
-        <User v-if="isFollow"></User>
+        <User :users = "usersData" v-if="isFollow"></User>
       </div>
     </div>
 
@@ -36,6 +36,7 @@ export default {
   data() {
     return {
       currentPage: 'homepage',
+      usersData:[],
     };
   },
   computed: {
@@ -46,15 +47,31 @@ export default {
       return this.currentPage === 'post';
     },
     isFollow() {
+      this.fetchUserData();
       return this.currentPage === 'follow';
     },
 
+  },
+  mounted() {
+    this.fetchUserData();
   },
   methods: {
     handlePageChange(newPage) {
       this.currentPage = newPage;
       console.log(newPage)
-    }
+    },
+
+    fetchUserData() {
+      axios.get("http://localhost:9090/user/follow")
+          .then(response => {
+            // 处理请求成功的响应数据
+            this.usersData = response.data;
+          })
+          .catch(error => {
+            // 处理请求失败的错误
+            console.error(error);
+          });
+    },
   }
 };
 </script>
