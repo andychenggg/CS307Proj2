@@ -83,6 +83,9 @@ export default {
     search() {
       // Perform additional search logic if needed
     },
+    getUser() {
+
+    },
   },
 };
 </script>
