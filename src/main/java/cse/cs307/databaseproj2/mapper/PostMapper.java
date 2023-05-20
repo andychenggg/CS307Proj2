@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
 
@@ -35,11 +36,19 @@ public interface PostMapper extends BaseMapper<Posts> {
     List<String> findPostCate(long postid);
 
     @Insert("insert into posts(title, content, postingtime, authorid, city, country, senderid, anonymous) " +
-        "values (#{title}, #{content}, #{postingtime}, #{authorid}, #{city}, #{country}, #{senderid}, #{anonymous})")
-    int insertNewPost(String title, String content, LocalDateTime postingtime, long authorid, String city, String country, long senderid, boolean anonymous);
+        "values (#{title}, #{content}, #{postingTime}, #{authorId}, #{city}, #{country}, #{senderId}, #{anonymous}) returning postid")
+    @Options(useGeneratedKeys = true, keyProperty = "postId")
+    Long insertNewPost(Posts posts);
     /* 待修改*/
-    @Insert("insert into categories(category) values #{category}")
-    int addCate(String category);
+    @Insert("insert into categories(category) values #{category} returning categoryid")
+    @Options(useGeneratedKeys = true, keyProperty = "postid")
+    Long addCate(String category);
+
+    @Select("select categoryid from categories where category = #{category};")
+    long findCateIdByName(String category);
+
+    @Insert("insert into postcategory values(#{postid}, #{cateid});")
+    long addPostCate(long postid, long cateid);
 
     @Select("select p.*, u.username authorname, v.username sendername\n" +
         "        from posts p join users u on p.authorid = u.userid join users v on p.senderid = v.userid\n" +

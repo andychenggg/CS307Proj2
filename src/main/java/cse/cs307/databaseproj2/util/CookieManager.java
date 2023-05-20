@@ -21,7 +21,6 @@ public class CookieManager {
         Cookie[] cookies = request.getCookies();
         if (cookies != null) {
             for (Cookie cookie : cookies) {
-                System.err.println(cookie.getName()+" "+cookie.getValue());
                 if(cookie.getName().equals("loginId")){
                     return Long.parseLong(cookie.getValue());
                 }
@@ -80,7 +79,7 @@ public class CookieManager {
         Cookie[] cookies = request.getCookies();
         if (cookies != null) {
             for (Cookie cookie : cookies) {
-//                System.err.println(cookie.getName()+" "+cookie.getValue()+" "+cookie.getMaxAge());
+                System.err.println(cookie.getName()+" "+cookie.getValue()+" "+cookie.getMaxAge());
                 if(cookie.getName().equals(cookieName)){
                     return true;
                 }

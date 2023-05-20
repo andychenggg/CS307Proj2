@@ -72,20 +72,37 @@ public class UserController {
         return null;
     }
 
+    @CrossOrigin(origins = "http://localhost:8080/user/homepage")
     @PostMapping("/user/homepage/post")
     public int sendPosts(@RequestBody Posts posts, HttpServletRequest request, HttpServletResponse response)
         throws IOException, GeoIp2Exception {
 //        System.err.println(userId);
         // update the validity
-        if (posts.getSenderId() == CookieManager.findCurrentUser(request)) {
+        if (-1 != CookieManager.findCurrentUser(request)) {
             CookieManager.updateCookieValidity(request, response, "loginId");
             // select the post
-            String [] locations = GeoIPService.getLocation(posts.getIp());
+            System.err.println(posts);
 
-            return postMapper.insertNewPost(posts.getTitle(), posts.getContent(),
-                LocalDateTime.now(), CookieManager.findCurrentUser(request), locations[1], locations[0],
-                CookieManager.findCurrentUser(request), posts.isAnonymous());
+            String [] locations;
+            try{
+                locations = GeoIPService.getLocation(posts.getIp());
+            }catch (GeoIp2Exception e){
+                locations = new String[]{"unknown", "unknown"};
+            }
+            posts.setAuthorId(CookieManager.findCurrentUser(request));
+            posts.setSenderId(CookieManager.findCurrentUser(request));
+            posts.setCity(locations[1]);
+            posts.setCountry(locations[0]);
+            posts.setPostingTime(LocalDateTime.now());
 
+            postMapper.insertNewPost(posts);
+            System.err.println(posts.getPostId());
+            posts.getPostCategories().forEach(e -> {
+                postMapper.addCate(e);
+                postMapper.addPostCate(posts.getPostId(), postMapper.findCateIdByName(e));
+            });
+//
+            return 1;
         }
         return -1;
     }
@@ -153,9 +170,8 @@ public class UserController {
         if(spw.getShareId() == CookieManager.findCurrentUser(request)) {
             Posts posts = postMapper.findPostById(spw.getPostId());
             userMapper.sharePost(spw.getPostId(), spw.getShareId());
-            postMapper.insertNewPost(posts.getTitle(), posts.getContent(), posts.getPostingTime(),
-                posts.getAuthorId(), posts.getCity(), posts.getCountry(),
-                spw.getShareId(), posts.isAnonymous());
+            posts.setSenderId(spw.getShareId());
+            postMapper.insertNewPost(posts);
             CookieManager.updateCookieValidity(request, response, "loginId");
             return "success";
         }

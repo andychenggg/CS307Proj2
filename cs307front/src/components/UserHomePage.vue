@@ -8,8 +8,7 @@
             <div class="postContainer-wrapper" >
                 <PostContainer v-if="isHomePage"></PostContainer>
                 <PostArticle v-if="isPost"></PostArticle>
-                
-        <User></User>
+                <User></User>
             </div>
         </div>
   </div>
