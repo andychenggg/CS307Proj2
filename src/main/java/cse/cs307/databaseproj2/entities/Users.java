@@ -14,6 +14,17 @@ public class Users {
 
 
     private String phone;
+
+    private boolean is_followed;
+
+    public boolean isIs_followed() {
+        return is_followed;
+    }
+
+    public void setIs_followed(boolean is_followed) {
+        this.is_followed = is_followed;
+    }
+
     @TableField(exist = false)
     private List<Users> following;
 
