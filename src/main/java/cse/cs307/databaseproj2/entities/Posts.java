@@ -23,6 +23,17 @@ public class Posts {
     @TableField(exist = false)
     private String senderName;
 
+    @TableField(exist = false)
+    private String ip;
+
+    public String getIp() {
+        return ip;
+    }
+
+    public void setIp(String ip) {
+        this.ip = ip;
+    }
+
     public String getSenderName() {
         return senderName;
     }
@@ -128,10 +139,15 @@ public class Posts {
             ", title='" + title + '\'' +
             ", content='" + content + '\'' +
             ", postingTime=" + postingTime +
-            ", authorId='" + authorId + '\'' +
+            ", authorId=" + authorId +
             ", city='" + city + '\'' +
+            ", senderId=" + senderId +
+            ", anonymous=" + anonymous +
             ", country='" + country + '\'' +
             ", postCategories=" + postCategories +
+            ", authorName='" + authorName + '\'' +
+            ", senderName='" + senderName + '\'' +
+            ", ip='" + ip + '\'' +
             '}';
     }
 }

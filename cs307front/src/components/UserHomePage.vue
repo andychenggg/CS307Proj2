@@ -11,6 +11,7 @@
         <User v-if="isFollow"></User>
       </div>
     </div>
+
   </div>
 </template>
 

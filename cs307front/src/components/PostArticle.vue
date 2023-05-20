@@ -112,26 +112,34 @@
                 this.tagValue = '';
             },
             submitPost(){
-                navigator.geolocation.getCurrentPosition(position => {
-                    const latitude = position.coords.latitude;
-                    const longitude = position.coords.longitude;
-                });
-                axios.post("localhost:9090/user/homepage/post", {
-                    title: this.article.title,
-                    anonymous: this.anonymous_value === 'Anonymous',
+                let ip;
+                if(this.article.mdContent !== '' && this.article.title !== ''){
+                    axios.get('https://api.ipify.org?format=json', {withCredentials: false})
+                        .then(response => {
+                            ip = response.data.ip;
+                            axios.post("http://localhost:9090/user/homepage/post", {
+                                title: this.article.title,
+                                anonymous: this.anonymous_value === 'Anonymous',
+                                content: this.article.mdContent,
+                                ip: ip,
+                                postCategories: this.article.dynamicTags
 
-                }, {
-                    withCredentials: true
-                })
-                    .then(response => {
-                        // 处理响应
-                        console.log(response.data)
-                        this.$router.push('../homepage');
-                    })
-                    .catch(error => {
-                        // 处理错误
-                        console.error(error);
-                    });
+                            }, {
+                                withCredentials: true
+                            })
+                                .then(response => {
+                                    // 处理响应
+                                    console.log(ip)
+                                    this.article.dynamicTags = [];
+                                    this.article.title = '';
+                                    this.article.mdContent = '';
+                                })
+                                .catch(error => {
+                                    // 处理错误
+                                    console.error(error);
+                                });
+                        });
+                }
             }
         }
     }
@@ -179,78 +187,6 @@
         vertical-align: bottom;
     }
 
-    .post-article {
-    }
 </style>
 
-<!--<template>-->
-<!--    <div className="container">-->
-<!--        <div className="main-content" id="content">-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</template>-->
 
-<!--<script>-->
-<!--    import Vue from 'vue';-->
-<!--    import Post from "@/components/Post.vue";-->
-
-<!--    export default {-->
-<!--        components: {Post},-->
-<!--        mounted() {-->
-<!--            const contentDiv = document.getElementById('content');-->
-<!--            const totalPages = 5; // 总页数-->
-<!--            let currentPage = 1; // 当前页数-->
-<!--            const itemsPerPage = 50; // 每页显示的条目数-->
-<!--            let loadedItems = 0; // 已加载的条目数-->
-
-<!--            // 加载指定页数的内容-->
-<!--            function loadContent(page) {-->
-<!--                for (let i = 1; i <= itemsPerPage; i++) {-->
-<!--                    const post = new Vue({-->
-<!--                        render: (h) => h(Post, {-->
-<!--                            props: {-->
-<!--                                content: 'Content ' + (loadedItems + i)-->
-<!--                            }-->
-<!--                        })-->
-<!--                    }).$mount();-->
-<!--                    contentDiv.appendChild(post.$el);-->
-<!--                }-->
-<!--                loadedItems += itemsPerPage;-->
-<!--            }-->
-
-<!--            // 添加初始内容-->
-<!--            loadContent(currentPage);-->
-
-<!--            // 监听滚动事件-->
-<!--            window.addEventListener('scroll', function () {-->
-<!--                // 判断滚动到底部-->
-<!--                if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {-->
-<!--                    // 加载下一页内容-->
-<!--                    currentPage++;-->
-<!--                    if (currentPage <= totalPages) {-->
-<!--                        loadContent(currentPage);-->
-<!--                    }-->
-<!--                }-->
-<!--            });-->
-<!--        }-->
-<!--    };-->
-<!--</script>-->
-
-<!--<style scoped>-->
-<!--    .container {-->
-<!--        width: 60%;-->
-<!--        display: flex;-->
-<!--        flex-direction: column;-->
-<!--    }-->
-
-<!--    .main-content {-->
-<!--        overflow-y: auto;-->
-<!--        border: 10px solid #ccc;-->
-<!--    }-->
-
-<!--    .box {-->
-<!--        padding: 20px;-->
-<!--        margin-bottom: 10px;-->
-<!--        background-color: #f0f0f0;-->
-<!--    }-->
-<!--</style>-->
