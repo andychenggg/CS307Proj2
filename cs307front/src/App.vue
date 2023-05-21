@@ -15,6 +15,7 @@
   import TopTrend from './components/TopTrend.vue';
   import Post from '@/components/Post.vue';
   import postDetail from '@/components/PostDetail.vue';
+  import NewComment from "@/components/NewComment.vue";
 export default {
   name: 'App',
   components: {
@@ -23,7 +24,8 @@ export default {
       Signup,
       UserHomePage,
       Post,
-      postDetail
+      postDetail,
+      NewComment
     // TopTrend
   }
 }

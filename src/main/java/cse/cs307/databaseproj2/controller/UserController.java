@@ -48,16 +48,15 @@ public class UserController {
     private RepliesMapper repliesMapper;
 
     @GetMapping("/homepage/post")
-    public List<Posts> findPostInPage(@RequestBody PostsRequestWrapper prw, HttpServletRequest request, HttpServletResponse response){
+    public List<Posts> findPostInPage(@RequestParam("lastPostId") Long lastPostId,  @RequestParam("limit") int limit, HttpServletRequest request, HttpServletResponse response){
 //        System.err.println(userId);
             // update the validity
 
             // select the post
-            if (prw.getLastPostId() == -1) {
-                prw.setLastPostId(postMapper.findMaxPostId());
+            if (lastPostId == -1) {
+                lastPostId = postMapper.findMaxPostId();
             }
-            return postMapper.findPostByIdWithUsernamePageByPage(prw.getLastPostId(),
-                prw.getLimit());
+            return postMapper.findPostByIdWithUsernamePageByPage(lastPostId, limit);
     }
 
     @GetMapping("/user/homepage/post")
@@ -122,16 +121,30 @@ public class UserController {
         return null;
     }
 
+    @GetMapping("/user/homepage/post/replies")
+    public List<Replies> findReplyByPost(@RequestParam("id") Long postId, HttpServletRequest request, HttpServletResponse response){
+//        System.err.println(userId);
+        // update the validity
+//        CookieManager.deleteCookie(response, "loginId");
+        CookieManager.printAllCookie(request);
+        if(-1 != CookieManager.findCurrentUser(request)) {
+            CookieManager.updateCookieValidity(request, response, "loginId");
+            // select the post
+            return repliesMapper.searchRepliesByPostId(postId);
+        }
+        return null;
+    }
+
     @PostMapping("/user/homepage/replies")
     public int sendReplies(@RequestBody Replies replies, HttpServletRequest request, HttpServletResponse response){
 //        System.err.println(userId);
         // update the validity
-        if(replies.getAuthorId() == CookieManager.findCurrentUser(request)) {
+        if(-1 != CookieManager.findCurrentUser(request)) {
             CookieManager.updateCookieValidity(request, response, "loginId");
             // select the replies
             return repliesMapper.addReply(replies.getToReplyId(), replies.getToPostId(),
                 replies.getContent(),
-                replies.getStars(), replies.getAuthorId(),
+                0, CookieManager.findCurrentUser(request),
                 replies.isAnonymous());
         }
         return -1;
@@ -182,10 +195,10 @@ public class UserController {
     }
 
     @GetMapping("/user/like")
-    public List<Posts> checkLikes(@RequestParam long userId, HttpServletRequest request, HttpServletResponse response){
-        if(userId == CookieManager.findCurrentUser(request)) {
+    public List<Posts> checkLikes( HttpServletRequest request, HttpServletResponse response){
+        if(-1 != CookieManager.findCurrentUser(request)) {
             CookieManager.updateCookieValidity(request, response, "loginId");
-            List<Posts> posts = postMapper.findLikePosts(userId);
+            List<Posts> posts = postMapper.findLikePosts(CookieManager.findCurrentUser(request));
             posts.forEach(e -> {
                 e.setPostCategories(postMapper.findPostCate(e.getPostId()));
             });
@@ -195,10 +208,10 @@ public class UserController {
     }
 
     @GetMapping("/user/favor")
-    public List<Posts> checkFavors(@RequestParam long userId, HttpServletRequest request, HttpServletResponse response){
-        if(userId == CookieManager.findCurrentUser(request)) {
+    public List<Posts> checkFavors(HttpServletRequest request, HttpServletResponse response){
+        if(-1 != CookieManager.findCurrentUser(request)) {
             CookieManager.updateCookieValidity(request, response, "loginId");
-            List<Posts> posts = postMapper.findFavoritePosts(userId);
+            List<Posts> posts = postMapper.findFavoritePosts(CookieManager.findCurrentUser(request));
             posts.forEach(e -> {
                 e.setPostCategories(postMapper.findPostCate(e.getPostId()));
             });
@@ -208,10 +221,10 @@ public class UserController {
     }
 
     @GetMapping("/user/share")
-    public List<Posts> checkShares(@RequestParam long userId, HttpServletRequest request, HttpServletResponse response){
-        if(userId == CookieManager.findCurrentUser(request)) {
+    public List<Posts> checkShares(HttpServletRequest request, HttpServletResponse response){
+        if(-1 != CookieManager.findCurrentUser(request)) {
             CookieManager.updateCookieValidity(request, response, "loginId");
-            List<Posts> posts = postMapper.findSharePosts(userId);
+            List<Posts> posts = postMapper.findSharePosts(CookieManager.findCurrentUser(request));
             posts.forEach(e -> {
                 e.setPostCategories(postMapper.findPostCate(e.getPostId()));
             });
@@ -241,11 +254,13 @@ public class UserController {
     }
 
     @GetMapping("/user/follow")
-    public List<Users> findFollow(HttpServletRequest request, HttpServletResponse response){
+    public List<Users> findFollow(HttpServletRequest request, HttpServletResponse response,
+                                  @RequestParam("offset") long offset,
+                                  @RequestParam("limit") long limit){
         if(-1 != CookieManager.findCurrentUser(request)){
 
             CookieManager.updateCookieValidity(request, response, "loginId");
-            return userMapper.findFollowing(CookieManager.findCurrentUser(request));
+            return userMapper.findFollowing(CookieManager.findCurrentUser(request), offset, limit);
         }
         return null;
     }

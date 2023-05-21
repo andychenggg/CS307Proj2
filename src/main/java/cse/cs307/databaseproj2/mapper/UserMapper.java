@@ -45,8 +45,8 @@ public interface UserMapper extends BaseMapper<Users> {
         "FROM users\n" +
         "LEFT JOIN followedby\n" +
         "ON users.userid = followedby.followigid\n" +
-        "AND followedby.userid = #{id};")
-    List<Users> findFollowing(long id);
+        "AND followedby.userid = #{id} ORDER BY is_followed DESC offset #{offset} limit #{limit}")
+    List<Users> findFollowing(long id, long offset, long limit);
 
     @Select("select *\n" +
             "from users\n" +

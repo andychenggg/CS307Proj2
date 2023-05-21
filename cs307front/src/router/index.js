@@ -6,6 +6,7 @@ import Signup from "@/components/Signup.vue";
 import HomePage from "@/components/HomePage.vue";
 import UserHomePage from "@/components/UserHomePage.vue";
 import PostDetail from "@/components/PostDetail.vue";
+import NewComment from "@/components/NewComment.vue";
 Vue.use(VueRouter)
 
 const router = new VueRouter({
@@ -19,7 +20,8 @@ const router = new VueRouter({
         {
             path: '/user/homepage', component: UserHomePage
         },
-        { path: '/user/homepage/PostDetail', component: PostDetail}
+        { path: '/user/homepage/PostDetail', component: PostDetail},
+        { path: "/user/homepage/comment", component: NewComment}
     ]
 })
 

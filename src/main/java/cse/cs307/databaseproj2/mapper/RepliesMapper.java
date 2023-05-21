@@ -20,4 +20,10 @@ public interface RepliesMapper extends BaseMapper<Replies> {
         "        left join replies v on r.toreplyid = v.replyid\n" +
         "        left join users w on w.userid = v.authorid where r.authorid = #{authorId};")
     List<Replies> searchRepliesByAuthorId(long authorId);
+
+    @Select("select r.*, u.username authorName, w.userid touserid, w.username tousername\n" +
+        "        from replies r join users u on u.userid = r.authorid\n" +
+        "        left join replies v on r.toreplyid = v.replyid\n" +
+        "        left join users w on w.userid = v.authorid where r.postid = #{postId};")
+    List<Replies> searchRepliesByPostId(long postId);
 }
