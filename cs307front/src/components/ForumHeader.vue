@@ -54,6 +54,7 @@
     body{
         background-color: #ffffff;
         width: 100%;
+        height: 10%;
     }
     .header {
         background-color: #ffffff;

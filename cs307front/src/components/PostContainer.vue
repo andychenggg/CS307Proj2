@@ -10,6 +10,14 @@ import Vue from 'vue';
 import Post from "@/components/Post.vue";
 
 export default {
+    props: {
+
+    },
+    data() {
+        return {
+
+        }
+    },
     components: {Post},
     mounted() {
         const contentDiv = document.getElementById('content');

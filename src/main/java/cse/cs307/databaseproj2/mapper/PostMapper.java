@@ -17,7 +17,6 @@ public interface PostMapper extends BaseMapper<Posts> {
     @Select("select * from posts where postid = #{postid};")
     Posts findPostById(long postid);
 
-
     @Select("select p.*, u.username authorname, v.username sendername " +
         "from posts p join users u on p.authorid = u.userid join users v on p.senderid = v.userid "+
         "where postid <= #{lastPostId} and postid > #{lastPostId} - #{limit} order by postid desc;")

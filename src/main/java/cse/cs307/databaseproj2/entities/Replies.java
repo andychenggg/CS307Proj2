@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Replies {
     private long replyId;
-    private long toReplyId;
+    private Long toReplyId;
     private long toPostId;
     private String content;
     private int stars;
