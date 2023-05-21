@@ -1,33 +1,25 @@
 <template>
   <div class="container">
     <div style="height: 60px; width: 100%">
-      <div style="display: flex; justify-content: flex-start; width: 50%; height: 100%; margin-left: 20px; align-items: center; ">
-        <el-tag style="margin-right: 10px;" >Sender: </el-tag>
-        <el-tag type="success" style="margin-right: 10px">hello world</el-tag>
-        <el-switch
-                v-model="followSender"
-                active-text="unfollow"
-                inactive-text="follow">
-        </el-switch>
+      <div style="display: flex; justify-content: flex-start; width: 50%; height: 100%; margin-left: 20px; align-items: center;">
+        <el-tag style="margin-right: 10px;">Sender:</el-tag>
+        <el-tag type="success" style="margin-right: 10px">{{ post.senderName}}</el-tag>
+        <el-switch v-model="followSender" active-text="unfollow" inactive-text="follow" @change = "toggleFollowSender"></el-switch>
       </div>
     </div>
     <div style="height: 60px; width: 100%">
       <div style="display: flex; justify-content: flex-start; width: 50%; height: 100%; margin-left: 20px; align-items: center;">
-        <el-tag style="margin-right: 10px">Author: </el-tag>
-        <el-tag type="success" style="margin-right: 10px">hello world</el-tag>
-        <el-switch
-                v-model="followAuthor"
-                active-text="unfollow"
-                inactive-text="follow">
-        </el-switch>
+        <el-tag style="margin-right: 10px;">Author:</el-tag>
+        <el-tag type="success" style="margin-right: 10px">{{ post.authorName }}</el-tag>
+        <el-switch v-model="followAuthor" active-text="unfollow" inactive-text="follow" @change = "toggleFollowAuthor"></el-switch>
       </div>
     </div>
     <div class="username">
-      <label>{{ "helloWorld" }}</label>
+      <label>{{ post.title }}</label>
     </div>
     <div class="content">
-      <pre class="content-textarea" readonly>{{ "hello"}}</pre>
-<!--      <textarea class="content-textarea" placeholder="content"></textarea>-->
+      <pre class="content-textarea" readonly>{{ post.content }}</pre>
+      <!-- <textarea class="content-textarea" placeholder="content"></textarea> -->
     </div>
     <div class="details">
       <div style="width: 25%; display: flex; justify-content: center">
@@ -44,10 +36,9 @@
       </div>
     </div>
     <div v-show="showContent">
-<!--      <PostDetail label="postDetail"></PostDetail>-->
+      <!-- <PostDetail label="postDetail"></PostDetail> -->
       <NewComment :replies="replyData"></NewComment>
     </div>
-
   </div>
 </template>
 
@@ -57,34 +48,95 @@ import NewComment from "@/components/NewComment.vue";
 import axios from "axios";
 
 export default {
+  props: {
+    post: {
+      type: Object,
+      required: true,
+    },
+  },
   components: {
     PostDetail,
-    NewComment
+    NewComment,
   },
   data() {
     return {
       showContent: false,
       followSender: false,
       followAuthor: false,
-      replyData: []
+      replyData: [],
+      posts: [],
     };
   },
   methods: {
-    toggleContent() {
-      this.showContent = !this.showContent;
-      axios.get('/user/homepage/replies')
-              .then(response => {
-                this.replyData = response.data; // 将响应数据赋值给comments数组
-              })
-              .catch(error => {
-                console.error(error);
-              });
+    toggleFollowSender() {
+      // 发送向后端的请求
+      if (this.followSender) {
+        // 当开关打开时的操作
+        // 发送关注发送者的请求
+        axios.post("http://localhost:9090/user/follow", {
+          userId: 0,
+          followigId: this.post.senderId,
+        }, {
+          withCredentials: true
+        })
+            .then(response => {
+              // 处理响应
+            })
+            .catch(error => {
+              // 处理错误
+              console.error(error);
+            });
+      } else {
+        // 当开关关闭时的操作
+        // 发送取消关注发送者的请求
+        axios.delete("http://localhost:9090/user/follow", {
+          params: {
+            followigid: this.post.senderId,
+          }
+        })
+            .then(response => {
+              // 处理响应
+            })
+            .catch(error => {
+              // 处理错误
+              console.error(error);
+            });
+      }
     },
-  },
-  props: {
-    label: {
-      type: String,
-      required: true,
+    toggleFollowAuthor() {
+      // 发送向后端的请求
+      if (this.followAuthor) {
+        // 当开关打开时的操作
+        // 发送关注发送者的请求
+        axios.post("http://localhost:9090/user/follow", {
+          userId: 0,
+          followigId: this.post.authorId,
+        }, {
+          withCredentials: true
+        })
+            .then(response => {
+              // 处理响应
+            })
+            .catch(error => {
+              // 处理错误
+              console.error(error);
+            });
+      } else {
+        // 当开关关闭时的操作
+        // 发送取消关注发送者的请求
+        axios.delete("http://localhost:9090/user/follow", {
+          params: {
+            followigid: this.post.authorId,
+          }
+        })
+            .then(response => {
+              // 处理响应
+            })
+            .catch(error => {
+              // 处理错误
+              console.error(error);
+            });
+      }
     },
   },
 };
@@ -103,7 +155,6 @@ export default {
   justify-content: center;
   align-items: center;
 }
-
 
 .content {
   margin-bottom: 10px;
