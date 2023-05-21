@@ -58,7 +58,6 @@
 </template>
 
 <script>
-
 import axios from "axios";
 
 export default {
@@ -74,6 +73,22 @@ export default {
         withCredentials: true
       })
           .then(response => {
+            let cookies = document.cookie.split(";");
+
+            for (let i = 0; i < cookies.length; i++) {
+              let cookie = cookies[i];
+              while (cookie.charAt(0) === " ") {
+                cookie = cookie.substring(1);
+              }
+              if (cookie.indexOf("loginId" + "=") === 0) {
+                let cookieValue = cookie.substring(("loginId" + "=").length);
+                let domain = window.location.hostname;
+                let path = "/";
+
+                // 删除同名 cookie
+                document.cookie = "loginId" + "=" + cookieValue + "; expires=Thu, 01 Jan 1970 00:00:00 UTC; domain=" + domain + "; path=" + path;
+              }
+            }
             // 处理响应
             console.log(response.data)
             this.$router.push('../homepage');

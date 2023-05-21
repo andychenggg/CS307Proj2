@@ -64,7 +64,7 @@ router.beforeEach((to, from, next) => {
             })
             .catch(error => {
                 // 错误处理逻辑
-                next();
+                // next();
             });
     }
 });

@@ -108,13 +108,16 @@ public class UserController {
     }
 
     @GetMapping("/user/homepage/replies")
-    public List<Replies> findMyReplies(@RequestParam long authorId, HttpServletRequest request, HttpServletResponse response){
+    public List<Replies> findMyReplies(HttpServletRequest request, HttpServletResponse response){
 //        System.err.println(userId);
         // update the validity
-        if(authorId == CookieManager.findCurrentUser(request)) {
+//        CookieManager.deleteCookie(response, "loginId");
+        System.err.println("findMyReplies");
+        CookieManager.printAllCookie(request);
+        if(-1 != CookieManager.findCurrentUser(request)) {
             CookieManager.updateCookieValidity(request, response, "loginId");
             // select the post
-            return repliesMapper.searchRepliesByAuthorId(authorId);
+            return repliesMapper.searchRepliesByAuthorId(CookieManager.findCurrentUser(request));
         }
         return null;
     }

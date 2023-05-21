@@ -1,6 +1,8 @@
 package cse.cs307.databaseproj2.util;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.Collections;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -28,6 +30,15 @@ public class CookieManager {
         }
         return -1;
     }
+    public static void printAllCookie(HttpServletRequest request){
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (int i = cookies.length-1; i >=0 ; i--) {
+                System.err.println(cookies[i].getName()+" "+cookies[i].getValue());
+
+            }
+        }
+    }
 
     /**
      * update specified cookie to 1h;
@@ -47,6 +58,7 @@ public class CookieManager {
                         cookie.setValue(cookieValue);
                     }
                     cookie.setMaxAge(60*60);
+                    cookie.setPath("/"); // 这很重要，确保它应用于你的整个应用。
                     response.addCookie(cookie);
                     return true;
                 }
@@ -66,6 +78,7 @@ public class CookieManager {
             for (Cookie cookie : cookies) {
                 if(cookie.getName().equals(cookieName)){
                     cookie.setMaxAge(60*60);
+                    cookie.setPath("/"); // 这很重要，确保它应用于你的整个应用。
                     response.addCookie(cookie);
                     return true;
                 }
@@ -79,7 +92,6 @@ public class CookieManager {
         Cookie[] cookies = request.getCookies();
         if (cookies != null) {
             for (Cookie cookie : cookies) {
-                System.err.println(cookie.getName()+" "+cookie.getValue()+" "+cookie.getMaxAge());
                 if(cookie.getName().equals(cookieName)){
                     return true;
                 }
@@ -91,12 +103,14 @@ public class CookieManager {
     public static void addCookie(HttpServletResponse response, String cookieName, String cookieValue, int maxAgeInSeconds){
         Cookie cookie = new Cookie(cookieName, cookieValue);
         cookie.setMaxAge(maxAgeInSeconds);
+        cookie.setPath("/"); // 这很重要，确保它应用于你的整个应用。
         response.addCookie(cookie);
     }
 
     public static void deleteCookie(HttpServletResponse response, String cookieName){
         Cookie cookie = new Cookie(cookieName, null);
         cookie.setMaxAge(0);
+        cookie.setPath("/"); // 这很重要，确保它应用于你的整个应用。
         response.addCookie(cookie);
     }
 

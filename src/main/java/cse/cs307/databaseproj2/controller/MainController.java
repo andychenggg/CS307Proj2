@@ -91,6 +91,7 @@ public class MainController {
     @GetMapping("/current_user")
     @ResponseBody
     public String findCurrentUser(HttpServletRequest request){
+        CookieManager.printAllCookie(request);
         long id = CookieManager.findCurrentUser(request);
 
         return userMapper.findNameById(id);
@@ -120,8 +121,8 @@ public class MainController {
     public String login(@RequestBody Users user, Model model, HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
 
+        CookieManager.printAllCookie(request);
             // 进行登录验证逻辑
-        System.err.println(user);
         Users u = userMapper.findByUsername(user.getUsername());
         if(u == null){
             System.out.println((Object) null);
