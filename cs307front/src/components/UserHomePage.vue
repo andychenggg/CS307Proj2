@@ -9,6 +9,7 @@
         <PostContainer v-if="isHomePage"></PostContainer>
         <PostArticle v-if="isPost"></PostArticle>
         <User v-if="isFollow"></User>
+        <Comment v-if="isComment" :CommentData="CommentData"></Comment>
       </div>
     </div>
 
@@ -23,6 +24,7 @@ import PostArticle from './PostArticle.vue';
 import User from './User.vue';
 import Post from './Post.vue';
 import axios from "axios";
+import Comment from "@/components/Comment.vue";
 
 export default {
   components: {
@@ -31,11 +33,13 @@ export default {
     PostContainer,
     PostArticle,
     User,
-    Post
+    Post,
+    Comment
   },
   data() {
     return {
       currentPage: 'homepage',
+      CommentData: []
     };
   },
   computed: {
@@ -48,6 +52,24 @@ export default {
     isFollow() {
       return this.currentPage === 'follow';
     },
+    isComment(){
+      console.log(document.cookie);
+      if(this.currentPage === 'yourComment'){
+        axios.get('http://localhost:9090/user/homepage/replies', {
+          withCredentials: true
+        }).then(response => {
+          // 处理响应
+          this.CommentData = response.data;
+          console.log("here");
+          console.log(document.cookie);
+        })
+                .catch(error => {
+                  // 处理错误
+                  console.error(error);
+                });
+      }
+      return this.currentPage === 'yourComment';
+    }
 
   },
   methods: {
