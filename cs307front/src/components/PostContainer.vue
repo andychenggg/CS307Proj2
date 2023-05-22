@@ -1,75 +1,77 @@
 <template>
-  <div className="container">
-    <div className="main-content" id="content"></div>
-  </div>
+    <div class="container">
+        <div class="main-content" id="content"
+             v-infinite-scroll="fetchPostData"
+             infinite-scroll-disabled="busy"
+             infinite-scroll-distance="10">
+            <Post v-for="post in postData" :key="post.postId" :post="post"></Post>
+        </div>
+    </div>
 </template>
 
 <script>
 import Vue from 'vue';
 import Post from "@/components/Post.vue";
+import axios from "axios";
 
 export default {
-  props: {
-    postData: {
-      type: Array,
-      required: true,
-    },
-  },
-  mounted() {
-    const contentDiv = document.getElementById('content');
-    const totalPages = 5; // 总页数
-    let currentPage = 1; // 当前页数
-    const itemsPerPage = 50; // 每页显示的条目数
-    let loadedItems = 0; // 已加载的条目数
-
-    // 加载指定页数的内容
-    const loadContent = (page) => {
-      for (let i = 1; i <= itemsPerPage; i++) {
-        const post = new Vue({
-          render: (h) => h(Post, {
-            props: {
-              post: this.postData[(currentPage - 1) * itemsPerPage + i - 1]
-            }
-          })
-        }).$mount();
-        contentDiv.appendChild(post.$el);
-      }
-      loadedItems += itemsPerPage;
-    };
-
-    // 添加初始内容
-    loadContent(currentPage);
-
-    // 监听滚动事件
-    window.addEventListener('scroll', () => {
-      // 判断滚动到底部
-      if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
-        // 加载下一页内容
-        currentPage++;
-        if (currentPage <= totalPages) {
-          loadContent(currentPage);
+    data() {
+        return {
+            lastPostId: -1,
+            postData: [],
+            controlByIsHomepage: true,
+            noMorePost: false,
+            busy: false
         }
-      }
-    });
-  }
+    },
+    components: {
+        Post
+    },
+    created() {
+        // 组件创建时要执行的操作
+        console.log('PostContainer created!');
+        this.fetchPostData();
+    },
+    methods: {
+        async fetchPostData() {
+            if (!this.noMorePost) {
+                this.busy = true;
+                axios.get('http://localhost:9090/homepage/post', {
+                    params: {
+                        lastPostId: this.lastPostId,
+                        limit: 50
+                    },
+                    withCredentials: true
+                }).then(response => {
+                    // 处理响应
+                    console.log(response.data)
+                    this.postData = this.postData.concat(response.data);
+                    this.lastPostId = this.postData[this.postData.length - 1]["postId"];
+                    if (response.data.length < 50) {
+                        this.noMorePost = true;
+                    }
+                    this.busy = false;
+                })
+                    .catch(error => {
+                        // 处理错误
+                        console.error(error);
+                    });
+            }
+        }
+    }
 };
 </script>
 
 <style scoped>
 .container {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
 .main-content {
-  overflow-y: auto;
-  border: 10px solid #ccc;
+    overflow-y: auto;
+    border: 10px solid #ccc;
 }
 
-.box {
-  padding: 20px;
-  margin-bottom: 10px;
-  background-color: #f0f0f0;
-}
 </style>
