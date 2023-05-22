@@ -6,7 +6,7 @@
         <LeftTab @page-change="handlePageChange"></LeftTab>
       </div>
       <div class="postContainer-wrapper">
-        <PostContainer v-if="isHomePage" :postData="postData"></PostContainer>
+        <PostContainer  v-if="isHomePage" :postData="postData"></PostContainer>
         <PostArticle v-if="isPost"></PostArticle>
         <User :users = "usersData" v-if="isFollow"></User>
         <div v-if="isFollow" style="display: flex; justify-content: center">
