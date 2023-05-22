@@ -14,15 +14,15 @@ public class Users {
 
 
     private String phone;
+    @TableField(value = "is_followed")
+    private boolean isFollowed;
 
-    private boolean is_followed;
-
-    public boolean isIs_followed() {
-        return is_followed;
+    public boolean isIsFollowed() {
+        return isFollowed;
     }
 
-    public void setIs_followed(boolean is_followed) {
-        this.is_followed = is_followed;
+    public void setIsFollowed(boolean is_followed) {
+        this.isFollowed = is_followed;
     }
 
     @TableField(exist = false)

@@ -66,7 +66,11 @@ public class UserController {
             // update the validity
             CookieManager.updateCookieValidity(request, response, "loginId");
             // select the post
-            return postMapper.findMyPosts(senderId);
+            List<Posts> posts = postMapper.findMyPosts(senderId);
+            posts.forEach(p -> {
+                p.setPostCategories(postMapper.findPostCate(p.getPostId()));
+            });
+            return posts;
         }
         return null;
     }
@@ -260,7 +264,9 @@ public class UserController {
         if(-1 != CookieManager.findCurrentUser(request)){
 
             CookieManager.updateCookieValidity(request, response, "loginId");
-            return userMapper.findFollowing(CookieManager.findCurrentUser(request), offset, limit);
+            List<Users> users = userMapper.findFollowing(CookieManager.findCurrentUser(request), offset, limit);
+            System.err.println(users.get(0).isIsFollowed());
+            return users;
         }
         return null;
     }

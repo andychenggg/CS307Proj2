@@ -1,10 +1,12 @@
 <template>
     <div class="container">
-        <div class="main-content" id="content"
-             v-infinite-scroll="fetchPostData"
-             infinite-scroll-disabled="busy"
-             infinite-scroll-distance="10">
+        <div class="main-content" id="content">
+
             <Post v-for="post in postData" :key="post.postId" :post="post"></Post>
+            <el-button type="primary" round style="width: 200px; height: 40px; margin: 20px"
+                       @click="fetchPostData" v-if="!noMorePost">To See More...
+            </el-button>
+            <span v-else style="height: 40px">我可是有底线的</span>
         </div>
     </div>
 </template>
@@ -31,10 +33,12 @@ export default {
         // 组件创建时要执行的操作
         console.log('PostContainer created!');
         this.fetchPostData();
+
     },
     methods: {
         async fetchPostData() {
-            if (!this.noMorePost) {
+
+            if (!this.noMorePost && !this.busy) {
                 this.busy = true;
                 axios.get('http://localhost:9090/homepage/post', {
                     params: {
@@ -71,6 +75,7 @@ export default {
 
 .main-content {
     overflow-y: auto;
+    height: 90%;
     border: 10px solid #ccc;
 }
 

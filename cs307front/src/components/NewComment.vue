@@ -30,47 +30,45 @@
             >{{ "Send" }}
             </el-button>
         </div>
-        <div class="comment-body" v-for="(item, index) in replies" :key="item.replyId + '' + index">
+        <div class="comment-body" v-for="item in replies" :key="item.replyId">
             <!-- 一级评论 -->
             <div class="first-comment">
                 <!--                <el-avatar :size="40" :src="item.avatarUrl"></el-avatar>-->
                 <div class="content">
 
                     <div style="display: flex">
-                        <el-tag type="success" style="margin-right: 10px">{{ "AuthorName" }}</el-tag>
+                        <el-tag type="success" style="margin-right: 10px">{{ item.authorName }}</el-tag>
                         <div style="min-width: 120px; height: 30px; justify-content: center; display: flex; font-weight: bold; align-items: center;"> Reply To: </div>
-                        <el-tag type="success" style="margin-right: 10px">{{ "toUserName"}}</el-tag>
+                        <el-tag type="success" style="margin-right: 10px">{{ item.toUserName}}</el-tag>
                     </div>
                     <div style="white-space: pre-wrap; height: 40px; display: flex;">
-                        <pre class="content-textarea" readonly>{{ "hello"}}</pre>
+                        {{item.content}}
                     </div>
 
                     <div class="comment-right">
                         <el-button type="warning" icon="el-icon-star-off" circle
-                                   @click="giveALike(item, item._id)"
-                                   :class="item.favour.includes(userId) ? '' : 'active' "
-                        ></el-button>
+                                   @click="giveAStar(item.replyId)"
+                        >{{item.stars}}</el-button>
                         <el-button type="primary" icon="el-icon-edit" circle
-                                   @click="isShowSecReply(item._id)"
+                                   @click="isShowSecReply(item.replyId)"
                         ></el-button>
-                        <el-button type="danger" icon="el-icon-delete" circle
-                                   @click="deleteComment(item._id, undefined)"
-                                   v-if="userId === item.userId"
-                        ></el-button>
+<!--                        <el-button type="danger" icon="el-icon-delete" circle-->
+<!--                                   @click="deleteComment(item._id, undefined)"-->
+<!--                                   v-if="userId === item.userId"-->
+<!--                        ></el-button>-->
                     </div>
                     <!-- 回复一级评论 -->
-                    <div class="reply-comment" v-show="isShowSec === item._id">
+                    <div class="reply-comment" v-show="isShowSec === item.replyId">
                         <el-input
                                 :placeholder="placeholderText"
                                 class="input"
                                 v-model.trim="replyContext"
-                                :maxlength="contentLength"
                         ></el-input>
                         <el-button
                                 type="primary"
                                 size="mini"
                                 class="reply-button"
-                                @click="addComment(item._id, item.username)"
+                                @click="addComment(item.replyId)"
                         >send
                         </el-button>
                     </div>
@@ -90,14 +88,19 @@
                 type: Number
             },
             replies: {
-                type: Array
+                type: Array,
+                require: true,
+                default: () => []
             }
         },
         data() {
             return {
                 placeholderText: "Comment now!",
                 content: "",
-                emptyText: "No replies yet."
+                emptyText: "No replies yet.",
+                isShowSec: '',
+                isClickId: '',
+                replyContext: ''
             }
         },
         methods: {
@@ -120,6 +123,25 @@
                         // 请求失败后的处理
                         console.error(error);
                     });
+            },
+            giveAStar(){
+
+            },
+            isShowSecReply(id) {
+                if (id) {
+                    this.isShowSec = id;
+                    if (this.isClickId === this.isShowSec) {
+                        this.isShowSec = "";
+                    } else {
+                        this.isShowSec = id;
+                    }
+                    this.isClickId = this.isShowSec;
+                } else {
+                    this.isShowSec = this.isClickId = "";
+                }
+            },
+            addComment(){
+
             }
         }
     }
@@ -162,6 +184,8 @@
             border: 1px;
             border-radius: 4px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, .12);
+            display: flex;
+            justify-content: center;
 
             .first-comment {
                 display: flex;
@@ -184,8 +208,11 @@
                     }
 
                     .reply-comment {
+                        margin-left: 30px;
                         height: 60px;
                         display: flex;
+                        justify-content: center;
+                        width: 80%;
 
                         //align-items: center;
 
