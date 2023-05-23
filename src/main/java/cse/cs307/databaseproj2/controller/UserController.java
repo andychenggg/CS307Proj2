@@ -161,7 +161,7 @@ public class UserController {
     @PostMapping("/user/like")
     public String likePost(@RequestBody LikePostWrapper lpw, HttpServletRequest request, HttpServletResponse response){
 
-        if(-1 == CookieManager.findCurrentUser(request)) {
+        if(-1 != CookieManager.findCurrentUser(request)) {
             userMapper.likePost(lpw.getPostId(), CookieManager.findCurrentUser(request));
 
             CookieManager.updateCookieValidity(request, response, "loginId");
@@ -174,7 +174,7 @@ public class UserController {
     @PostMapping("/user/favor")
     public String favorPost(@RequestBody FavorPostWrapper fpw, HttpServletRequest request,HttpServletResponse response){
 
-        if(-1 == CookieManager.findCurrentUser(request)) {
+        if(-1 != CookieManager.findCurrentUser(request)) {
             userMapper.collectPost(fpw.getPostId(), CookieManager.findCurrentUser(request));
 
             CookieManager.updateCookieValidity(request, response, "loginId");
@@ -187,7 +187,7 @@ public class UserController {
     @PostMapping("/user/share")
     public String sharePost(@RequestBody SharePostWrapper spw, HttpServletRequest request, HttpServletResponse response){
 
-        if(-1 == CookieManager.findCurrentUser(request)) {
+        if(-1 != CookieManager.findCurrentUser(request)) {
             Posts posts = postMapper.findPostById(spw.getPostId());
             userMapper.sharePost(spw.getPostId(), CookieManager.findCurrentUser(request));
             posts.setSenderId(CookieManager.findCurrentUser(request));
@@ -271,6 +271,24 @@ public class UserController {
         return -1;
     }
 
+    @DeleteMapping("/user/like")
+    public int unLike(@RequestParam("postId") long postId, HttpServletRequest request, HttpServletResponse response){
+        if(-1 != CookieManager.findCurrentUser(request)) {
+            CookieManager.updateCookieValidity(request, response, "loginId");
+            return userMapper.deLikePosts(CookieManager.findCurrentUser(request), postId);
+        }
+        return -1;
+    }
+
+    @DeleteMapping("/user/favorite")
+    public int unFavorite(@RequestParam("postId") long postId, HttpServletRequest request, HttpServletResponse response){
+        if(-1 != CookieManager.findCurrentUser(request)) {
+            CookieManager.updateCookieValidity(request, response, "loginId");
+            return userMapper.deFavoritePosts(CookieManager.findCurrentUser(request), postId);
+        }
+        return -1;
+    }
+
     @GetMapping("/user/follow")
     public List<Users> findFollow(HttpServletRequest request, HttpServletResponse response,
                                   @RequestParam("offset") long offset,
@@ -292,6 +310,28 @@ public class UserController {
             CookieManager.updateCookieValidity(request, response, "loginId");
 
             return userMapper.findFollowed(CookieManager.findCurrentUser(request));
+        }
+        return null;
+    }
+
+    @GetMapping("user/like/ids")
+    public List<Long> findLikeIds(HttpServletRequest request, HttpServletResponse response){
+        if(-1 != CookieManager.findCurrentUser(request)){
+
+            CookieManager.updateCookieValidity(request, response, "loginId");
+
+            return userMapper.findLiked(CookieManager.findCurrentUser(request));
+        }
+        return null;
+    }
+
+    @GetMapping("user/favorite/ids")
+    public List<Long> findFavoriteIds(HttpServletRequest request, HttpServletResponse response){
+        if(-1 != CookieManager.findCurrentUser(request)){
+
+            CookieManager.updateCookieValidity(request, response, "loginId");
+
+            return userMapper.findFavorite(CookieManager.findCurrentUser(request));
         }
         return null;
     }
