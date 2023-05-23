@@ -3,30 +3,37 @@
     <div style="height: 60px; width: 100%">
       <div style="display: flex; justify-content: flex-start; width: 50%; height: 100%; margin-left: 20px; align-items: center; ">
         <el-tag style="margin-right: 10px;" >Sender: </el-tag>
-        <el-tag type="success" style="margin-right: 10px">hello world</el-tag>
+        <el-tag type="success" style="margin-right: 10px">{{post.senderName}}</el-tag>
         <el-switch
                 v-model="followSender"
                 active-text="unfollow"
-                inactive-text="follow">
+                inactive-text="follow" v-if="post.authorName!==post.senderName">
+        </el-switch>
+        <el-switch
+                v-model="followAuthor"
+                active-text="unfollow"
+                inactive-text="follow" v-if="post.authorName===post.senderName">
         </el-switch>
       </div>
     </div>
     <div style="height: 60px; width: 100%">
       <div style="display: flex; justify-content: flex-start; width: 50%; height: 100%; margin-left: 20px; align-items: center;">
         <el-tag style="margin-right: 10px">Author: </el-tag>
-        <el-tag type="success" style="margin-right: 10px">hello world</el-tag>
+        <el-tag type="success" style="margin-right: 10px">{{post.authorName}}</el-tag>
         <el-switch
                 v-model="followAuthor"
                 active-text="unfollow"
-                inactive-text="follow">
+                inactive-text="follow" >
         </el-switch>
       </div>
     </div>
-    <div class="username">
-      <label>{{ "helloWorld" }}</label>
+    <div class="title">
+      <label>{{ post.title }}</label>
     </div>
+    <div v-for="cate in post.postCategories" :key="cate" style="display: flex; justify-content: flex-start; width: 90%">></div>
+    <div style="display: flex; justify-content: flex-start; width: 90%">{{"Post at: "+post.postingTime}}</div>
     <div class="content">
-      <pre class="content-textarea" readonly>{{ "hello"}}</pre>
+      <div class="content-textarea" >{{ post.content }}</div>
 <!--      <textarea class="content-textarea" placeholder="content"></textarea>-->
     </div>
     <div class="details">
@@ -45,7 +52,7 @@
     </div>
     <div v-show="showContent">
 <!--      <PostDetail label="postDetail"></PostDetail>-->
-      <NewComment :replies="replyData"></NewComment>
+      <NewComment :replies="replyData" :current-post-id="post.postId"></NewComment>
     </div>
 
   </div>
@@ -69,22 +76,84 @@ export default {
       replyData: []
     };
   },
+  watch: {
+    followSender: {
+      handler(newVal) {
+        // 当followSender变化时，调用fetchData方法
+        if(newVal){
+
+        }
+      },
+      immediate: true // 在组件初始化时立即执行一次
+    },
+    followAuthor: {
+      handler(newVal) {
+        // 当followAuthor变化时，调用fetchData方法
+        if(newVal){
+
+        }
+      },
+      immediate: true // 在组件初始化时立即执行一次
+    }
+  },
   methods: {
     toggleContent() {
       this.showContent = !this.showContent;
-      axios.get('/user/homepage/replies')
+      if(this.showContent){
+        axios.get('http://localhost:9090/user/homepage/replies')
+                .then(response => {
+                  this.replyData = response.data; // 将响应数据赋值给comments数组
+                })
+                .catch(error => {
+                  console.error(error);
+                });
+      }
+    },
+    followAuthor(){
+      axios.post('http://localhost:9090/user/like', {
+        followigId: this.post.authorId
+      }, {
+        withCredentials: true
+      })
               .then(response => {
-                this.replyData = response.data; // 将响应数据赋值给comments数组
+                console.log(response.data); // 将响应数据赋值给comments数组
               })
               .catch(error => {
                 console.error(error);
               });
     },
+    followSender(){
+      axios.post('http://localhost:9090/user/like', {
+        followigId: this.post.senderId
+      }, {
+        withCredentials: true
+      })
+              .then(response => {
+                console.log(response.data); // 将响应数据赋值给comments数组
+              })
+              .catch(error => {
+                console.error(error);
+              });
+    }
   },
   props: {
-    label: {
-      type: String,
-      required: true,
+    post: {
+      type: Object,
+      require: true,
+      default: () => ({
+        postId: 0,
+        title: '',
+        content: '',
+        postingTime: '',
+        authorId: 0,
+        senderId: 0,
+        city: '',
+        country: '',
+        anonymous: false,
+        postCategories: [],
+        authorName: '',
+        senderName: '',
+      })
     },
   },
 };
@@ -96,7 +165,7 @@ export default {
   padding: 10px;
 }
 
-.username {
+.title {
   font-weight: bold;
   margin-bottom: 10px;
   display: flex;
@@ -110,6 +179,7 @@ export default {
   width: 100%;
   display: flex;
   justify-content: center;
+  word-wrap: break-word;
 }
 
 .details {
@@ -127,11 +197,13 @@ export default {
 }
 
 .content-textarea {
-  width: 100%;
+  width: 90%;
   min-height: 50px;
   padding: 5px;
   border: 1px solid #ccc;
   resize: vertical; /* 可垂直调整大小 */
+  word-wrap: break-word;
+  text-align: justify;
 }
 
 .el-btn {

@@ -41,7 +41,7 @@ public interface UserMapper extends BaseMapper<Users> {
         "       CASE\n" +
         "           WHEN followedby.userid IS NOT NULL THEN true\n" +
         "           ELSE false\n" +
-        "       END AS is_followed\n" +
+        "       END AS isFollowed\n" +
         "FROM users\n" +
         "LEFT JOIN followedby\n" +
         "ON users.userid = followedby.followigid\n" +

@@ -106,6 +106,7 @@
                                 this.noMoreFollowIg = true;
                             }
                             this.usersData = this.usersData.concat(response.data);
+                            console.log(this.usersData.at(0));
                         })
                         .catch(error => {
                             // 处理请求失败的错误
