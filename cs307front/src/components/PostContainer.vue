@@ -4,7 +4,7 @@
 
             <Post v-for="post in postData" :key="post.postId" :post="post"
                   :authorIsFollowed="isAuthorFollowed(post.authorId)"
-                  :senderIsFollowed="isSenderFollowed(post.authorId)" ></Post>
+                  :senderIsFollowed="isSenderFollowed(post.senderId)" ></Post>
             <el-button type="primary" round style="width: 200px; height: 40px; margin: 20px"
                        @click="fetchPostData" v-if="!noMorePost">To See More...
             </el-button>
@@ -35,18 +35,18 @@ export default {
     created() {
         // 组件创建时要执行的操作
         console.log('PostContainer created!');
+      axios.get('http://localhost:9090/user/follow/ids')
+          .then(response => {
+            // 处理请求成功的响应数据
+            this.followigId = response.data;
+            console.log("followigId"+response.data);
+          })
+          .catch(error => {
+            // 处理请求失败的情况
+            console.error(error);
+          });
         this.fetchPostData();
 
-        axios.get('http://localhost:9090/user/follow/ids')
-            .then(response => {
-                // 处理请求成功的响应数据
-                this.followigId = response.data;
-                console.log(response.data);
-            })
-            .catch(error => {
-                // 处理请求失败的情况
-                console.error(error);
-            });
     },
     methods: {
         isAuthorFollowed(authorId) {
