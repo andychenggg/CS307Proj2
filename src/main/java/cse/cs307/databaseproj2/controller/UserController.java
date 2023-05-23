@@ -271,5 +271,15 @@ public class UserController {
         return null;
     }
 
+    @GetMapping("user/follow/ids")
+    public List<Long> findFollowIds(HttpServletRequest request, HttpServletResponse response){
+        if(-1 != CookieManager.findCurrentUser(request)){
+
+            CookieManager.updateCookieValidity(request, response, "loginId");
+
+            return userMapper.findFollowed(CookieManager.findCurrentUser(request));
+        }
+        return null;
+    }
 
 }
