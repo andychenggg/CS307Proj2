@@ -1,5 +1,10 @@
 <template>
     <div class="wrapper">
+        <div class="background">
+            <div ref='loginRef' style="width: 100%; height: 100%">
+
+            </div>
+        </div>
         <div class="login-wrapper">
             <h1 class="logo">
                 <img src="/Images/Logo.png" alt="TheForum" style="width: 120px; height: auto;">
@@ -30,6 +35,9 @@
 
 <script>
     import axios from 'axios';
+    import NET from "vanta/src/vanta.net";
+    import WAVES from "vanta/src/vanta.waves";
+    import * as THREE from "three";
     // import router from "../router/index.js";
     export default {
         data() {
@@ -64,6 +72,27 @@
                         console.error(error);
                     });
             }
+        },
+        mounted() {
+            this.vantaEffect = WAVES({
+                el: this.$refs.loginRef,
+                THREE: THREE,
+                mouseControls: true,
+                touchControls: true,
+                gyroControls: false,
+                minHeight: 200.00,
+                minWidth: 200.00,
+                scale: 1.00,
+                scaleMobile: 1.00,
+                color: 0xe73b1,
+                shininess: 100.00,
+                zoom: 1.05
+            })
+        },
+        beforeDestroy() {
+            if (this.vantaEffect) {
+                this.vantaEffect.destroy()
+            }
         }
     }
 </script>
@@ -91,6 +120,8 @@
         border-radius: 4px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         text-align: center;
+        position: absolute;
+
     }
 
     .logo {
@@ -159,5 +190,14 @@
 
     .form-group button.submit-button:hover {
         background-color: #1c2125;
+    }
+
+    .background{
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 0;
     }
 </style>

@@ -57,11 +57,12 @@
         height: 10%;
     }
     .header {
-        background-color: #ffffff;
+        background-color: transparent;
         border: 1px #1c2125;
         width: 100%;
         display: flex;
         justify-content: space-between;
+        height: 10%;
     }
 
     .logo {
