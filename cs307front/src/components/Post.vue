@@ -4,14 +4,14 @@
       <div style="display: flex; justify-content: flex-start; width: 50%; height: 100%; margin-left: 20px; align-items: center;">
         <el-tag style="margin-right: 10px;">Sender:</el-tag>
         <el-tag type="success" style="margin-right: 10px">{{ post.senderName}}</el-tag>
-        <el-switch v-model="followSender" active-text="unfollow" inactive-text="follow" @change = "toggleFollowSender"></el-switch>
+        <el-switch v-model="post.followSender" active-text="follow" inactive-text="unfollow" @change = "toggleFollowSender"></el-switch>
       </div>
     </div>
     <div style="height: 60px; width: 100%">
       <div style="display: flex; justify-content: flex-start; width: 50%; height: 100%; margin-left: 20px; align-items: center;">
         <el-tag style="margin-right: 10px;">Author:</el-tag>
         <el-tag type="success" style="margin-right: 10px">{{ post.authorName }}</el-tag>
-        <el-switch v-model="followAuthor" active-text="unfollow" inactive-text="follow" @change = "toggleFollowAuthor"></el-switch>
+        <el-switch v-model="post.followAuthor" active-text="follow" inactive-text="unfollow" @change = "toggleFollowAuthor"></el-switch>
       </div>
     </div>
     <div class="username">
@@ -45,7 +45,7 @@
 <script>
 import PostDetail from "@/components/PostDetail.vue";
 import NewComment from "@/components/NewComment.vue";
-import axios from "axios";
+import axios, {post} from "axios";
 
 export default {
   props: {
@@ -70,7 +70,7 @@ export default {
   methods: {
     toggleFollowSender() {
       // 发送向后端的请求
-      if (this.followSender) {
+      if (!this.followSender) {
         // 当开关打开时的操作
         // 发送关注发送者的请求
         axios.post("http://localhost:9090/user/follow", {
@@ -102,10 +102,11 @@ export default {
               console.error(error);
             });
       }
+      return !this.post.followSender;
     },
     toggleFollowAuthor() {
       // 发送向后端的请求
-      if (this.followAuthor) {
+      if (!this.followAuthor) {
         // 当开关打开时的操作
         // 发送关注发送者的请求
         axios.post("http://localhost:9090/user/follow", {
@@ -137,6 +138,7 @@ export default {
               console.error(error);
             });
       }
+      return !this.post.followAuthor;
     },
   },
 };
