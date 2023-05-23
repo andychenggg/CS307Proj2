@@ -198,6 +198,20 @@ public class UserController {
         return null;
     }
 
+    @DeleteMapping("/user/share")
+    public String unSharePost(@RequestParam("postId") long postId, HttpServletRequest request, HttpServletResponse response){
+
+        long currentUser = CookieManager.findCurrentUser(request);
+        Long success = postMapper.whetherInShares(currentUser, postId);
+        if(success == postId) {
+            postMapper.deShares(currentUser, postId);
+
+            // 待完成
+            return "success";
+        }
+        return null;
+    }
+
     @GetMapping("/user/like")
     public List<Posts> checkLikes( HttpServletRequest request, HttpServletResponse response){
         if(-1 != CookieManager.findCurrentUser(request)) {

@@ -13,7 +13,6 @@ const router = new VueRouter({
     mode: 'history',
     routes: [
         { path: '/', redirect: '/login'},
-        { path: '/TopTrend', component: TopTrend},
         { path: '/login', component: Login },  // 新增这一行
         { path: '/signup', component: Signup },  // 新增这一行
         { path: '/homepage', component: HomePage},

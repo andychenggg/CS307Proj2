@@ -150,12 +150,14 @@
     .content-wrapper {
         display: flex;
         flex-direction: row;
-        height: 100vh;
+        height: 90%;
         width: 100%;
+        z-index: 0;
     }
 
     .forum_header {
     //position: fixed; background-color: #ffffff;
+        z-index: 0;
     }
 
     .leftTab-wrapper {
@@ -168,6 +170,7 @@
     //margin-top: 5%; //margin-left: 20%; width: 80%;
         height: 100%;
         overflow: auto;
+        z-index: 5;
     }
 
     .postPost-wrapper {

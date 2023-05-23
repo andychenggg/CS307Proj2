@@ -1,21 +1,21 @@
 <template>
-  <div>
-    <el-container>
-      <el-aside style="background-color: rgb(238, 241, 246)">
-        <el-menu>
-          <el-submenu index="1">
+  <div style="z-index: 0;">
+    <el-container style="display: flex; flex-direction: column;">
+      <el-aside style=" background-color: transparent">
+        <el-menu  background-color="transparent">
+          <el-submenu index="1" >
             <template slot="title"><i class="el-icon-message"></i>homepage</template>
-            <el-menu-item index="1-1">
+            <el-menu-item index="1-1" >
               <el-button type="primary" plain class="same_length_button" @click="changeToHomepage">homepage</el-button>
             </el-menu-item>
           </el-submenu>
-          <el-submenu index="2">
+          <el-submenu index="2" style="background-color: transparent">
             <template slot="title"><i class="el-icon-menu"></i>Post</template>
             <el-menu-item index="2-1">
               <el-button type="primary" plain class="same_length_button" @click="changeToPost">post</el-button>
             </el-menu-item>
           </el-submenu>
-          <el-submenu index="3">
+          <el-submenu index="3" style="background-color: transparent">
             <template slot="title">
               <i class="el-icon-document"></i>Record
             </template>
@@ -52,6 +52,7 @@
           </el-submenu>
         </el-menu>
       </el-aside>
+
     </el-container>
   </div>
 
@@ -61,6 +62,7 @@
 import axios from "axios";
 
 export default {
+
   data() {
     return {
       currentPage: 'homepage'

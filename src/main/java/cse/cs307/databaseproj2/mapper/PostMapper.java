@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import cse.cs307.databaseproj2.entities.Posts;
 import java.time.LocalDateTime;
 import java.util.List;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Options;
@@ -52,6 +53,9 @@ public interface PostMapper extends BaseMapper<Posts> {
     @Insert("insert into postcategory values(#{postid}, #{cateid});")
     long addPostCate(long postid, long cateid);
 
+    @Delete("delete from posts where postid = #{postid};")
+    Integer deletePostById(long postid);
+
     @Select("select p.*, u.username authorname, v.username sendername\n" +
         "        from posts p join users u on p.authorid = u.userid join users v on p.senderid = v.userid\n" +
         "        join likes f on f.postid = p.postid\n" +
@@ -69,5 +73,8 @@ public interface PostMapper extends BaseMapper<Posts> {
         "where collectorid = #{collectorid};")
     List<Posts> findFavoritePosts(long collectorid);
 
-
+    @Select("select PostID from shares where PostID = #{postId} and SharerID = #{sharerId}; ")
+    Long whetherInShares(long sharerId, long postId);
+    @Delete("delete from shares where PostID = #{postId} and SharerID = #{sharerId}; ")
+    Integer deShares(long sharerId, long postId);
 }
