@@ -29,6 +29,9 @@ public interface PostMapper extends BaseMapper<Posts> {
         "where p.senderid = #{senderid} order by postid desc;")
     List<Posts> findMyPosts(long senderid);
 
+    @Select("select category from postcategory p join categories c on p.categoryid = c.categoryid where p.postid = #{postid};")
+    List<String> findCateByPostId(long postid);
+
 
 
     @Select("select category from categories join postcategory p on categories.categoryid = p.categoryid where p.postid = #{postid};")

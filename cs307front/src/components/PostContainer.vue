@@ -1,10 +1,14 @@
 <template>
     <div class="container">
-        <div class="main-content" id="content"
-             v-infinite-scroll="fetchPostData"
-             infinite-scroll-disabled="busy"
-             infinite-scroll-distance="10">
-            <Post v-for="post in postData" :key="post.postId" :post="post"></Post>
+        <div class="main-content" id="content">
+
+            <Post v-for="post in postData" :key="post.postId" :post="post"
+                  :authorIsFollowed="isAuthorFollowed(post.authorId)"
+                  :senderIsFollowed="isSenderFollowed(post.authorId)" ></Post>
+            <el-button type="primary" round style="width: 200px; height: 40px; margin: 20px"
+                       @click="fetchPostData" v-if="!noMorePost">To See More...
+            </el-button>
+            <span v-else style="height: 40px">我可是有底线的</span>
         </div>
     </div>
 </template>
@@ -19,6 +23,7 @@ export default {
         return {
             lastPostId: -1,
             postData: [],
+            followigId: [],
             controlByIsHomepage: true,
             noMorePost: false,
             busy: false
@@ -31,10 +36,28 @@ export default {
         // 组件创建时要执行的操作
         console.log('PostContainer created!');
         this.fetchPostData();
+
+        axios.get('http://localhost:9090/user/follow/ids')
+            .then(response => {
+                // 处理请求成功的响应数据
+                this.followigId = response.data;
+                console.log(response.data);
+            })
+            .catch(error => {
+                // 处理请求失败的情况
+                console.error(error);
+            });
     },
     methods: {
+        isAuthorFollowed(authorId) {
+            return this.followigId.includes(authorId);
+        },
+        isSenderFollowed(senderId){
+            return this.followigId.includes(senderId);
+        },
         async fetchPostData() {
-            if (!this.noMorePost) {
+
+            if (!this.noMorePost && !this.busy) {
                 this.busy = true;
                 axios.get('http://localhost:9090/homepage/post', {
                     params: {
@@ -71,6 +94,7 @@ export default {
 
 .main-content {
     overflow-y: auto;
+    height: 90%;
     border: 10px solid #ccc;
 }
 

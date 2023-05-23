@@ -14,7 +14,7 @@
         <div style="display: flex; text-align: left; margin-bottom: 10px">
           <div style="font-weight: bold; font-size: 16px">{{ user.username }}</div>
           <div style="width: 10px"></div>
-          <el-switch v-model="user.is_followed" active-color="#13ce66" inactive-color="#ff4949" active-text="follow"
+          <el-switch v-model="user.isFollowed" active-color="#13ce66" inactive-color="#ff4949" active-text="follow"
                      inactive-text="unfollow"
                      @change="toggleFollow(user)"></el-switch>
         </div>
@@ -49,6 +49,13 @@ export default {
     users: {
       type: Array,
       required: true,
+      default: ()=>({
+        userid: 0,
+        username: '',
+        registrationtime: '',
+        phone: '',
+        isFollowed: false,
+      })
     }
   },
   data() {
