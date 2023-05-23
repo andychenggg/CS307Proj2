@@ -69,7 +69,7 @@ export default {
       if (this.searchMode === 'all') {
         return this.users.filter(user => user.username.toLowerCase().includes(this.searchText.toLowerCase()));
       } else if (this.searchMode === 'following') {
-        return this.users.filter(user => user.is_followed && user.username.toLowerCase().includes(this.searchText.toLowerCase()));
+        return this.users.filter(user => user.isFollowed && user.username.toLowerCase().includes(this.searchText.toLowerCase()));
       }
     },
   },

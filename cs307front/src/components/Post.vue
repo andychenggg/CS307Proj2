@@ -121,9 +121,9 @@ export default {
       followSender: this.senderIsFollowed,
       followAuthor: this.authorIsFollowed,
       replyData: [],
-      isLiked: this.post.isLike,
-      isFavorited: this.post.isFavorite,
-      isShared: this.post.isShare
+      isLiked: this.isLike,
+      isFavorited: this.isFavorite,
+      isShared: this.isShare
     };
   },
   watch: {
@@ -146,7 +146,30 @@ export default {
           this.toggleUnFollowAuthor();
         }
       }
-    }
+    },
+    // isLiked: {
+    //   handler(newVal) {
+    //     // 当followAuthor变化时，调用fetchData方法
+    //     if (newVal) {
+    //       this.toggleLike();
+    //     } else {
+    //       this.toggleUnLike();
+    //     }
+    //   }
+    // },
+    // isFavorited: {
+    //   handler(newVal) {
+    //     // 当followAuthor变化时，调用fetchData方法
+    //     if (newVal) {
+    //       this.toggleFavorite();
+    //     } else {
+    //       this.toggleUnFavorite();
+    //     }
+    //   }
+    // },
+    // isShared: {
+    //
+    // }
   },
   methods: {
     toggleContent() {
@@ -280,7 +303,7 @@ export default {
       this.isFavorited = !this.isFavorited;
     },
     toggleUnFavorite() {
-      axios.delete('http://localhost:9090/user/favor', {
+      axios.delete('http://localhost:9090/user/favorite', {
         params:{
           postId: this.post.postId,
         }
@@ -317,6 +340,12 @@ export default {
       type: Boolean
     },
     senderIsFollowed: {
+      type: Boolean
+    },
+    isLike: {
+      type: Boolean
+    },
+    isFavorite: {
       type: Boolean
     }
   },
