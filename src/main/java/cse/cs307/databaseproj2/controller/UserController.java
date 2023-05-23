@@ -161,8 +161,8 @@ public class UserController {
     @PostMapping("/user/like")
     public String likePost(@RequestBody LikePostWrapper lpw, HttpServletRequest request, HttpServletResponse response){
 
-        if(lpw.getLikerId() == CookieManager.findCurrentUser(request)) {
-            userMapper.likePost(lpw.getPostId(), lpw.getLikerId());
+        if(-1 == CookieManager.findCurrentUser(request)) {
+            userMapper.likePost(lpw.getPostId(), CookieManager.findCurrentUser(request));
 
             CookieManager.updateCookieValidity(request, response, "loginId");
             return "success";
@@ -174,8 +174,8 @@ public class UserController {
     @PostMapping("/user/favor")
     public String favorPost(@RequestBody FavorPostWrapper fpw, HttpServletRequest request,HttpServletResponse response){
 
-        if(fpw.getFavorId() == CookieManager.findCurrentUser(request)) {
-            userMapper.collectPost(fpw.getPostId(), fpw.getFavorId());
+        if(-1 == CookieManager.findCurrentUser(request)) {
+            userMapper.collectPost(fpw.getPostId(), CookieManager.findCurrentUser(request));
 
             CookieManager.updateCookieValidity(request, response, "loginId");
             return "success";
@@ -187,10 +187,10 @@ public class UserController {
     @PostMapping("/user/share")
     public String sharePost(@RequestBody SharePostWrapper spw, HttpServletRequest request, HttpServletResponse response){
 
-        if(spw.getShareId() == CookieManager.findCurrentUser(request)) {
+        if(-1 == CookieManager.findCurrentUser(request)) {
             Posts posts = postMapper.findPostById(spw.getPostId());
-            userMapper.sharePost(spw.getPostId(), spw.getShareId());
-            posts.setSenderId(spw.getShareId());
+            userMapper.sharePost(spw.getPostId(), CookieManager.findCurrentUser(request));
+            posts.setSenderId(CookieManager.findCurrentUser(request));
             postMapper.insertNewPost(posts);
             CookieManager.updateCookieValidity(request, response, "loginId");
             return "success";
