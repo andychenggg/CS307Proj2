@@ -71,8 +71,8 @@ export default {
   data() {
     return {
       showContent: false,
-      followSender: false,
-      followAuthor: false,
+      followSender: this.senderIsFollowed,
+      followAuthor: this.authorIsFollowed,
       replyData: []
     };
   },
@@ -155,6 +155,12 @@ export default {
         senderName: '',
       })
     },
+    authorIsFollowed: {
+      type: Boolean
+    },
+    senderIsFollowed: {
+      type: Boolean
+    }
   },
 };
 </script>

@@ -48,10 +48,10 @@ public interface UserMapper extends BaseMapper<Users> {
         "AND followedby.userid = #{id} ORDER BY is_followed DESC offset #{offset} limit #{limit}")
     List<Users> findFollowing(long id, long offset, long limit);
 
-    @Select("select *\n" +
-            "from users\n" +
-            "where userid in (select followigid from followedby where userid = #{userid});")
-    int findFollowed(String userid);
+    @Select("select followigid\n" +
+            "from followedby\n" +
+            "where userid = #{userid};")
+    List<Long> findFollowed(long userid);
     //按理应该不包括密码，如果后续需要不包括密码，可以参照这个userid, username, registrationtime, phone
 
     @Update("update users set username=#{username}, phone=#{phone}")
