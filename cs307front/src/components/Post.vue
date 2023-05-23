@@ -1,57 +1,104 @@
 <template>
   <div class="container">
     <div style="height: 60px; width: 100%">
-      <div style="display: flex; justify-content: flex-start; width: 50%; height: 100%; margin-left: 20px; align-items: center; ">
-        <el-tag style="margin-right: 10px;" >Sender: </el-tag>
-        <el-tag type="success" style="margin-right: 10px">{{post.senderName}}</el-tag>
+      <div
+          style="display: flex; justify-content: flex-start; width: 50%; height: 100%; margin-left: 20px; align-items: center; ">
+        <el-tag style="margin-right: 10px;">Sender:</el-tag>
+        <el-tag type="success" style="margin-right: 10px">{{ post.senderName }}</el-tag>
         <el-switch
-                v-model="followSender"
-                active-text="unfollow"
-                inactive-text="follow" v-if="post.authorName!==post.senderName">
-        </el-switch>
-        <el-switch
-                v-model="followAuthor"
-                active-text="unfollow"
-                inactive-text="follow" v-if="post.authorName===post.senderName">
+            v-model="followSender"
+            active-text="follow"
+            inactive-text="unfollow" v-if="post.authorName!==post.senderName">
         </el-switch>
       </div>
     </div>
     <div style="height: 60px; width: 100%">
-      <div style="display: flex; justify-content: flex-start; width: 50%; height: 100%; margin-left: 20px; align-items: center;">
-        <el-tag style="margin-right: 10px">Author: </el-tag>
-        <el-tag type="success" style="margin-right: 10px">{{post.authorName}}</el-tag>
+      <div
+          style="display: flex; justify-content: flex-start; width: 50%; height: 100%; margin-left: 20px; align-items: center;">
+        <el-tag style="margin-right: 10px">Author:</el-tag>
+        <el-tag type="success" style="margin-right: 10px">{{ post.authorName }}</el-tag>
         <el-switch
-                v-model="followAuthor"
-                active-text="unfollow"
-                inactive-text="follow" >
+            v-model="followAuthor"
+            active-text="follow"
+            inactive-text="unfollow">
         </el-switch>
       </div>
     </div>
     <div class="title">
       <label>{{ post.title }}</label>
     </div>
-    <div v-for="cate in post.postCategories" :key="cate" style="display: flex; justify-content: flex-start; width: 90%">></div>
-    <div style="display: flex; justify-content: center; width: 90%; text-align: center">{{"Post at: " + post.postingTime}}</div>
+    <div v-for="cate in post.postCategories" :key="cate" style="display: flex; justify-content: flex-start; width: 90%">
+      >
+    </div>
+    <div style="display: flex; justify-content: center; width: 90%; text-align: center">
+      {{ "Post at: " + post.postingTime + ", " + post.city + ", " + post.country }}
+    </div>
     <div class="content">
-      <div class="content-textarea" >{{ post.content }}</div>
-<!--      <textarea class="content-textarea" placeholder="content"></textarea>-->
+      <div class="content-textarea">{{ post.content }}</div>
+      <!--      <textarea class="content-textarea" placeholder="content"></textarea>-->
     </div>
     <div class="details">
       <div style="width: 25%; display: flex; justify-content: center">
-        <el-button type="primary" icon="el-icon-share" class="el-btn">share</el-button>
+        <el-button
+            type="primary"
+            icon="el-icon-share"
+            @click="toggleShare"
+            class="el-btn"
+            v-if="!isShared"
+        >share
+        </el-button>
+        <el-button
+            type="danger"
+            icon="el-icon-share"
+            @click="toggleUnShare"
+            class="el-btn"
+            v-if="isShared"
+        >unshare
+        </el-button>
       </div>
       <div style="width: 25%; display: flex; justify-content: center">
         <el-button type="primary" icon="el-icon-s-comment" @click="toggleContent" class="el-btn">comments</el-button>
       </div>
       <div style="width: 25%; display: flex; justify-content: center">
-        <el-button type="primary" icon="el-icon-collection-tag" class="el-btn">favorite</el-button>
+        <el-button
+            type="primary"
+            icon="el-icon-star-on"
+            @click="toggleFavorite"
+            class="el-btn"
+            v-if="!isFavorited"
+        >favorite
+        </el-button>
+        <el-button
+            type="danger"
+            icon="el-icon-star-on"
+            @click="toggleUnFavorite"
+            class="el-btn"
+            v-if="isFavorited"
+        >unfavorite
+        </el-button>
       </div>
       <div style="width: 25%; display: flex; justify-content: center">
-        <el-button type="primary" icon="el-icon-magic-stick" class="el-btn">like</el-button>
+        <el-button
+            type="primary"
+            icon="el-icon-magic-stick"
+            @click="toggleLike"
+            class="el-btn"
+            v-if="!isLiked"
+        >like
+        </el-button>
+        <el-button
+            type="danger"
+            icon="el-icon-magic-stick"
+            @click="toggleUnLike"
+            class="el-btn"
+            v-if="isLiked"
+        >unlike
+        </el-button>
+
       </div>
     </div>
     <div v-show="showContent">
-<!--      <PostDetail label="postDetail"></PostDetail>-->
+      <!--      <PostDetail label="postDetail"></PostDetail>-->
       <NewComment :replies="replyData" :current-post-id="post.postId"></NewComment>
     </div>
 
@@ -61,7 +108,7 @@
 <script>
 import PostDetail from "@/components/PostDetail.vue";
 import NewComment from "@/components/NewComment.vue";
-import axios from "axios";
+import axios, {post} from "axios";
 
 export default {
   components: {
@@ -73,68 +120,179 @@ export default {
       showContent: false,
       followSender: this.senderIsFollowed,
       followAuthor: this.authorIsFollowed,
-      replyData: []
+      replyData: [],
+      isLiked: this.post.isLike,
+      isFavorited: this.post.isFavorite,
+      isShared: this.post.isShare
     };
   },
   watch: {
     followSender: {
       handler(newVal) {
         // 当followSender变化时，调用fetchData方法
-        if(newVal){
-
+        if (newVal) {
+          this.toggleFollowSender();
+        } else {
+          this.toggleUnFollowSender();
         }
-      },
-      immediate: true // 在组件初始化时立即执行一次
+      }
     },
     followAuthor: {
       handler(newVal) {
         // 当followAuthor变化时，调用fetchData方法
-        if(newVal){
-
+        if (newVal) {
+          this.toggleFollowAuthor();
+        } else {
+          this.toggleUnFollowAuthor();
         }
-      },
-      immediate: true // 在组件初始化时立即执行一次
+      }
     }
   },
   methods: {
     toggleContent() {
       this.showContent = !this.showContent;
-      if(this.showContent){
+      if (this.showContent) {
         axios.get('http://localhost:9090/user/homepage/replies')
-                .then(response => {
-                  this.replyData = response.data; // 将响应数据赋值给comments数组
-                })
-                .catch(error => {
-                  console.error(error);
-                });
+            .then(response => {
+              this.replyData = response.data; // 将响应数据赋值给comments数组
+            })
+            .catch(error => {
+              console.error(error);
+            });
       }
     },
-    followAuthor(){
-      axios.post('http://localhost:9090/user/like', {
+    toggleFollowAuthor() {
+      axios.post('http://localhost:9090/user/follow', {
         followigId: this.post.authorId
       }, {
         withCredentials: true
       })
-              .then(response => {
-                console.log(response.data); // 将响应数据赋值给comments数组
-              })
-              .catch(error => {
-                console.error(error);
-              });
+          .then(response => {
+            console.log(response.data); // 将响应数据赋值给comments数组
+          })
+          .catch(error => {
+            console.error(error);
+          });
     },
-    followSender(){
-      axios.post('http://localhost:9090/user/like', {
+    toggleUnFollowAuthor() {
+      axios.delete('http://localhost:9090/user/follow', {
+        params:{
+          followigid: this.post.authorId,
+        }
+      },)
+          .then(response => {
+          })
+          .catch(error => {
+            console.error(error);
+          });
+    },
+    toggleFollowSender() {
+      axios.post('http://localhost:9090/user/follow', {
         followigId: this.post.senderId
       }, {
         withCredentials: true
       })
-              .then(response => {
-                console.log(response.data); // 将响应数据赋值给comments数组
-              })
-              .catch(error => {
-                console.error(error);
-              });
+          .then(response => {
+            console.log(response.data); // 将响应数据赋值给comments数组
+          })
+          .catch(error => {
+            console.error(error);
+          });
+    },
+    toggleUnFollowSender() {
+      axios.delete('http://localhost:9090/user/follow', {
+        params:{
+          followigid: this.post.senderId,
+        }
+      },)
+          .then(response => {
+          })
+          .catch(error => {
+            console.error(error);
+          });
+    },
+    toggleShare() {
+      axios.post('http://localhost:9090/user/share', {
+        postId: this.post.postId,
+        shareId: 0
+      }, {
+        withCredentials: true
+      })
+          .then(response => {
+          })
+          .catch(error => {
+            console.error(error);
+          });
+      this.isShared = !this.isShared;
+    },
+    toggleUnShare() {
+      axios.delete('http://localhost:9090/user/share', {
+        params:{
+          postId: this.post.postId,
+        }
+      },)
+          .then(response => {
+          })
+          .catch(error => {
+            console.error(error);
+          });
+      this.isShared = !this.isShared;
+    },
+    toggleLike() {
+      axios.post('http://localhost:9090/user/like', {
+        postId: this.post.postId,
+        likerId: 0
+      }, {
+        withCredentials: true
+      })
+          .then(response => {
+          })
+          .catch(error => {
+            console.error(error);
+          });
+      this.isLiked = !this.isLiked;
+    },
+    toggleUnLike() {
+      axios.delete('http://localhost:9090/user/like', {
+        params:{
+          postId: this.post.postId,
+        }
+      },)
+          .then(response => {
+          })
+          .catch(error => {
+            console.error(error);
+          });
+      this.isLiked = !this.isLiked;
+    },
+    toggleFavorite() {
+      axios.post('http://localhost:9090/user/favor', {
+        postId: this.post.postId,
+        favorId: 0
+      }, {
+        withCredentials: true
+      })
+          .then(response => {
+          })
+          .catch(error => {
+            console.error(error);
+          });
+      this.isFavorited = !this.isFavorited;
+    },
+    toggleUnFavorite() {
+      axios.delete('http://localhost:9090/user/favor', {
+        params:{
+          postId: this.post.postId,
+        }
+      },)
+          .then(response => {
+          })
+          .catch(error => {
+            console.error(error);
+          });
+      this.isFavorited = !this.isFavorited;
     }
+
   },
   props: {
     post: {
