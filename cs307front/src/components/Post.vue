@@ -234,6 +234,7 @@ export default {
         }
       },)
           .then(response => {
+            console.log("hello");
           })
           .catch(error => {
             console.error(error);

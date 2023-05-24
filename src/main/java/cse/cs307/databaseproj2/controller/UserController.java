@@ -124,6 +124,22 @@ public class UserController {
         }
         return null;
     }
+    @GetMapping("/user/homepage/yourReplyPost")
+    public List<Posts> findMyReplyPost(HttpServletRequest request, HttpServletResponse response){
+        System.err.println(CookieManager.findCurrentUser(request));
+        if(-1 != CookieManager.findCurrentUser(request)) {
+            // update the validity
+            CookieManager.updateCookieValidity(request, response, "loginId");
+            // select the post
+            List<Posts> posts = postMapper.findMyReplyPost(CookieManager.findCurrentUser(request));
+            posts.forEach(p -> {
+                p.setPostCategories(postMapper.findPostCate(p.getPostId()));
+            });
+            System.err.println(posts);
+            return posts;
+        }
+        return null;
+    }
 
     @CrossOrigin(origins = "http://localhost:8080/user/homepage")
     @PostMapping("/user/homepage/post")

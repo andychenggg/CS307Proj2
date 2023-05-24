@@ -34,6 +34,9 @@
               <el-button type="primary" plain class="same_length_button" @click="changeToYourPost">yourPost</el-button>
             </el-menu-item>
             <el-menu-item index="3-5">
+              <el-button type="primary" plain class="same_length_button" @click="changeToYourReplyPost">yourReplyPost</el-button>
+            </el-menu-item>
+            <el-menu-item index="3-6">
               <el-button type="primary" plain class="same_length_button" @click="changeToYourComment">yourComment
               </el-button>
             </el-menu-item>
@@ -117,6 +120,9 @@ export default {
     },
     changeToYourPost() {
       this.currentPage = 'yourPost';
+    },
+    changeToYourReplyPost() {
+      this.currentPage = 'yourReplyPost';
     },
     changeToYourComment() {
       this.currentPage = 'yourComment';
