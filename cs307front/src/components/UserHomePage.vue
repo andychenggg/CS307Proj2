@@ -106,6 +106,14 @@ export default {
     }
 
   },
+  watch :{
+    currentPage(newVal, oldVal){
+      if(newVal !== oldVal && newVal === 'follow'){
+        console.log('watch')
+        this.fetchUserData();
+      }
+    }
+  },
   mounted() {
     if (this.isFollow) {
       this.fetchUserData();

@@ -64,6 +64,25 @@ export default {
       searchText: '',
     };
   },
+  mounted() {
+      console.log("fetchUserData");
+      axios.get("http://localhost:9090/user/follow", {
+        params: {
+          offset: 0,
+          limit: 100
+        },
+        withCredentials: true
+      })
+          .then(response => {
+            this.users = response.data;
+            console.log(this.users.at(0));
+          })
+          .catch(error => {
+            // 处理请求失败的错误
+            console.error(error);
+          });
+
+  },
   computed: {
     filteredUsers() {
       if (this.searchMode === 'all') {
