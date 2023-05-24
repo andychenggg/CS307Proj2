@@ -12,6 +12,7 @@
         <LikePostContainer v-if="isLike"></LikePostContainer>
         <FavoritePostContainer v-if="isFavorite"></FavoritePostContainer>
         <YourPostContainer v-if="isYourPost"></YourPostContainer>
+        <YourReplyPostContainer v-if="isYourReplyPost"></YourReplyPostContainer>
         <User :users="usersData" v-if="isFollow"></User>
         <div v-if="isFollow" style="display: flex; justify-content: center">
 
@@ -40,6 +41,7 @@ import SharePostContainer from "@/components/SharePostContainer.vue";
 import LikePostContainer from "@/components/LikePostContainer.vue";
 import FavoritePostContainer from "@/components/FavoritePostContainer.vue";
 import YourPostContainer from "@/components/YourPostContainer.vue";
+import YourReplyPostContainer from "@/components/YourReplyPostContainer.vue";
 
 export default {
   components: {
@@ -54,6 +56,7 @@ export default {
     LikePostContainer,
     FavoritePostContainer,
     YourPostContainer,
+    YourReplyPostContainer,
   },
   data() {
     return {
@@ -90,15 +93,15 @@ export default {
       return this.currentPage === 'yourLike';
     },
     isFavorite() {
-      console.log(this.currentPage === 'yourLike');
       return this.currentPage === 'yourFavorites';
     },
     isYourPost() {
-      console.log(this.currentPage === 'yourLike');
       return this.currentPage === 'yourPost';
     },
+    isYourReplyPost() {
+      return this.currentPage === 'yourReplyPost';
+    },
     isComment() {
-      console.log(document.cookie);
       if (this.currentPage === 'yourComment') {
         this.fetchCommentData();
       }
