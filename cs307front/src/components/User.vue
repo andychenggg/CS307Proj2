@@ -104,12 +104,12 @@ export default {
           });
     },
     toggleFollow(user) {
-      if (!user.is_followed) {
+      if (!user.isFollowed) {
         this.deleteFollow(user.userid);
       } else {
         this.addFollow(user.userid);
       }
-      return !user.is_followed;
+      return !user.isFollowed;
     },
     search() {
       // Perform additional search logic if needed
