@@ -23,6 +23,31 @@ public interface PostMapper extends BaseMapper<Posts> {
         "where postid <= #{lastPostId} and postid > #{lastPostId} - #{limit} order by postid desc;")
     // replace also provide the username
     List<Posts> findPostByIdWithUsernamePageByPage(long lastPostId, int limit);
+
+    @Select("select p.*, u.username authorname, v.username sendername " +
+            "from posts p join users u on p.authorid = u.userid join users v on p.senderid = v.userid join (select * from shares where sharerid = #{userid}) s on p.postid = s.postid "+
+            " order by p.postid desc;")
+        // replace also provide the username
+    List<Posts> findShareByIdWithUsernamePageByPage(long lastPostId, long userid, int limit);
+
+    @Select("select p.*, u.username authorname, v.username sendername " +
+            "from posts p join users u on p.authorid = u.userid join users v on p.senderid = v.userid join (select * from likes where likerid = #{userid}) s on p.postid = s.postid "+
+            " order by p.postid desc;")
+        // replace also provide the username
+    List<Posts> findLikeByIdWithUsernamePageByPage(long lastPostId, long userid, int limit);
+
+    @Select("select p.*, u.username authorname, v.username sendername " +
+            "from posts p join users u on p.authorid = u.userid join users v on p.senderid = v.userid join (select * from favorites where collectorid = #{userid}) s on p.postid = s.postid "+
+            " order by p.postid desc;")
+        // replace also provide the username
+    List<Posts> findFavoriteByIdWithUsernamePageByPage(long lastPostId, long userid, int limit);
+
+    @Select("select p.*, u.username authorname, v.username sendername " +
+            "from posts p join users u on p.authorid = u.userid join users v on p.senderid = v.userid\n" +
+            "and senderid = #{userid};")
+        // replace also provide the username
+    List<Posts> findYourPostByIdWithUsernamePageByPage(long lastPostId, long userid, int limit);
+
     @Select("select max(postid) from posts;")
     long findMaxPostId();
     @Select("select p.*, u.username authorname, v.username sendername " +
