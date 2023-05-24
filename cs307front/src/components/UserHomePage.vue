@@ -120,7 +120,7 @@ export default {
     fetchUserData() {
       if (!this.noMoreFollowIg) {
         console.log("fetchUserData");
-        axios.get("http://localhost:9090/user/post", {
+        axios.get("http://localhost:9090/user/follow", {
           params: {
             offset: this.usersData.length,
             limit: 100
