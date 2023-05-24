@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Replies {
     private long replyId;
-    private Long toReplyId;
+    private long toReplyId;
     private long toPostId;
     private String content;
     private int stars;
@@ -101,6 +101,22 @@ public class Replies {
     }
 
     public Replies() {
+    }
+
+    @Override
+    public String toString() {
+        return "Replies{" +
+            "replyId=" + replyId +
+            ", toReplyId=" + toReplyId +
+            ", toPostId=" + toPostId +
+            ", content='" + content + '\'' +
+            ", stars=" + stars +
+            ", authorId=" + authorId +
+            ", isAnonymous=" + isAnonymous +
+            ", authorName='" + authorName + '\'' +
+            ", toUserId='" + toUserId + '\'' +
+            ", toUserName='" + toUserName + '\'' +
+            '}';
     }
 
     public Replies(long replyId, long toReplyId, long toPostId, String content, int stars,
