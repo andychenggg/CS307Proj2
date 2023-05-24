@@ -28,7 +28,7 @@
       <label>{{ post.title }}</label>
     </div>
     <div v-for="cate in post.postCategories" :key="cate" style="display: flex; justify-content: flex-start; width: 90%">
-      >
+      {{cate}}
     </div>
     <div style="display: flex; justify-content: center; width: 90%; text-align: center">
       {{ "Post at: " + post.postingTime + ", " + post.city + ", " + post.country }}
