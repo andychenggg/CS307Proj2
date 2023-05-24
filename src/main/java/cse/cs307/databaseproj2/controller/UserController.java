@@ -177,14 +177,13 @@ public class UserController {
 
     @GetMapping("/user/homepage/post/replies")
     public List<Replies> findReplyByPost(@RequestParam("id") Long postId, HttpServletRequest request, HttpServletResponse response){
-//        System.err.println(userId);
-        // update the validity
-//        CookieManager.deleteCookie(response, "loginId");
-        CookieManager.printAllCookie(request);
+
         if(-1 != CookieManager.findCurrentUser(request)) {
             CookieManager.updateCookieValidity(request, response, "loginId");
+            List<Replies> replies = repliesMapper.searchRepliesByPostId(postId);
             // select the post
-            return repliesMapper.searchRepliesByPostId(postId);
+            System.err.println(replies);
+            return replies;
         }
         return null;
     }
@@ -200,6 +199,18 @@ public class UserController {
                 replies.getContent(),
                 0, CookieManager.findCurrentUser(request),
                 replies.isAnonymous());
+        }
+        return -1;
+    }
+
+    @PostMapping("/user/homepage/replies/star")
+    public int starReply(@RequestParam("replyId") long replyId, HttpServletRequest request, HttpServletResponse response){
+
+        // update the validity
+        if(-1 != CookieManager.findCurrentUser(request)) {
+            CookieManager.updateCookieValidity(request, response, "loginId");
+            // select the replies
+            return repliesMapper.starReply(replyId);
         }
         return -1;
     }

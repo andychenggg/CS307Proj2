@@ -175,8 +175,13 @@ export default {
     toggleContent() {
       this.showContent = !this.showContent;
       if (this.showContent) {
-        axios.get('http://localhost:9090/user/homepage/replies')
+        axios.get('http://localhost:9090/user/homepage/post/replies', {
+          params: {
+            id: this.post.postId
+          }
+        })
             .then(response => {
+              console.log(response.data)
               this.replyData = response.data; // 将响应数据赋值给comments数组
             })
             .catch(error => {
