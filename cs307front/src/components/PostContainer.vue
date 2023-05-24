@@ -6,7 +6,8 @@
             :authorIsFollowed="isAuthorFollowed(post.authorId)"
             :senderIsFollowed="isSenderFollowed(post.senderId)"
             :isLike="isLiked(post.postId)"
-            :isFavorite="isFavorite(post.postId)"></Post>
+            :isFavorite="isFavorite(post.postId)"
+            :isShare="isShared(post.postId)"></Post>
       <el-button type="primary" round style="width: 200px; height: 40px; margin: 20px"
                  @click="fetchPostData" v-if="!noMorePost">To See More...
       </el-button>
@@ -28,6 +29,7 @@ export default {
       followigId: [],
       likedPostId: [],
       favoritePostId: [],
+      sharePostId: [],
       controlByIsHomepage: true,
       noMorePost: false,
       busy: false
@@ -69,7 +71,16 @@ export default {
           // 处理请求失败的情况
           console.error(error);
         });
-
+    axios.get('http://localhost:9090/user/share/ids')
+            .then(response => {
+              // 处理请求成功的响应数据
+              this.sharePostId = response.data;
+              console.log("favoritePostId" + response.data);
+            })
+            .catch(error => {
+              // 处理请求失败的情况
+              console.error(error);
+            });
     this.fetchPostData();
 
   },
@@ -88,8 +99,12 @@ export default {
       console.log("isFavorite" + this.favoritePostId.includes(postId));
       return this.favoritePostId.includes(postId);
     },
+    isShared(postId){
+      console.log("isFavorite" + this.sharePostId.includes(postId));
+      return this.sharePostId.includes(postId);
+    },
     async fetchPostData() {
-
+      console.log("this.lastPostId"+this.lastPostId);
       if (!this.noMorePost && !this.busy) {
         this.busy = true;
         axios.get('http://localhost:9090/homepage/post', {

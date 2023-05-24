@@ -64,6 +64,11 @@ public interface UserMapper extends BaseMapper<Users> {
             "where collectorid = #{userid};")
     List<Long> findFavorite(long userid);
 
+    @Select("select postid\n" +
+        "from shares\n" +
+        "where sharerId = #{userid};")
+    List<Long> findShare(long userid);
+
     @Update("update users set username=#{username}, phone=#{phone}")
     int update(Users user);
 
