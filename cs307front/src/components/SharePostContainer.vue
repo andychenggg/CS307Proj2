@@ -40,7 +40,7 @@ export default {
   },
   mounted() {
     // 组件创建时要执行的操作
-    console.log('PostContainer created!');
+    console.log('SharePostContainer created!');
     axios.get('http://localhost:9090/user/follow/ids')
         .then(response => {
           // 处理请求成功的响应数据
@@ -72,16 +72,16 @@ export default {
           console.error(error);
         });
     axios.get('http://localhost:9090/user/share/ids')
-            .then(response => {
-              // 处理请求成功的响应数据
-              this.sharePostId = response.data;
-              console.log("favoritePostId" + response.data);
-            })
-            .catch(error => {
-              // 处理请求失败的情况
-              console.error(error);
-            });
-    this.fetchPostData();
+        .then(response => {
+          // 处理请求成功的响应数据
+          this.sharePostId = response.data;
+          console.log("favoritePostId" + response.data);
+        })
+        .catch(error => {
+          // 处理请求失败的情况
+          console.error(error);
+        });
+    this.fetchShareData();
   },
   methods: {
     isAuthorFollowed(authorId) {
@@ -99,15 +99,11 @@ export default {
     isShared(postId){
       return this.sharePostId.includes(postId);
     },
-    async fetchPostData() {
+    async fetchShareData() {
       console.log("this.lastPostId"+this.lastPostId);
-
-      console.log(!this.noMorePost);
-      console.log(!this.busy);
-
       if (!this.noMorePost && !this.busy) {
         this.busy = true;
-        axios.get('http://localhost:9090/homepage/post', {
+        axios.get('http://localhost:9090/homepage/share', {
           params: {
             lastPostId: this.lastPostId,
             limit: 50

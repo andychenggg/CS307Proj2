@@ -59,6 +59,56 @@ public class UserController {
             return postMapper.findPostByIdWithUsernamePageByPage(lastPostId, limit);
     }
 
+    @GetMapping("/homepage/share")
+    public List<Posts> findShareInPage(@RequestParam("lastPostId") Long lastPostId, HttpServletRequest request, @RequestParam("limit") int limit,  HttpServletResponse response){
+//        System.err.println(userId);
+        // update the validity
+
+        // select the post
+        if (lastPostId == -1) {
+            lastPostId = postMapper.findMaxPostId();
+        }
+        return postMapper.findShareByIdWithUsernamePageByPage(lastPostId, CookieManager.findCurrentUser(request), limit);
+    }
+
+    @GetMapping("/homepage/like")
+    public List<Posts> findLikeInPage(@RequestParam("lastPostId") Long lastPostId, HttpServletRequest request, @RequestParam("limit") int limit,  HttpServletResponse response){
+//        System.err.println(userId);
+        // update the validity
+
+        // select the post
+        if (lastPostId == -1) {
+            lastPostId = postMapper.findMaxPostId();
+        }
+        return postMapper.findLikeByIdWithUsernamePageByPage(lastPostId, CookieManager.findCurrentUser(request), limit);
+    }
+
+    @GetMapping("/homepage/favorite")
+    public List<Posts> findFavoriteInPage(@RequestParam("lastPostId") Long lastPostId, HttpServletRequest request, @RequestParam("limit") int limit,  HttpServletResponse response){
+//        System.err.println(userId);
+        // update the validity
+
+        // select the post
+        if (lastPostId == -1) {
+            lastPostId = postMapper.findMaxPostId();
+        }
+        return postMapper.findFavoriteByIdWithUsernamePageByPage(lastPostId, CookieManager.findCurrentUser(request), limit);
+    }
+
+    @GetMapping("/homepage/yourPost")
+    public List<Posts> findYourPostInPage(@RequestParam("lastPostId") Long lastPostId, HttpServletRequest request, @RequestParam("limit") int limit,  HttpServletResponse response){
+//        System.err.println(userId);
+        // update the validity
+
+        // select the post
+        if (lastPostId == -1) {
+            lastPostId = postMapper.findMaxPostId();
+        }
+        return postMapper.findYourPostByIdWithUsernamePageByPage(lastPostId, CookieManager.findCurrentUser(request), limit);
+    }
+
+
+
     @GetMapping("/user/homepage/post")
     public List<Posts> findMyPost(@RequestParam long senderId, HttpServletRequest request, HttpServletResponse response){
         System.err.println(CookieManager.findCurrentUser(request));
