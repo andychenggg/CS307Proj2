@@ -192,6 +192,9 @@ public class UserController {
             userMapper.sharePost(spw.getPostId(), CookieManager.findCurrentUser(request));
             posts.setSenderId(CookieManager.findCurrentUser(request));
             postMapper.insertNewPost(posts);
+            Long newPostId = postMapper.findNewSharePostId(spw.getPostId(), CookieManager.findCurrentUser(request));
+                System.err.println("newPostId"+newPostId);
+            postMapper.copyCate(newPostId, spw.getPostId());
             CookieManager.updateCookieValidity(request, response, "loginId");
             return "success";
         }
@@ -199,14 +202,13 @@ public class UserController {
     }
 
     @DeleteMapping("/user/share")
-    public String unSharePost(@RequestParam("postId") long postId, HttpServletRequest request, HttpServletResponse response){
+    public String unSharePost(@RequestParam("postId") long originalPostId, HttpServletRequest request, HttpServletResponse response){
 
         long currentUser = CookieManager.findCurrentUser(request);
-        Long success = postMapper.whetherInShares(currentUser, postId);
-        if(success == postId) {
-            postMapper.deShares(currentUser, postId);
-
-            // 待完成
+        Integer affected = postMapper.deShares(currentUser, originalPostId);
+        if(affected != null){
+            System.err.println("affected"+affected);
+            postMapper.deSharePost(originalPostId, currentUser);
             return "success";
         }
         return null;
@@ -332,6 +334,17 @@ public class UserController {
             CookieManager.updateCookieValidity(request, response, "loginId");
 
             return userMapper.findFavorite(CookieManager.findCurrentUser(request));
+        }
+        return null;
+    }
+
+    @GetMapping("user/share/ids")
+    public List<Long> findShareIds(HttpServletRequest request, HttpServletResponse response){
+        if(-1 != CookieManager.findCurrentUser(request)){
+
+            CookieManager.updateCookieValidity(request, response, "loginId");
+
+            return userMapper.findShare(CookieManager.findCurrentUser(request));
         }
         return null;
     }

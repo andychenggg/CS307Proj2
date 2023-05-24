@@ -38,10 +38,16 @@ public interface PostMapper extends BaseMapper<Posts> {
     @Select("select category from categories join postcategory p on categories.categoryid = p.categoryid where p.postid = #{postid};")
     List<String> findPostCate(long postid);
 
-    @Insert("insert into posts(title, content, postingtime, authorid, city, country, senderid, anonymous) " +
-        "values (#{title}, #{content}, #{postingTime}, #{authorId}, #{city}, #{country}, #{senderId}, #{anonymous}) returning postid")
+    @Insert("insert into posts(title, content, postingtime, authorid, city, country, senderid, anonymous, originpostid) " +
+        "values (#{title}, #{content}, #{postingTime}, #{authorId}, #{city}, #{country}, #{senderId}, #{anonymous}, #{postId}) returning postid")
     @Options(useGeneratedKeys = true, keyProperty = "postId")
     Long insertNewPost(Posts posts);
+    @Select("select postid from posts where originPostId = #{originPostId} and senderId = #{senderId}")
+    Long findNewSharePostId(long originPostId, long senderId);
+    @Insert("insert into postcategory\n" +
+        "select #{postId}, CategoryID from postcategory where PostID = #{originPostId};")
+    Integer copyCate(long postId, long originPostId);
+
     /* 待修改*/
     @Insert("insert into categories(category) values #{category} returning categoryid")
     @Options(useGeneratedKeys = true, keyProperty = "postid")
@@ -77,4 +83,8 @@ public interface PostMapper extends BaseMapper<Posts> {
     Long whetherInShares(long sharerId, long postId);
     @Delete("delete from shares where PostID = #{postId} and SharerID = #{sharerId}; ")
     Integer deShares(long sharerId, long postId);
+    @Delete("delete from posts where originPostId = #{originPostId} and senderid = #{senderId}")
+    Integer deSharePost(long originPostId, long senderId); // 删post, 响应的replies和postCate会响应的删除
+
+
 }

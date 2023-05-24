@@ -6,7 +6,7 @@
                 <LeftTab @page-change="handlePageChange"></LeftTab>
             </div>
             <div class="postContainer-wrapper">
-                <PostContainer v-if="isHomePage" ></PostContainer>
+                <PostContainer v-if="isHomePage" ref="postContainRef"></PostContainer>
                 <PostArticle v-if="isPost"></PostArticle>
                 <User :users="usersData" v-if="isFollow"></User>
                 <div v-if="isFollow" style="display: flex; justify-content: center">
@@ -82,7 +82,8 @@
             if (this.isFollow) {
                 this.fetchUserData();
             } else if (this.isHomePage) {
-                this.fetchPostData();
+                const child = this.$refs.postContainRef;
+                child.fetchPostData();
             }
         },
         methods: {

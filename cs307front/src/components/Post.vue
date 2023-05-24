@@ -347,6 +347,9 @@ export default {
     },
     isFavorite: {
       type: Boolean
+    },
+    isShare:{
+      type: Boolean
     }
   },
 };
