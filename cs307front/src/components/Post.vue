@@ -1,5 +1,9 @@
 <template>
   <div class="container">
+    <el-tag type="warning" style="font-size: 20px; width: 120px;">
+      <i class="el-icon-sunrise-1"></i>
+      hot: {{ post.hot }}
+    </el-tag>
     <div style="height: 60px; width: 100%">
       <div
           style="display: flex; justify-content: flex-start; width: 50%; height: 100%; margin-left: 20px; align-items: center; ">
@@ -28,7 +32,7 @@
       <label>{{ post.title }}</label>
     </div>
     <div v-for="cate in post.postCategories" :key="cate" style="display: flex; justify-content: flex-start; width: 90%">
-      {{cate}}
+      {{ cate }}
     </div>
     <div style="display: flex; justify-content: center; width: 90%; text-align: center">
       {{ "Post at: " + post.postingTime + ", " + post.city + ", " + post.country }}
@@ -123,7 +127,7 @@ export default {
       replyData: [],
       isLiked: this.isLike,
       isFavorited: this.isFavorite,
-      isShared: this.isShare
+      isShared: this.isShare,
     };
   },
   watch: {
@@ -147,29 +151,6 @@ export default {
         }
       }
     },
-    // isLiked: {
-    //   handler(newVal) {
-    //     // 当followAuthor变化时，调用fetchData方法
-    //     if (newVal) {
-    //       this.toggleLike();
-    //     } else {
-    //       this.toggleUnLike();
-    //     }
-    //   }
-    // },
-    // isFavorited: {
-    //   handler(newVal) {
-    //     // 当followAuthor变化时，调用fetchData方法
-    //     if (newVal) {
-    //       this.toggleFavorite();
-    //     } else {
-    //       this.toggleUnFavorite();
-    //     }
-    //   }
-    // },
-    // isShared: {
-    //
-    // }
   },
   methods: {
     toggleContent() {
@@ -204,7 +185,7 @@ export default {
     },
     toggleUnFollowAuthor() {
       axios.delete('http://localhost:9090/user/follow', {
-        params:{
+        params: {
           followigid: this.post.authorId,
         }
       },)
@@ -229,7 +210,7 @@ export default {
     },
     toggleUnFollowSender() {
       axios.delete('http://localhost:9090/user/follow', {
-        params:{
+        params: {
           followigid: this.post.senderId,
         }
       },)
@@ -253,10 +234,11 @@ export default {
             console.error(error);
           });
       this.isShared = !this.isShared;
+      this.post.hot += 4;
     },
     toggleUnShare() {
       axios.delete('http://localhost:9090/user/share', {
-        params:{
+        params: {
           postId: this.post.postId,
         }
       },)
@@ -266,6 +248,7 @@ export default {
             console.error(error);
           });
       this.isShared = !this.isShared;
+      this.post.hot -= 4;
     },
     toggleLike() {
       axios.post('http://localhost:9090/user/like', {
@@ -280,10 +263,11 @@ export default {
             console.error(error);
           });
       this.isLiked = !this.isLiked;
+      this.post.hot += 2;
     },
     toggleUnLike() {
       axios.delete('http://localhost:9090/user/like', {
-        params:{
+        params: {
           postId: this.post.postId,
         }
       },)
@@ -293,6 +277,7 @@ export default {
             console.error(error);
           });
       this.isLiked = !this.isLiked;
+      this.post.hot -= 2;
     },
     toggleFavorite() {
       axios.post('http://localhost:9090/user/favor', {
@@ -307,10 +292,11 @@ export default {
             console.error(error);
           });
       this.isFavorited = !this.isFavorited;
+      this.post.hot += 3;
     },
     toggleUnFavorite() {
       axios.delete('http://localhost:9090/user/favorite', {
-        params:{
+        params: {
           postId: this.post.postId,
         }
       },)
@@ -320,6 +306,7 @@ export default {
             console.error(error);
           });
       this.isFavorited = !this.isFavorited;
+      this.post.hot -= 3;
     }
 
   },
@@ -340,6 +327,7 @@ export default {
         postCategories: [],
         authorName: '',
         senderName: '',
+        hot: 0,
       })
     },
     authorIsFollowed: {
@@ -354,7 +342,7 @@ export default {
     isFavorite: {
       type: Boolean
     },
-    isShare:{
+    isShare: {
       type: Boolean
     }
   },
@@ -421,4 +409,5 @@ export default {
   text-align: center;
   margin-top: 10px;
 }
+
 </style>
