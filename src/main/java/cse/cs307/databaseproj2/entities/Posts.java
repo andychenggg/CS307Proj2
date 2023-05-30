@@ -26,6 +26,17 @@ public class Posts {
     @TableField(exist = false)
     private String ip;
 
+    @TableField(exist = false)
+    private int hot;
+
+    public int getHot() {
+        return hot;
+    }
+
+    public void setHot(int hot) {
+        this.hot = hot;
+    }
+
     public String getIp() {
         return ip;
     }
