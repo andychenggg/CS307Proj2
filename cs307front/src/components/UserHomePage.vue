@@ -67,7 +67,7 @@ export default {
     FavoritePostContainer,
     YourPostContainer,
 
-    SearchFrame
+    SearchFrame,
 
     YourReplyPostContainer,
     HotSearchContainer,
