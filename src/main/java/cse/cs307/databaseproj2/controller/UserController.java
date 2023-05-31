@@ -55,6 +55,18 @@ public class UserController {
             return postMapper.findPostByIdWithUsernamePageByPage(lastPostId, CookieManager.findCurrentUser(request), limit);
     }
 
+    @GetMapping("/homepage/hotpost")
+    public List<Posts> findHotPostInPage(@RequestParam("lastPostId") Long lastPostId,  @RequestParam("limit") int limit, HttpServletRequest request, HttpServletResponse response){
+//        System.err.println(userId);
+        // update the validity
+
+        // select the post
+        if (lastPostId == -1) {
+            lastPostId = postMapper.findMaxPostId();
+        }
+        return postMapper.findHotPostByIdWithUsernamePageByPage(lastPostId, CookieManager.findCurrentUser(request), limit);
+    }
+
     @GetMapping("/homepage/share")
     public List<Posts> findShareInPage(@RequestParam("lastPostId") Long lastPostId, HttpServletRequest request, @RequestParam("limit") int limit,  HttpServletResponse response){
 //        System.err.println(userId);
