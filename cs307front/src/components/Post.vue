@@ -4,11 +4,11 @@
       <div
           style="display: flex; justify-content: flex-start; width: 50%; height: 100%; margin-left: 20px; align-items: center; ">
         <el-tag style="margin-right: 10px;">Sender:</el-tag>
-        <el-tag type="success" style="margin-right: 10px">{{ post.senderName }}</el-tag>
+        <el-tag type="success" style="margin-right: 10px">{{!this.post.anonymous ? post.senderName : "anonymous"}}</el-tag>
         <el-switch
             v-model="followSender"
             active-text="follow"
-            inactive-text="unfollow" v-if="post.authorName!==post.senderName">
+            inactive-text="unfollow" v-if="post.authorName!==post.senderName&&!this.post.anonymous">
         </el-switch>
       </div>
     </div>
@@ -16,8 +16,9 @@
       <div
           style="display: flex; justify-content: flex-start; width: 50%; height: 100%; margin-left: 20px; align-items: center;">
         <el-tag style="margin-right: 10px">Author:</el-tag>
-        <el-tag type="success" style="margin-right: 10px">{{ post.authorName }}</el-tag>
+        <el-tag type="success" style="margin-right: 10px">{{!this.post.issenderanonymous ? post.authorName : "anonymous" }}</el-tag>
         <el-switch
+            v-if="!this.post.issenderanonymous"
             v-model="followAuthor"
             active-text="follow"
             inactive-text="unfollow">
@@ -134,7 +135,6 @@ export default {
       isLiked: this.isLike,
       isFavorited: this.isFavorite,
       isShared: this.isShare,
-
       isPic: false,
       isVideo: false,
       filepath: ''
@@ -165,6 +165,7 @@ export default {
 
   },
   created() {
+    console.log(this.post.anonymous);
     this.isPic = this.post.filepath && (this.post.filepath.endsWith('gif') || this.post.filepath.endsWith('png') || this.post.filepath.endsWith('jpg'));
     this.isVideo = this.post.filepath && this.post.filepath.endsWith('mp4');
     this.filepath = 'http://localhost:9090'+this.post.filepath;
@@ -342,6 +343,7 @@ export default {
         city: '',
         country: '',
         anonymous: false,
+        issenderanonymous: false,
         postCategories: [],
         authorName: '',
         senderName: '',

@@ -33,7 +33,7 @@ public interface PostMapper extends BaseMapper<Posts> {
             "where postid <= #{lastPostId} and postid > #{lastPostId} - #{limit} \n" +
             "and u.userID not in (select shieldID from shieldby where userID = #{userid})\n" +
             "and v.userID not in (select shieldID from shieldby where userID = #{userid})\n" +
-            "order by p.postingtime desc;")
+            "order by p.postid desc;")
         // replace also provide the username
     List<Posts> findPostByIdWithUsernamePageByPage(long lastPostId, long userid, int limit);
 

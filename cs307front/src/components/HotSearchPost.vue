@@ -324,6 +324,7 @@ export default {
         city: '',
         country: '',
         anonymous: false,
+        isSenderAnonymous: false,
         postCategories: [],
         authorName: '',
         senderName: '',
