@@ -2,16 +2,16 @@
   <div style="z-index: 0;">
     <el-container style="display: flex; flex-direction: column;">
       <el-aside style=" background-color: transparent">
-        <el-menu  background-color="transparent">
-          <el-submenu index="1" >
+        <el-menu background-color="transparent">
+          <el-submenu index="1">
             <template slot="title"><i class="el-icon-message"></i>homepage</template>
-            <el-menu-item index="1-1" >
+            <el-menu-item index="1-1">
               <el-button type="primary" plain class="same_length_button" @click="changeToHomepage">homepage</el-button>
             </el-menu-item>
-            <el-menu-item index="1-2" >
-
+            <el-menu-item index="1-2">
               <el-button type="primary" plain class="same_length_button" @click="changeToSearch">Search</el-button>
-
+            </el-menu-item>
+            <el-menu-item index="1-3">
               <el-button type="primary" plain class="same_length_button" @click="changeToHotPost">hotpost</el-button>
 
             </el-menu-item>
@@ -41,7 +41,8 @@
               <el-button type="primary" plain class="same_length_button" @click="changeToYourPost">yourPost</el-button>
             </el-menu-item>
             <el-menu-item index="3-5">
-              <el-button type="primary" plain class="same_length_button" @click="changeToYourReplyPost">yourReplyPost</el-button>
+              <el-button type="primary" plain class="same_length_button" @click="changeToYourReplyPost">yourReplyPost
+              </el-button>
             </el-menu-item>
             <el-menu-item index="3-6">
               <el-button type="primary" plain class="same_length_button" @click="changeToYourComment">yourComment

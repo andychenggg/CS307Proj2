@@ -32,7 +32,8 @@ export default {
       sharePostId: [],
       controlByIsHomepage: true,
       noMorePost: false,
-      busy: false
+      busy: false,
+
     }
   },
   components: {

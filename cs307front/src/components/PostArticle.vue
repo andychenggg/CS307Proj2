@@ -145,6 +145,7 @@
                             axios.post("http://localhost:9090/user/homepage/post", {
                                 title: this.article.title,
                                 anonymous: this.anonymous_value === 'Anonymous',
+                                isSenderAnonymous: this.anonymous_value === 'Anonymous',
                                 content: this.article.mdContent,
                                 ip: ip,
                                 postCategories: this.article.dynamicTags,

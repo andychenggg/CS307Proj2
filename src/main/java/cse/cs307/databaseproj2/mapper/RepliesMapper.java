@@ -12,9 +12,9 @@ import org.springframework.stereotype.Repository;
 @Mapper
 @Repository
 public interface RepliesMapper extends BaseMapper<Replies> {
-    @Insert("insert into replies(toreplyid, topostid, content, stars, authorid, anonymous) " +
-        "VALUES (#{toreplyid}, #{topostid}, #{content}, #{stars}, #{authorid}, #{anonymous})")
-    int addReply(long toreplyid, long topostid, String content, int stars, long authorid, boolean anonymous);
+    @Insert("insert into replies(toreplyid, topostid, content, stars, authorid, anonymous, orginalanonymous) " +
+        "VALUES (#{toreplyid}, #{topostid}, #{content}, #{stars}, #{authorid}, #{anonymous}, #{orginalanonymous})")
+    int addReply(long toreplyid, long topostid, String content, int stars, long authorid, boolean anonymous, boolean orginalanonymous);
 
     @Update("UPDATE replies\n" +
         "SET stars = stars + 1\n" +
