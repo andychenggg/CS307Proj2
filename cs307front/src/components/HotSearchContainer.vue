@@ -1,15 +1,17 @@
 <template>
   <div class="container">
+    <el-tag class="fixed-tag" effect="plain">
+      hot = comments * 1 + likes * 2 + favorites * 3 + shares * 4
+    </el-tag>
     <div class="main-content" id="content">
-
-      <Post v-for="post in postData" :key="post.postId" :post="post"
+      <HotSearchPost v-for="post in postData" :key="post.postId" :post="post"
             :authorIsFollowed="isAuthorFollowed(post.authorId)"
             :senderIsFollowed="isSenderFollowed(post.senderId)"
             :isLike="isLiked(post.postId)"
             :isFavorite="isFavorite(post.postId)"
-            :isShare="isShared(post.postId)"></Post>
+            :isShare="isShared(post.postId)"></HotSearchPost>
       <el-button type="primary" round style="width: 200px; height: 40px; margin: 20px"
-                 @click="fetchPostData" v-if="!noMorePost">To See More...
+                 @click="fetchPostData" v-if="false">To See More...
       </el-button>
       <span v-else style="height: 40px">我可是有底线的</span>
     </div>
@@ -18,8 +20,8 @@
 
 <script>
 import Vue, {watch} from 'vue';
-import Post from "@/components/Post.vue";
 import axios from "axios";
+import HotSearchPost from "@/components/HotSearchPost.vue";
 
 export default {
   data() {
@@ -32,12 +34,11 @@ export default {
       sharePostId: [],
       controlByIsHomepage: true,
       noMorePost: false,
-      busy: false,
-
+      busy: false
     }
   },
   components: {
-    Post
+    HotSearchPost,
   },
   mounted() {
     // 组件创建时要执行的操作
@@ -73,15 +74,15 @@ export default {
           console.error(error);
         });
     axios.get('http://localhost:9090/user/share/ids')
-            .then(response => {
-              // 处理请求成功的响应数据
-              this.sharePostId = response.data;
-              console.log("favoritePostId" + response.data);
-            })
-            .catch(error => {
-              // 处理请求失败的情况
-              console.error(error);
-            });
+        .then(response => {
+          // 处理请求成功的响应数据
+          this.sharePostId = response.data;
+          console.log("favoritePostId" + response.data);
+        })
+        .catch(error => {
+          // 处理请求失败的情况
+          console.error(error);
+        });
     this.fetchPostData();
   },
   methods: {
@@ -108,7 +109,7 @@ export default {
 
       if (!this.noMorePost && !this.busy) {
         this.busy = true;
-        axios.get('http://localhost:9090/homepage/post', {
+        axios.get('http://localhost:9090/homepage/hotpost', {
           params: {
             lastPostId: this.lastPostId,
             limit: 50
@@ -141,10 +142,20 @@ export default {
   flex-direction: column;
 }
 
+.fixed-tag {
+  position: fixed;
+  max-width: 1000px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  right: 0;
+}
+
 .main-content {
   overflow-y: auto;
   height: 90%;
   border: 10px solid #ccc;
 }
+
 
 </style>

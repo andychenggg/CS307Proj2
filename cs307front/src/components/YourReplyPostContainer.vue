@@ -9,7 +9,7 @@
             :isFavorite="isFavorite(post.postId)"
             :isShare="isShared(post.postId)"></Post>
       <el-button type="primary" round style="width: 200px; height: 40px; margin: 20px"
-                 @click="fetchPostData" v-if="!noMorePost">To See More...
+                 @click="fetchYourReplyPostData" v-if="!noMorePost">To See More...
       </el-button>
       <span v-else style="height: 40px">我可是有底线的</span>
     </div>
@@ -32,8 +32,7 @@ export default {
       sharePostId: [],
       controlByIsHomepage: true,
       noMorePost: false,
-      busy: false,
-
+      busy: false
     }
   },
   components: {
@@ -41,7 +40,7 @@ export default {
   },
   mounted() {
     // 组件创建时要执行的操作
-    console.log('PostContainer created!');
+    console.log('YourReplyPostPostContainer created!');
     axios.get('http://localhost:9090/user/follow/ids')
         .then(response => {
           // 处理请求成功的响应数据
@@ -73,16 +72,16 @@ export default {
           console.error(error);
         });
     axios.get('http://localhost:9090/user/share/ids')
-            .then(response => {
-              // 处理请求成功的响应数据
-              this.sharePostId = response.data;
-              console.log("favoritePostId" + response.data);
-            })
-            .catch(error => {
-              // 处理请求失败的情况
-              console.error(error);
-            });
-    this.fetchPostData();
+        .then(response => {
+          // 处理请求成功的响应数据
+          this.sharePostId = response.data;
+          console.log("favoritePostId" + response.data);
+        })
+        .catch(error => {
+          // 处理请求失败的情况
+          console.error(error);
+        });
+    this.fetchYourReplyPostData();
   },
   methods: {
     isAuthorFollowed(authorId) {
@@ -100,18 +99,13 @@ export default {
     isShared(postId){
       return this.sharePostId.includes(postId);
     },
-    async fetchPostData() {
+    async fetchYourReplyPostData() {
       console.log("this.lastPostId"+this.lastPostId);
-
-      console.log(!this.noMorePost);
-      console.log(!this.busy);
-
       if (!this.noMorePost && !this.busy) {
         this.busy = true;
-        axios.get('http://localhost:9090/homepage/post', {
+        axios.get('http://localhost:9090/user/homepage/yourReplyPost', {
           params: {
-            lastPostId: this.lastPostId,
-            limit: 50
+            lastPostId: this.lastPostId
           },
           withCredentials: true
         }).then(response => {

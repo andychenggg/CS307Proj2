@@ -10,7 +10,16 @@ public class Replies {
     private String content;
     private int stars;
     private long authorId;
-    private boolean isAnonymous;
+    private boolean anonymous;
+    private boolean orginalanonymous;
+
+    public boolean getOrginalanonymous() {
+        return orginalanonymous;
+    }
+
+    public void setOrginalanonymous(boolean orginalanonymous) {
+        this.orginalanonymous = orginalanonymous;
+    }
 
     @TableField(exist = false)
     private String authorName;
@@ -37,12 +46,12 @@ public class Replies {
         this.toUserName = toUserName;
     }
 
-    public boolean isAnonymous() {
-        return isAnonymous;
+    public boolean getAnonymous() {
+        return anonymous;
     }
 
     public void setAnonymous(boolean anonymous) {
-        isAnonymous = anonymous;
+        this.anonymous = anonymous;
     }
 
     public String getAuthorName() {
@@ -112,7 +121,7 @@ public class Replies {
             ", content='" + content + '\'' +
             ", stars=" + stars +
             ", authorId=" + authorId +
-            ", isAnonymous=" + isAnonymous +
+            ", isAnonymous=" + anonymous +
             ", authorName='" + authorName + '\'' +
             ", toUserId='" + toUserId + '\'' +
             ", toUserName='" + toUserName + '\'' +

@@ -7,11 +7,13 @@
       </div>
       <div class="postContainer-wrapper">
         <PostContainer v-if="isHomePage"></PostContainer>
+        <HotSearchContainer v-if="isHotPost"></HotSearchContainer>
         <PostArticle v-if="isPost"></PostArticle>
         <SharePostContainer v-if="isShare"></SharePostContainer>
         <LikePostContainer v-if="isLike"></LikePostContainer>
         <FavoritePostContainer v-if="isFavorite"></FavoritePostContainer>
         <YourPostContainer v-if="isYourPost"></YourPostContainer>
+        <YourReplyPostContainer v-if="isYourReplyPost"></YourReplyPostContainer>
         <User :users="usersData" v-if="isFollow"></User>
         <div v-if="isFollow" style="display: flex; justify-content: center">
 
@@ -41,11 +43,18 @@ import SharePostContainer from "@/components/SharePostContainer.vue";
 import LikePostContainer from "@/components/LikePostContainer.vue";
 import FavoritePostContainer from "@/components/FavoritePostContainer.vue";
 import YourPostContainer from "@/components/YourPostContainer.vue";
+
 import SearchResult from "@/components/SearchResult.vue";
 import SearchFrame from "@/components/SearchFrame.vue";
 
+import YourReplyPostContainer from "@/components/YourReplyPostContainer.vue";
+import HotSearchPost from "@/components/HotSearchPost.vue";
+import HotSearchContainer from "@/components/HotSearchContainer.vue";
+
+
 export default {
   components: {
+    HotSearchPost,
     ForumHeader,
     LeftTab,
     PostContainer,
@@ -57,7 +66,12 @@ export default {
     LikePostContainer,
     FavoritePostContainer,
     YourPostContainer,
-    SearchFrame
+
+    SearchFrame,
+
+    YourReplyPostContainer,
+    HotSearchContainer,
+
   },
   data() {
     return {
@@ -74,6 +88,9 @@ export default {
   computed: {
     isHomePage() {
       return this.currentPage === 'homepage';
+    },
+    isHotPost() {
+      return this.currentPage === 'hotpost';
     },
     isPost() {
       return this.currentPage === 'post';
@@ -94,15 +111,15 @@ export default {
       return this.currentPage === 'yourLike';
     },
     isFavorite() {
-      console.log(this.currentPage === 'yourLike');
       return this.currentPage === 'yourFavorites';
     },
     isYourPost() {
-      console.log(this.currentPage === 'yourLike');
       return this.currentPage === 'yourPost';
     },
+    isYourReplyPost() {
+      return this.currentPage === 'yourReplyPost';
+    },
     isComment() {
-      console.log(document.cookie);
       if (this.currentPage === 'yourComment') {
         this.fetchCommentData();
       }
@@ -112,6 +129,14 @@ export default {
       return this.currentPage === 'search'
     }
 
+  },
+  watch :{
+    currentPage(newVal, oldVal){
+      if(newVal !== oldVal && newVal === 'follow'){
+        console.log('watch')
+        this.fetchUserData();
+      }
+    }
   },
   mounted() {
     if (this.isFollow) {

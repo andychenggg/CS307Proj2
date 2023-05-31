@@ -1,9 +1,11 @@
 package cse.cs307.databaseproj2.entities;
 
 import com.baomidou.mybatisplus.annotation.TableField;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import javax.persistence.Table;
+
 import org.springframework.web.multipart.MultipartFile;
 
 public class Posts {
@@ -24,7 +26,7 @@ public class Posts {
         return isSenderAnonymous;
     }
 
-    public void setSenderAnonymous(boolean senderAnonymous) {
+    public void setisSenderAnonymous(boolean senderAnonymous) {
         isSenderAnonymous = senderAnonymous;
     }
 
@@ -40,6 +42,7 @@ public class Posts {
     private String ip;
 
     @TableField(exist = false)
+
     private MultipartFile file;
     @TableField(exist = false)
     private String filename;
@@ -85,6 +88,17 @@ public class Posts {
 
     public void setFile(MultipartFile file) {
         this.file = file;
+    }
+
+    private int hot;
+
+    public int getHot() {
+        return hot;
+    }
+
+    public void setHot(int hot) {
+        this.hot = hot;
+
     }
 
     public String getIp() {
@@ -176,7 +190,7 @@ public class Posts {
         this.senderId = senderId;
     }
 
-    public boolean isAnonymous() {
+    public boolean getAnonymous() {
         return anonymous;
     }
 
@@ -196,20 +210,20 @@ public class Posts {
     @Override
     public String toString() {
         return "Posts{" +
-            "postId=" + postId +
-            ", title='" + title + '\'' +
-            ", content='" + content + '\'' +
-            ", postingTime=" + postingTime +
-            ", authorId=" + authorId +
-            ", city='" + city + '\'' +
-            ", senderId=" + senderId +
-            ", anonymous=" + anonymous +
-            ", country='" + country + '\'' +
-            ", postCategories=" + postCategories +
-            ", authorName='" + authorName + '\'' +
-            ", senderName='" + senderName + '\'' +
-            ", ip='" + ip + '\'' +
-            '}';
+                "postId=" + postId +
+                ", title='" + title + '\'' +
+                ", content='" + content + '\'' +
+                ", postingTime=" + postingTime +
+                ", authorId=" + authorId +
+                ", city='" + city + '\'' +
+                ", senderId=" + senderId +
+                ", anonymous=" + anonymous +
+                ", country='" + country + '\'' +
+                ", postCategories=" + postCategories +
+                ", authorName='" + authorName + '\'' +
+                ", senderName='" + senderName + '\'' +
+                ", ip='" + ip + '\'' +
+                '}';
     }
 }
 
