@@ -12,5 +12,9 @@ public class CrossController implements WebMvcConfigurer {
             .allowedOrigins("http://localhost:8080")
             .allowedMethods("*")
             .allowedOriginPatterns("*").allowCredentials(true);
+        registry.addMapping("/static/**")
+            .allowedOrigins("http://localhost:8080")
+            .allowedMethods("*")
+            .allowedOriginPatterns("*").allowCredentials(true);
     }
 }

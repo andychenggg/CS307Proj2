@@ -1,6 +1,7 @@
 <template>
     <div>
-        <el-container v-loading="loading" class="post-article">
+        <el-skeleton :rows="15" animated v-if="isUploading"></el-skeleton>
+        <el-container v-loading="loading" class="post-article" v-else>
             <el-header class="header">
                 <el-select v-model="anonymous_value" placeholder="Anonymous or not?">
                     <el-option
@@ -42,14 +43,16 @@
                 </div>
                 <div style="display: flex; flex-direction: column; width: 40%; height: 100%">
                     <el-upload
-                            style="height: 40%"
                             class="upload-demo"
-                            drag
-                            action="https://jsonplaceholder.typicode.com/posts/"
-                            multiple>
-                        <i class="el-icon-upload"></i>
-                        <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-                        <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>
+                            ref="upload"
+                            :action='`http://localhost:9090/Files/users/${this.userId}`'
+                            :on-preview="handlePreview"
+                            :on-remove="handleRemove"
+                            :auto-upload="false"
+                            :before-upload="beforeUpload"
+                            list-type="picture">
+                        <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+                        <div slot="tip" class="el-upload__tip">上传文件，且不超过30MB</div>
                     </el-upload>
                     <div style="height: 250px">
 
@@ -66,9 +69,14 @@
 <script>
     import 'mavon-editor/dist/css/index.css'
     import axios from "axios";
+    import PostArticle from './PostArticle.vue';
+    import { Upload } from 'element-ui';
+
 
     export default {
-        components: {},
+        components: {
+            'el-upload': Upload
+        },
         data(){
             return {
                 options: [{
@@ -90,7 +98,11 @@
                 tagValue: '',
                 loading: false,
                 from: '',
-                value1: true
+                value1: true,
+                isUploading: false,
+                file: null,
+                userId: -1,
+                fileName: null
             }
         },
         methods: {
@@ -111,9 +123,22 @@
                 this.tagInputVisible = false;
                 this.tagValue = '';
             },
+            handleRemove(file, fileList) {
+                console.log(file, fileList);
+            },
+            handlePreview(file) {
+                console.log(file);
+            },
+            beforeUpload(file){
+                this.fileName = file.name;
+            },
             submitPost(){
                 let ip;
                 if(this.article.mdContent !== '' && this.article.title !== ''){
+                    this.isUploading = true;
+                    this.$refs.upload.submit();
+                    console.log("here")
+
                     axios.get('https://api.ipify.org?format=json', {withCredentials: false})
                         .then(response => {
                             ip = response.data.ip;
@@ -122,25 +147,38 @@
                                 anonymous: this.anonymous_value === 'Anonymous',
                                 content: this.article.mdContent,
                                 ip: ip,
-                                postCategories: this.article.dynamicTags
-
+                                postCategories: this.article.dynamicTags,
+                                filename: this.fileName
                             }, {
                                 withCredentials: true
                             })
                                 .then(response => {
                                     // 处理响应
                                     console.log(ip)
-                                    this.article.dynamicTags = [];
-                                    this.article.title = '';
-                                    this.article.mdContent = '';
+                                    this.isUploading = false;
                                 })
                                 .catch(error => {
                                     // 处理错误
                                     console.error(error);
                                 });
+                            this.article.dynamicTags = [];
+                            this.article.title = '';
+                            this.article.mdContent = '';
                         });
                 }
-            }
+            },
+            // handleUploadSuccess(response, file, fileList) {
+            //     console.log(response); // 打印上传成功后服务器的响应
+            //     this.file = file;
+            //     console.log(file); // 打印上传成功的文件
+            //     console.log(fileList); // 打印全部已上传的文件列表
+            // }
+        },
+        mounted() {
+            axios.get("http://localhost:9090/current_userId")
+                .then(response =>{
+                    this.userId = response.data;
+                })
         }
     }
 </script>

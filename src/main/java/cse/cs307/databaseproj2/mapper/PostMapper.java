@@ -2,13 +2,17 @@ package cse.cs307.databaseproj2.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import cse.cs307.databaseproj2.entities.Posts;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
+import org.apache.ibatis.annotations.Arg;
+import org.apache.ibatis.annotations.ConstructorArgs;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Select;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Mapper
@@ -59,12 +63,65 @@ public interface PostMapper extends BaseMapper<Posts> {
     List<String> findCateByPostId(long postid);
 
 
+    @Select("""
+         <script>
+             SELECT * FROM posts p
+                 <where>
+                     <if test='titles != null and !titles.isEmpty()'>
+                         AND (
+                         <foreach collection='titles' item='item' index='index' separator=' AND '>
+                         p.title LIKE CONCAT('%', #{item}, '%')
+                         </foreach>)
+                     </if>
+                     <if test='content != null and !content.isEmpty()'>
+                         AND (
+                         <foreach collection='content' item='item' index='index' separator=' OR '>
+                         p.content LIKE CONCAT('%', #{item}, '%')
+                         </foreach>)
+                     </if>
+                     <if test='author != null and !author.isEmpty()'>
+                         AND (
+                         <foreach collection='author' item='item' index='index' separator=' OR '>
+                         p.author = #{item}
+                         </foreach>)
+                     </if>
+                     <if test='sender != null and !sender.isEmpty()'>
+                         AND (
+                         <foreach collection='sender' item='item' index='index' separator=' OR '>
+                         p.sender = #{item}
+                         </foreach>)
+                     </if>
+                     <if test='start != null'>
+                         AND p.postingTime &gt;= #{start}
+                     </if>
+                     <if test='end != null'>
+                         AND p.postingTime &lt;= #{end}
+                     </if>
+                     <if test='true'>
+                         AND (
+                         p.anonymous = false)
+                     </if>
+                     <if test='true'>
+                         AND (
+                         p.isSenderAnonymous = false)
+                     </if>
+                 </where>
+         </script>
+        """)
+    List<Posts> findPostsByFilter(@Param("titles") List<String> titles,
+                          @Param("content") List<String> content,
+                          @Param("author") List<String> author,
+                          @Param("sender") List<String> sender,
+                          @Param("start") Timestamp start,
+                          @Param("end") Timestamp end);
+
+
 
     @Select("select category from categories join postcategory p on categories.categoryid = p.categoryid where p.postid = #{postid};")
     List<String> findPostCate(long postid);
 
-    @Insert("insert into posts(title, content, postingtime, authorid, city, country, senderid, anonymous, originpostid) " +
-        "values (#{title}, #{content}, #{postingTime}, #{authorId}, #{city}, #{country}, #{senderId}, #{anonymous}, #{postId}) returning postid")
+    @Insert("insert into posts(title, content, postingtime, authorid, city, country, senderid, anonymous, originpostid, filePath, issenderanonymous) " +
+        "values (#{title}, #{content}, #{postingTime}, #{authorId}, #{city}, #{country}, #{senderId}, #{anonymous}, #{postId}, #{filepath}, #{issenderanonymous}) returning postid")
     @Options(useGeneratedKeys = true, keyProperty = "postId")
     Long insertNewPost(Posts posts);
     @Select("select postid from posts where originPostId = #{originPostId} and senderId = #{senderId}")

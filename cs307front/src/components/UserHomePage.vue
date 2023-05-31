@@ -21,6 +21,7 @@
           <span v-else style="height: 40px">我可是有底线的</span>
         </div>
         <Comment v-if="isComment" :CommentData="CommentData"></Comment>
+        <SearchFrame v-if="isSearch"></SearchFrame>
       </div>
     </div>
 
@@ -40,6 +41,8 @@ import SharePostContainer from "@/components/SharePostContainer.vue";
 import LikePostContainer from "@/components/LikePostContainer.vue";
 import FavoritePostContainer from "@/components/FavoritePostContainer.vue";
 import YourPostContainer from "@/components/YourPostContainer.vue";
+import SearchResult from "@/components/SearchResult.vue";
+import SearchFrame from "@/components/SearchFrame.vue";
 
 export default {
   components: {
@@ -54,6 +57,7 @@ export default {
     LikePostContainer,
     FavoritePostContainer,
     YourPostContainer,
+    SearchFrame
   },
   data() {
     return {
@@ -103,6 +107,9 @@ export default {
         this.fetchCommentData();
       }
       return this.currentPage === 'yourComment';
+    },
+    isSearch(){
+      return this.currentPage === 'search'
     }
 
   },
@@ -120,7 +127,7 @@ export default {
     fetchUserData() {
       if (!this.noMoreFollowIg) {
         console.log("fetchUserData");
-        axios.get("http://localhost:9090/user/post", {
+        axios.get("http://localhost:9090/user/follow", {
           params: {
             offset: this.usersData.length,
             limit: 100
