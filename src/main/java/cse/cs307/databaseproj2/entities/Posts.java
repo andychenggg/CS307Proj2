@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import java.time.LocalDateTime;
 import java.util.List;
 import javax.persistence.Table;
+import org.springframework.web.multipart.MultipartFile;
 
 public class Posts {
     private long postId;
@@ -14,7 +15,19 @@ public class Posts {
     private String city;
     private long senderId;
     private boolean anonymous;
+    private boolean isSenderAnonymous;
     private String country;
+    private String filePath;
+    private long originPostId;
+
+    public boolean getissenderanonymous() {
+        return isSenderAnonymous;
+    }
+
+    public void setSenderAnonymous(boolean senderAnonymous) {
+        isSenderAnonymous = senderAnonymous;
+    }
+
     @TableField(exist = false)
     private List<String> postCategories;
     @TableField(exist = false)
@@ -27,6 +40,53 @@ public class Posts {
     private String ip;
 
     @TableField(exist = false)
+
+    private MultipartFile file;
+    @TableField(exist = false)
+    private String filename;
+    @TableField(exist = false)
+    private String filepath;
+
+    public String getFilename() {
+        return filename;
+    }
+
+    public void setFilename(String filename) {
+        this.filename = filename;
+    }
+
+    public String getFilepath() {
+        return filepath;
+    }
+
+    public void setFilepath(String filepath) {
+        this.filepath = filepath;
+    }
+
+
+    public long getOriginPostId() {
+        return originPostId;
+    }
+
+    public void setOriginPostId(long originPostId) {
+        this.originPostId = originPostId;
+    }
+
+    public String getFilePath() {
+        return filePath;
+    }
+
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
+    }
+
+    public MultipartFile getFile() {
+        return file;
+    }
+
+    public void setFile(MultipartFile file) {
+        this.file = file;
+
     private int hot;
 
     public int getHot() {
@@ -35,6 +95,7 @@ public class Posts {
 
     public void setHot(int hot) {
         this.hot = hot;
+
     }
 
     public String getIp() {

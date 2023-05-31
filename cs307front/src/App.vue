@@ -17,7 +17,6 @@
   import HomePage from "@/components/HomePage.vue";
   import Signup from "@/components/Signup.vue";
   import UserHomePage from "@/components/UserHomePage.vue";
-  import TopTrend from './components/TopTrend.vue';
   import Post from '@/components/Post.vue';
   import postDetail from '@/components/PostDetail.vue';
   import NewComment from "@/components/NewComment.vue";

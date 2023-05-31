@@ -9,10 +9,15 @@ import cse.cs307.databaseproj2.mapper.PostMapper;
 import cse.cs307.databaseproj2.mapper.RepliesMapper;
 import cse.cs307.databaseproj2.mapper.UserMapper;
 import cse.cs307.databaseproj2.util.CookieManager;
+import cse.cs307.databaseproj2.util.FileManager;
+import cse.cs307.databaseproj2.util.Filter;
 import cse.cs307.databaseproj2.util.GeoIPService;
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -30,6 +35,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:8080")
@@ -66,6 +72,36 @@ public class UserController {
         }
         return postMapper.findHotPostByIdWithUsernamePageByPage(lastPostId, CookieManager.findCurrentUser(request), limit);
     }
+
+    @PostMapping("/homepage/search")
+    public List<Posts> searchPost(@RequestBody ArrayList<Filter> filters,
+                                                HttpServletRequest request){
+        List<String> title = new ArrayList<>();
+        List<String> content = new ArrayList<>();
+        List<String> author = new ArrayList<>();
+        List<String> sender = new ArrayList<>();
+        Timestamp start = null;
+        Timestamp end = null;
+        for (Filter filter : filters){
+            String key = filter.getKey();
+            switch (key) {
+                case "1" -> title.add(filter.getValue());
+                case "2" -> author.add(filter.getValue());
+                case "3" -> content.add(filter.getValue());
+                case "4" -> {
+                    if(start == null || start.before(filter.getTimeValue().get(0)))
+                        start = filter.getTimeValue().get(0);
+                    if(end == null || end.after(filter.getTimeValue().get(1)))
+                        end = filter.getTimeValue().get(1);
+                }
+                case "5" -> sender.add(filter.getValue());
+            }
+        }
+        System.err.println(filters);
+        return postMapper.findPostsByFilter(title, content, author, sender, start, end);
+    }
+
+
 
     @GetMapping("/homepage/share")
     public List<Posts> findShareInPage(@RequestParam("lastPostId") Long lastPostId, HttpServletRequest request, @RequestParam("limit") int limit,  HttpServletResponse response){
@@ -159,6 +195,10 @@ public class UserController {
             CookieManager.updateCookieValidity(request, response, "loginId");
             // select the post
             System.err.println(posts);
+            long id = CookieManager.findCurrentUser(request);
+            if(posts.getFilename() != null){
+                posts.setFilepath(String.format("/Files/users/%d/%s", id, posts.getFilename()));
+            }
 
             String [] locations;
             try{
@@ -171,7 +211,8 @@ public class UserController {
             posts.setCity(locations[1]);
             posts.setCountry(locations[0]);
             posts.setPostingTime(LocalDateTime.now());
-
+            posts.setOriginPostId(-1);
+//            FileManager.saveFile(posts.getFile(), CookieManager.findCurrentUser(request));
             postMapper.insertNewPost(posts);
             System.err.println(posts.getPostId());
             posts.getPostCategories().forEach(e -> {
@@ -182,6 +223,19 @@ public class UserController {
             return 1;
         }
         return -1;
+    }
+    @PostMapping("/Files/users/{userId}")
+    public void uploadPic(HttpServletRequest request, HttpServletResponse response, @RequestBody MultipartFile file, @PathVariable long userId){
+        System.err.println("here");
+        System.err.println("uploadPic"+(file == null));
+        System.err.println(CookieManager.findCurrentUser(request));
+        System.err.println("Id"+userId);
+        try {
+            if(file != null)
+                FileManager.saveFile(file, userId);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @GetMapping("/user/homepage/replies")

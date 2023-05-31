@@ -1,6 +1,5 @@
 import VueRouter from "vue-router";
 import Vue from "vue";
-import TopTrend from '../components/TopTrend.vue'
 import Login from "@/components/Login.vue";
 import Signup from "@/components/Signup.vue";
 import HomePage from "@/components/HomePage.vue";

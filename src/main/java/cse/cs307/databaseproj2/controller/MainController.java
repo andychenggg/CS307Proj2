@@ -97,6 +97,15 @@ public class MainController {
         return userMapper.findNameById(id);
     }
 
+    @GetMapping("/current_userId")
+    @ResponseBody
+    public long findCurrentUserId(HttpServletRequest request){
+        CookieManager.printAllCookie(request);
+        long id = CookieManager.findCurrentUser(request);
+
+        return id;
+    }
+
     @GetMapping("/login")
     @ResponseBody
     public String login(HttpServletRequest request, HttpServletResponse response){

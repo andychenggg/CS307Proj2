@@ -37,6 +37,16 @@
       <div class="content-textarea">{{ post.content }}</div>
       <!--      <textarea class="content-textarea" placeholder="content"></textarea>-->
     </div>
+
+    <div v-if="this.isPic || this.isVideo" style="width: 100%; height: 200px; display: flex; justify-content: center; margin-bottom: 50px">
+      <!-- 展示图片 -->
+      <img v-if="this.isPic" :src="this.filepath" alt="Image" style="max-width: 300px; max-height: 200px"/>
+
+      <!-- 展示视频 -->
+      <video controls v-if="this.isVideo" preload="auto" autoplay :src="this.filepath" style="max-width: 300px; max-height: 200px">
+<!--        <source :src="filepath" type="video/mp4" />-->
+      </video>
+    </div>
     <div class="details">
       <div style="width: 25%; display: flex; justify-content: center">
         <el-button
@@ -124,6 +134,11 @@ export default {
       isLiked: this.isLike,
       isFavorited: this.isFavorite,
       isShared: this.isShare,
+
+      isPic: false,
+      isVideo: false,
+      filepath: ''
+
     };
   },
   watch: {
@@ -147,8 +162,19 @@ export default {
         }
       }
     },
+
+  },
+  created() {
+    this.isPic = this.post.filepath && (this.post.filepath.endsWith('gif') || this.post.filepath.endsWith('png') || this.post.filepath.endsWith('jpg'));
+    this.isVideo = this.post.filepath && this.post.filepath.endsWith('mp4');
+    this.filepath = 'http://localhost:9090'+this.post.filepath;
+
   },
   methods: {
+    getFilePath(){
+      console.log(this.post.filepath);
+      return this.filepath;
+    },
     toggleContent() {
       this.showContent = !this.showContent;
       if (this.showContent) {
@@ -319,6 +345,7 @@ export default {
         postCategories: [],
         authorName: '',
         senderName: '',
+        filepath: null
       })
     },
     authorIsFollowed: {

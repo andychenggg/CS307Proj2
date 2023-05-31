@@ -9,7 +9,11 @@
               <el-button type="primary" plain class="same_length_button" @click="changeToHomepage">homepage</el-button>
             </el-menu-item>
             <el-menu-item index="1-2" >
+
+              <el-button type="primary" plain class="same_length_button" @click="changeToSearch">Search</el-button>
+
               <el-button type="primary" plain class="same_length_button" @click="changeToHotPost">hotpost</el-button>
+
             </el-menu-item>
           </el-submenu>
           <el-submenu index="2" style="background-color: transparent">
@@ -108,6 +112,9 @@ export default {
     },
     changeToHomepage() {
       this.currentPage = 'homepage';
+    },
+    changeToSearch() {
+      this.currentPage = 'search';
     },
     changeToPost() {
       this.currentPage = 'post';
