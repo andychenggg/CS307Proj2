@@ -40,6 +40,7 @@ public class Posts {
     private String ip;
 
     @TableField(exist = false)
+
     private MultipartFile file;
     @TableField(exist = false)
     private String filename;
@@ -85,6 +86,16 @@ public class Posts {
 
     public void setFile(MultipartFile file) {
         this.file = file;
+
+    private int hot;
+
+    public int getHot() {
+        return hot;
+    }
+
+    public void setHot(int hot) {
+        this.hot = hot;
+
     }
 
     public String getIp() {

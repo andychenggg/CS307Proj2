@@ -1,11 +1,7 @@
 package cse.cs307.databaseproj2.controller;
 
 import com.maxmind.geoip2.exception.GeoIp2Exception;
-import cse.cs307.databaseproj2.Wrapper.FavorPostWrapper;
-import cse.cs307.databaseproj2.Wrapper.FollowUserWrapper;
-import cse.cs307.databaseproj2.Wrapper.LikePostWrapper;
-import cse.cs307.databaseproj2.Wrapper.PostsRequestWrapper;
-import cse.cs307.databaseproj2.Wrapper.SharePostWrapper;
+import cse.cs307.databaseproj2.Wrapper.*;
 import cse.cs307.databaseproj2.entities.Posts;
 import cse.cs307.databaseproj2.entities.Replies;
 import cse.cs307.databaseproj2.entities.Users;
@@ -62,7 +58,19 @@ public class UserController {
             if (lastPostId == -1) {
                 lastPostId = postMapper.findMaxPostId();
             }
-            return postMapper.findPostByIdWithUsernamePageByPage(lastPostId, limit);
+            return postMapper.findPostByIdWithUsernamePageByPage(lastPostId, CookieManager.findCurrentUser(request), limit);
+    }
+
+    @GetMapping("/homepage/hotpost")
+    public List<Posts> findHotPostInPage(@RequestParam("lastPostId") Long lastPostId,  @RequestParam("limit") int limit, HttpServletRequest request, HttpServletResponse response){
+//        System.err.println(userId);
+        // update the validity
+
+        // select the post
+        if (lastPostId == -1) {
+            lastPostId = postMapper.findMaxPostId();
+        }
+        return postMapper.findHotPostByIdWithUsernamePageByPage(lastPostId, CookieManager.findCurrentUser(request), limit);
     }
 
     @PostMapping("/homepage/search")
@@ -156,6 +164,22 @@ public class UserController {
             posts.forEach(p -> {
                 p.setPostCategories(postMapper.findPostCate(p.getPostId()));
             });
+            return posts;
+        }
+        return null;
+    }
+    @GetMapping("/user/homepage/yourReplyPost")
+    public List<Posts> findMyReplyPost(HttpServletRequest request, HttpServletResponse response){
+        System.err.println(CookieManager.findCurrentUser(request));
+        if(-1 != CookieManager.findCurrentUser(request)) {
+            // update the validity
+            CookieManager.updateCookieValidity(request, response, "loginId");
+            // select the post
+            List<Posts> posts = postMapper.findMyReplyPost(CookieManager.findCurrentUser(request));
+            posts.forEach(p -> {
+                p.setPostCategories(postMapper.findPostCate(p.getPostId()));
+            });
+            System.err.println(posts);
             return posts;
         }
         return null;
@@ -378,12 +402,30 @@ public class UserController {
         return -1;
     }
 
+    @PostMapping("/user/shield")
+    public int shield(@RequestBody ShieldUserWrapper fuw, HttpServletRequest request, HttpServletResponse response){
+        if(-1 != CookieManager.findCurrentUser(request)) {
+            CookieManager.updateCookieValidity(request, response, "loginId");
+            return userMapper.shieldOthers(CookieManager.findCurrentUser(request), fuw.getShieldId());
+        }
+        return -1;
+    }
+
 
     @DeleteMapping("/user/follow")
     public int unfollow(@RequestParam("followigid") long followigid, HttpServletRequest request, HttpServletResponse response){
         if(-1 != CookieManager.findCurrentUser(request)) {
             CookieManager.updateCookieValidity(request, response, "loginId");
             return userMapper.deFollowOthers(CookieManager.findCurrentUser(request), followigid);
+        }
+        return -1;
+    }
+
+    @DeleteMapping("/user/shield")
+    public int unshield(@RequestParam("shieldid") long shieldid, HttpServletRequest request, HttpServletResponse response){
+        if(-1 != CookieManager.findCurrentUser(request)) {
+            CookieManager.updateCookieValidity(request, response, "loginId");
+            return userMapper.deShieldOthers(CookieManager.findCurrentUser(request), shieldid);
         }
         return -1;
     }
@@ -414,7 +456,7 @@ public class UserController {
 
             CookieManager.updateCookieValidity(request, response, "loginId");
             List<Users> users = userMapper.findFollowing(CookieManager.findCurrentUser(request), offset, limit);
-            System.err.println(users.get(0).isIsFollowed());
+            System.err.println(users.get(0).isIsShield());
             return users;
         }
         return null;

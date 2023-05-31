@@ -17,12 +17,23 @@ public class Users {
     @TableField(value = "is_followed")
     private boolean isFollowed;
 
+    @TableField(value = "is_shield")
+    private boolean isShield;
+
     public boolean isIsFollowed() {
         return isFollowed;
     }
 
     public void setIsFollowed(boolean is_followed) {
         this.isFollowed = is_followed;
+    }
+
+    public void setIsShield(boolean is_shield) {
+        this.isShield = is_shield;
+    }
+
+    public boolean isIsShield() {
+        return isShield;
     }
 
     @TableField(exist = false)

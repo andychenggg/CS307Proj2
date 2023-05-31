@@ -1,5 +1,9 @@
 <template>
   <div class="container">
+    <el-tag type="warning" style="font-size: 20px; width: 120px;">
+      <i class="el-icon-sunrise-1"></i>
+      hot: {{ post.hot }}
+    </el-tag>
     <div style="height: 60px; width: 100%">
       <div
           style="display: flex; justify-content: flex-start; width: 50%; height: 100%; margin-left: 20px; align-items: center; ">
@@ -36,16 +40,6 @@
     <div class="content">
       <div class="content-textarea">{{ post.content }}</div>
       <!--      <textarea class="content-textarea" placeholder="content"></textarea>-->
-    </div>
-
-    <div v-if="this.isPic || this.isVideo" style="width: 100%; height: 200px; display: flex; justify-content: center; margin-bottom: 50px">
-      <!-- 展示图片 -->
-      <img v-if="this.isPic" :src="this.filepath" alt="Image" style="max-width: 300px; max-height: 200px"/>
-
-      <!-- 展示视频 -->
-      <video controls v-if="this.isVideo" preload="auto" autoplay :src="this.filepath" style="max-width: 300px; max-height: 200px">
-<!--        <source :src="filepath" type="video/mp4" />-->
-      </video>
     </div>
     <div class="details">
       <div style="width: 25%; display: flex; justify-content: center">
@@ -134,11 +128,6 @@ export default {
       isLiked: this.isLike,
       isFavorited: this.isFavorite,
       isShared: this.isShare,
-
-      isPic: false,
-      isVideo: false,
-      filepath: ''
-
     };
   },
   watch: {
@@ -162,19 +151,8 @@ export default {
         }
       }
     },
-
-  },
-  created() {
-    this.isPic = this.post.filepath && (this.post.filepath.endsWith('gif') || this.post.filepath.endsWith('png') || this.post.filepath.endsWith('jpg'));
-    this.isVideo = this.post.filepath && this.post.filepath.endsWith('mp4');
-    this.filepath = 'http://localhost:9090'+this.post.filepath;
-
   },
   methods: {
-    getFilePath(){
-      console.log(this.post.filepath);
-      return this.filepath;
-    },
     toggleContent() {
       this.showContent = !this.showContent;
       if (this.showContent) {
@@ -256,6 +234,7 @@ export default {
             console.error(error);
           });
       this.isShared = !this.isShared;
+      this.post.hot += 4;
     },
     toggleUnShare() {
       axios.delete('http://localhost:9090/user/share', {
@@ -269,6 +248,7 @@ export default {
             console.error(error);
           });
       this.isShared = !this.isShared;
+      this.post.hot -= 4;
     },
     toggleLike() {
       axios.post('http://localhost:9090/user/like', {
@@ -283,6 +263,7 @@ export default {
             console.error(error);
           });
       this.isLiked = !this.isLiked;
+      this.post.hot += 2;
     },
     toggleUnLike() {
       axios.delete('http://localhost:9090/user/like', {
@@ -296,6 +277,7 @@ export default {
             console.error(error);
           });
       this.isLiked = !this.isLiked;
+      this.post.hot -= 2;
     },
     toggleFavorite() {
       axios.post('http://localhost:9090/user/favor', {
@@ -310,7 +292,7 @@ export default {
             console.error(error);
           });
       this.isFavorited = !this.isFavorited;
-
+      this.post.hot += 3;
     },
     toggleUnFavorite() {
       axios.delete('http://localhost:9090/user/favorite', {
@@ -324,7 +306,7 @@ export default {
             console.error(error);
           });
       this.isFavorited = !this.isFavorited;
-
+      this.post.hot -= 3;
     }
 
   },
@@ -345,7 +327,7 @@ export default {
         postCategories: [],
         authorName: '',
         senderName: '',
-        filepath: null
+        hot: 0,
       })
     },
     authorIsFollowed: {
