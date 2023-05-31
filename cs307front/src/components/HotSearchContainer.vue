@@ -11,7 +11,7 @@
             :isFavorite="isFavorite(post.postId)"
             :isShare="isShared(post.postId)"></HotSearchPost>
       <el-button type="primary" round style="width: 200px; height: 40px; margin: 20px"
-                 @click="fetchPostData" v-if="!noMorePost">To See More...
+                 @click="fetchPostData" v-if="false">To See More...
       </el-button>
       <span v-else style="height: 40px">我可是有底线的</span>
     </div>

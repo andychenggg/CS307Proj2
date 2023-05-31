@@ -43,7 +43,6 @@ public interface PostMapper extends BaseMapper<Posts> {
             "(SELECT COUNT(*) FROM favorites f WHERE f.postid = p.postid) * 3 +\n" +
             "(SELECT COUNT(*) FROM shares s WHERE s.postid = p.postid) * 4 AS hot\n" +
             "from posts p join users u on p.authorid = u.userid join users v on p.senderid = v.userid " +
-            "where postid <= #{lastPostId} and postid > #{lastPostId} - #{limit} " +
             "and u.userID not in (select shieldID from shieldby where userID = #{userid})\n" +
             "and v.userID not in (select shieldID from shieldby where userID = #{userid})\n" +
             "order by hot desc;")
