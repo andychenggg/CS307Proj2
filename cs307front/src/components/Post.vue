@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container" style="height: auto;overflow: visible;">
     <div style="height: 60px; width: 100%">
       <div
           style="display: flex; justify-content: flex-start; width: 50%; height: 100%; margin-left: 20px; align-items: center; ">
@@ -405,6 +405,8 @@ export default {
   display: flex;
   flex-direction: column;
 }
+
+
 
 .content-textarea {
   width: 90%;
