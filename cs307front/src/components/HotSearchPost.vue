@@ -1,5 +1,9 @@
 <template>
   <div class="container">
+    <el-tag type="warning" style="font-size: 20px; width: 120px;">
+      <i class="el-icon-sunrise-1"></i>
+      hot: {{ post.hot }}
+    </el-tag>
     <div style="height: 60px; width: 100%">
       <div
           style="display: flex; justify-content: flex-start; width: 50%; height: 100%; margin-left: 20px; align-items: center; ">
@@ -230,6 +234,7 @@ export default {
             console.error(error);
           });
       this.isShared = !this.isShared;
+      this.post.hot += 4;
     },
     toggleUnShare() {
       axios.delete('http://localhost:9090/user/share', {
@@ -243,6 +248,7 @@ export default {
             console.error(error);
           });
       this.isShared = !this.isShared;
+      this.post.hot -= 4;
     },
     toggleLike() {
       axios.post('http://localhost:9090/user/like', {
@@ -257,6 +263,7 @@ export default {
             console.error(error);
           });
       this.isLiked = !this.isLiked;
+      this.post.hot += 2;
     },
     toggleUnLike() {
       axios.delete('http://localhost:9090/user/like', {
@@ -270,6 +277,7 @@ export default {
             console.error(error);
           });
       this.isLiked = !this.isLiked;
+      this.post.hot -= 2;
     },
     toggleFavorite() {
       axios.post('http://localhost:9090/user/favor', {
@@ -284,7 +292,7 @@ export default {
             console.error(error);
           });
       this.isFavorited = !this.isFavorited;
-
+      this.post.hot += 3;
     },
     toggleUnFavorite() {
       axios.delete('http://localhost:9090/user/favorite', {
@@ -298,7 +306,7 @@ export default {
             console.error(error);
           });
       this.isFavorited = !this.isFavorited;
-
+      this.post.hot -= 3;
     }
 
   },
@@ -319,6 +327,7 @@ export default {
         postCategories: [],
         authorName: '',
         senderName: '',
+        hot: 0,
       })
     },
     authorIsFollowed: {

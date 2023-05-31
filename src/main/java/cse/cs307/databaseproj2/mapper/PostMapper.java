@@ -20,6 +20,15 @@ public interface PostMapper extends BaseMapper<Posts> {
     @Select("select * from posts where postid = #{postid};")
     Posts findPostById(long postid);
 
+    @Select("select p.*, u.username authorname, v.username sendername \n" +
+            "from posts p join users u on p.authorid = u.userid join users v on p.senderid = v.userid \n" +
+            "where postid <= #{lastPostId} and postid > #{lastPostId} - #{limit} \n" +
+            "and u.userID not in (select shieldID from shieldby where userID = #{userid})\n" +
+            "and v.userID not in (select shieldID from shieldby where userID = #{userid})\n" +
+            "order by p.postingtime desc;")
+        // replace also provide the username
+    List<Posts> findPostByIdWithUsernamePageByPage(long lastPostId, long userid, int limit);
+
     @Select("select p.*, u.username authorname, v.username sendername, " +
             "(SELECT COUNT(*) FROM replies c WHERE c.topostid = p.postid) +\n" +
             "(SELECT COUNT(*) FROM likes l WHERE l.postid = p.postid) * 2 +\n" +
@@ -31,7 +40,7 @@ public interface PostMapper extends BaseMapper<Posts> {
             "and v.userID not in (select shieldID from shieldby where userID = #{userid})\n" +
             "order by hot desc;")
         // replace also provide the username
-    List<Posts> findPostByIdWithUsernamePageByPage(long lastPostId, long userid, int limit);
+    List<Posts> findHotPostByIdWithUsernamePageByPage(long lastPostId, long userid, int limit);
 
     @Select("select p.*, u.username authorname, v.username sendername " +
             "from posts p join users u on p.authorid = u.userid join users v on p.senderid = v.userid join (select * from shares where sharerid = #{userid}) s on p.postid = s.postid " +

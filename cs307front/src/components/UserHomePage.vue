@@ -7,6 +7,7 @@
       </div>
       <div class="postContainer-wrapper">
         <PostContainer v-if="isHomePage"></PostContainer>
+        <HotSearchContainer v-if="isHotPost"></HotSearchContainer>
         <PostArticle v-if="isPost"></PostArticle>
         <SharePostContainer v-if="isShare"></SharePostContainer>
         <LikePostContainer v-if="isLike"></LikePostContainer>
@@ -42,9 +43,12 @@ import LikePostContainer from "@/components/LikePostContainer.vue";
 import FavoritePostContainer from "@/components/FavoritePostContainer.vue";
 import YourPostContainer from "@/components/YourPostContainer.vue";
 import YourReplyPostContainer from "@/components/YourReplyPostContainer.vue";
+import HotSearchPost from "@/components/HotSearchPost.vue";
+import HotSearchContainer from "@/components/HotSearchContainer.vue";
 
 export default {
   components: {
+    HotSearchPost,
     ForumHeader,
     LeftTab,
     PostContainer,
@@ -57,6 +61,7 @@ export default {
     FavoritePostContainer,
     YourPostContainer,
     YourReplyPostContainer,
+    HotSearchContainer,
   },
   data() {
     return {
@@ -73,6 +78,9 @@ export default {
   computed: {
     isHomePage() {
       return this.currentPage === 'homepage';
+    },
+    isHotPost() {
+      return this.currentPage === 'hotpost';
     },
     isPost() {
       return this.currentPage === 'post';
