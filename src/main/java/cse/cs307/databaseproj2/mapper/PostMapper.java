@@ -99,7 +99,8 @@ public interface PostMapper extends BaseMapper<Posts> {
 
     @Select("""
          <script>
-             SELECT * FROM posts p
+             SELECT p.*, u.username authorname, v.username sendername 
+             from posts p join users u on p.authorid = u.userid join users v on p.senderid = v.userid
                  <where>
                      <if test='titles != null and !titles.isEmpty()'>
                          AND (
@@ -116,13 +117,13 @@ public interface PostMapper extends BaseMapper<Posts> {
                      <if test='author != null and !author.isEmpty()'>
                          AND (
                          <foreach collection='author' item='item' index='index' separator=' OR '>
-                         p.author = #{item}
+                         authorname = #{item}
                          </foreach>)
                      </if>
                      <if test='sender != null and !sender.isEmpty()'>
                          AND (
                          <foreach collection='sender' item='item' index='index' separator=' OR '>
-                         p.sender = #{item}
+                         sendername = #{item}
                          </foreach>)
                      </if>
                      <if test='start != null'>

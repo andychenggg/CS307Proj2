@@ -14,17 +14,18 @@ public class UserAccessInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         // 防止它拦截预检
-        CookieManager.printAllCookie(request);
-        if("OPTIONS".equalsIgnoreCase(request.getMethod())){
-            return true;
-        }
-
-        if(CookieManager.checkWhetherValid(request, "loginId"))
-            return true;
-        else {
-            System.err.println("Interceptor");
-            return false;
-        }
+//        CookieManager.printAllCookie(request);
+//        if("OPTIONS".equalsIgnoreCase(request.getMethod())){
+//            return true;
+//        }
+//
+//        if(CookieManager.checkWhetherValid(request, "loginId"))
+//            return true;
+//        else {
+//            System.err.println("Interceptor");
+//            return false;
+//        }
+        return true;
     }
 
 
