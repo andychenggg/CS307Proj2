@@ -86,6 +86,7 @@ public class Posts {
 
     public void setFile(MultipartFile file) {
         this.file = file;
+    }
 
     private int hot;
 
