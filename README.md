@@ -22,7 +22,6 @@
      ```
 
      - HTTP request type: **get**
-     - Response data format: **json**
      - Function: Get a list of all users, including all the information that needs to be rendered
 
    - `findCurrentUser`
@@ -34,7 +33,6 @@
      ```
 
      - HTTP request type: **get**
-     - Response data format: **json**
      - Function: Gets the current **user name**
 
    - `findCurrentUserId`
@@ -46,7 +44,6 @@
      ```
 
      - HTTP request type: **get**
-     - Response data format: **json**
      - Function: Gets the current **user ID**
 
    - `login`
@@ -58,7 +55,6 @@
      ```
 
      - HTTP request type: **get**
-     - Response data format: **json**
      - Function: 
 
    - `login`
@@ -82,7 +78,6 @@
      ```
 
      - HTTP request type: **get**
-     - Response data format: **json**
      - Function: 
 
    - `signup`
@@ -128,7 +123,6 @@
      ```
 
      - HTTP request type: **get**
-     - Response data format: **json**
 
      - Request Parameter:
 
@@ -146,7 +140,6 @@
      ```
 
      - HTTP request type: **get**
-     - Response data format: **json**
 
      - Request Parameter:
 
@@ -156,7 +149,7 @@
 
      - Function:  Get the hottest *limit* **posts**
 
-   -  `searchPost`
+   - `searchPost`
 
      ```java
      @PostMapping("/homepage/search")
@@ -180,7 +173,6 @@
      ```
 
      - HTTP request type: **get**
-     - Response data format: **json**
 
      - Request Parameter:
 
@@ -198,7 +190,6 @@
      ```
 
      - HTTP request type: **get**
-     - Response data format: **json**
 
      - Function:  Get the your **Reply** **posts**
 
@@ -237,7 +228,6 @@
      ```
 
      - HTTP request type: **get**
-     - Response data format: **json**
 
      - Function:  Find the content of my all reply
 
@@ -249,8 +239,6 @@
      ```
 
      - HTTP request type: **get**
-
-     - Response data format: **json**
 
      - Request Param: 
 
@@ -296,6 +284,18 @@
      - Request Body:
      - Function:  Like post
 
+   - `unLike`
+
+     ```java
+     @DeleteMapping("/user/like")
+     public int unLike(@RequestParam("postId") long postId, HttpServletRequest request, HttpServletResponse response)
+     ```
+
+     - HTTP request type: **delete**
+
+     - Request Param: the id of the corresponding liked post
+     - Function: un like the corresponding post
+
    - `checkLikes`
 
      ```java
@@ -305,8 +305,18 @@
 
      - HTTP request type: **get**
 
-     - Response data format: **json**
-     - Function:  Get the liked posts
+     - Function:  Get your liked posts
+
+   - `findLikeIds`
+
+     ```java
+     @GetMapping("user/like/ids")
+     public List<Long> findLikeIds(HttpServletRequest request, HttpServletResponse response)
+     ```
+
+     - HTTP request type: **get**
+
+     - Function:  Get the id of your liked posts
 
    - `favorPost`
 
@@ -320,6 +330,18 @@
      - Request Body:
      - Function:  Favorite post
 
+   - `unFavorite`
+
+     ```java
+     @DeleteMapping("/user/favorite")
+     public int unFavorite(@RequestParam("postId") long postId, HttpServletRequest request, HttpServletResponse response)
+     ```
+
+     - HTTP request type: **delete**
+
+     - Request Param: the id of the corresponding favorited post
+     - Function: un favorite the corresponding post
+
    - `checkFavors`
 
      ```java
@@ -327,7 +349,20 @@
      public List<Posts> checkFavors(HttpServletRequest request, HttpServletResponse response)
      ```
 
-     
+     - HTTP request type: **get**
+
+     - Function:  Get your favorited posts
+
+   - `findFavoriteIds`
+
+     ```java
+     @GetMapping("user/favorite/ids")
+     public List<Long> findFavoriteIds(HttpServletRequest request, HttpServletResponse response)
+     ```
+
+     - HTTP request type: **get**
+
+     - Function:  Get the id of your favorited posts
 
    - `sharePost`
 
@@ -353,154 +388,101 @@
      - Request Param: the id of the corresponding post
      - Function: un Share the corresponding post
 
+   - `checkShares`
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-## Advance Requirement
-
-1. Complete the project using `opengauss` database **(task 1)**
-
-   Install opengauss: 
-
-   - Install a **linux os**: `centos 7`
-
-     > [https://blog.csdn.net/m0_51545690/article/details/123238360](https://blog.csdn.net/m0_51545690/article/details/123238360)
-
-   - Install `docker` in `centos 7`
-
-     > https://docs.docker.com/engine/install/centos/
-
-   - Use `docker` to pull `opengauss`
-
-     > https://blog.csdn.net/coding0820/article/details/121703952
-
-   - Use `docker` to run `opengauss`
-
-     ```shell
-     systemctl start docker
-     docker start opengauss
+     ```java
+     @GetMapping("/user/share")
+     public List<Posts> checkShares(HttpServletRequest request, HttpServletResponse response)
      ```
 
-   - connect to the `opengauss` in `datagrip`
+     - HTTP request type: **get**
 
-     > https://blog.csdn.net/zsxbd/article/details/115143135
+     - Function:  Get your shared posts
 
-2. Enhance the usability of the APIs **(task 2)**
+   - `findShareIds`
 
-   - picture and video upload
+     ```java
+     @GetMapping("user/share/ids")
+     public List<Long> findShareIds(HttpServletRequest request, HttpServletResponse response)
+     ```
 
-     - use `el-upload` component in `element-ui`
+     - HTTP request type: **get**
 
-     - bind a reference `upload` to the component
+     - Function:  Get the id of your shared posts
 
-       ```html
-       <el-upload ref="upload"></el-upload>
-       ```
+   - `follow`
 
-     - specific the location(the **static resourse directory** of the springboot)
+     ```java
+     @PostMapping("/user/follow")
+     public int follow(@RequestBody FollowUserWrapper fuw, HttpServletRequest request, HttpServletResponse response)
+     ```
 
-       ```html
-       <el-upload 
-       	ref="upload"
-       	:action= '`http://localhost:9090/Files/users/${this.userId}`'>
-       </el-upload>
-       ```
+     - HTTP request type: **post**
 
-     - use function `submit()` to upload the source
+     - Request Body: 
+     - Function:  Follow users
 
-       ```js
-       this.$refs.upload.submit();
-       ```
+   - `unfollow`
 
-     - store the filepath in the database
-     - when get the posts from the back-end, the from-end also get the filepath, hence it can access the file and show it
+     ```java
+     @DeleteMapping("/user/follow")
+     public int unfollow(@RequestParam("followigid") long followigid, HttpServletRequest request, HttpServletResponse response)
+     ```
 
-   - Multi-parameter search function
+     - HTTP request type: **delete**
 
-     - We allow the users to add **plenty** constraints as long as they want. 
+     - Request Param: the corresponding id of the followed users
+     - Function:  un follow  the corresponding users
 
-     - We can seach data by: `author`, `sender`, `postingTime`, `title`, `content`
+   - `findFollow`
 
-     - `title` and `content`support fuzzy search
+     ```java
+     @GetMapping("/user/follow")
+     public List<Users> findFollow(HttpServletRequest request, HttpServletResponse response, @RequestParam("offset") long offset,
+     @RequestParam("limit") long limit)
+     ```
 
-     How to seach the data by such restrictions?
+     - HTTP request type: **get**
 
-     - back-end can get a series of restriction in `List<T>`
+     - Request Param: 
 
-     - use `.xml` configuration file to configurate SQL statement, `foreach` is use to iterate the `List`
+       `offest`:
 
-       ```xml
-       <foreach collection='author' item='item' index='index' separator=' OR '>
-       	authorname = #{item}
-       </foreach>
-       ```
+       `limit`:
 
-     - To see more, please refer to the `findPostsByFilter` in `PostMapper.java`
+     - Function:  Get your followed users
 
-   - Record the user login status
+   - `findFollowIds`
 
-     If the user does not login, webpage will be redirected to `localhost:8080/login` even if he want to access the `localhost:8080/user/homepage`
+     ```java
+     @GetMapping("user/follow/ids")
+     public List<Long> findFollowIds(HttpServletRequest request, HttpServletResponse response)
+     ```
 
-     - create `CookieManager` in `util` package, it store all static methods we use to manage the `cookies`
+     - HTTP request type: **get**
+     - Function:  Get the id of your followed users
 
-     - get cookies from `HttpServletRequest request`
+   - `shield`
 
-       ```java
-       Cookie[] cookies = request.getCookies();
-       ```
+     ```java
+     @PostMapping("/user/shield")
+     public int shield(@RequestBody ShieldUserWrapper fuw, HttpServletRequest request, HttpServletResponse response)
+     ```
 
-     - add/update the cookie to 1 hour
+     - HTTP request type: **post**
 
-       ```java
-       cookie.setMaxAge(60*60);
-       cookie.setPath("/"); 
-       response.addCookie(cookie);
-       ```
+     - Request Body: 
+     - Function:  Shield users
 
-     - delete the cookie
+   - `unshield`
 
-       ```java
-       cookie.setMaxAge(0);
-       cookie.setPath("/"); 
-       response.addCookie(cookie);
-       ```
+     ```java
+     @DeleteMapping("/user/shield")
+     public int unshield(@RequestParam("shieldid") long shieldid, HttpServletRequest request, HttpServletResponse response)
+     ```
 
-3. Technology stack introduction: **(task 3 & 4 & 6)**
+     - HTTP request type: **delete**
 
-   - Backend: `springboot`
-   - Front end: `vue2+vuex+vue-router+axios`
-   - Component library: `element-ui`
-   - Front-end and back-end connection test: `swagger 2`
-   - Connection pool: `druid`
-   - ORM: `Mybatis-plus`
-   - POJO to json: `Jackson`
-
-   advantage:
-
-   1. Separation of **front-end** and **back-end** development: the back-end receives and verifies the front-end request, and then returns the data (**Restful**) required by the front-end in json format, and renders after the front-end gets the data.
-   2. springboot: Adopting the method of **convention over configuration**, it provides developers with a very suitable environment for web development. At the same time, based on dependency injection(**DI**) and inversion of control transfer(**IOC**), it helps developers manage a series of tasks.
-   3. Vue2: Progressive framework, easier to learn than react, **two-way data binding**, good at making single-page web pages.
-   4. druid: The connection pool developed by Alibaba provides monitoring functions to **clearly know the working conditions of the connection pool** and SQL
-   5. Mybatis-plus: On the basis of Mybatis, single-table query is enhanced, and SQL statements are bound through **annotations** or configuring `.xml` files
-
-4. create index: (**task 7**)
-
-   To enhance the speed of Multi-parameter search function. At the same time, we find the length of the column `title` in table `posts` are always much shorter then the `content`, hence we decide to create index in column `title`
-
-   ```postgresql
-   CREATE INDEX title_index ON posts (title);
-   ```
-
-   
+     - Request Param: the corresponding id of the shielded users
+     - Function:  un shield  the corresponding users
 
