@@ -7,7 +7,7 @@
             :senderIsFollowed="isSenderFollowed(post.senderId)"
             :isLike="isLiked(post.postId)"
             :isFavorite="isFavorite(post.postId)"
-            :isShare="isShared(post.postId)"></Post>
+            :isShare="isShared(post.postId)" style="height: auto;overflow: visible;"></Post>
       <el-button type="primary" round style="width: 200px; height: 40px; margin: 20px"
                  @click="fetchPostData" v-if="!noMorePost">To See More...
       </el-button>
