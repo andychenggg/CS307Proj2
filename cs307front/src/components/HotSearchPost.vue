@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container" style="height: auto;overflow: visible;">
     <el-tag type="warning" style="font-size: 20px; width: 120px;">
       <i class="el-icon-sunrise-1"></i>
       hot: {{ post.hot }}
