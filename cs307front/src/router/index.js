@@ -56,7 +56,7 @@ router.beforeEach((to, from, next) => {
                 if (data['request-login'] === 'failed') {
                     // 重定向到 /user/homepage
 
-                    next('/homepage');
+                    next('/login');
                 } else {
                     // 其他处理逻辑，比如显示错误消息
                     next();
