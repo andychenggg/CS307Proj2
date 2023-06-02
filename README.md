@@ -22,8 +22,7 @@
      ```
 
      - HTTP request type: **get**
-     - Response data format: **json**
-     - Function: Get a list of all users, including all the information that needs to be rendered
+     - Function and return value: **return** a list of all users, including all the information that needs to be rendered
 
    - `findCurrentUser`
 
@@ -34,8 +33,7 @@
      ```
 
      - HTTP request type: **get**
-     - Response data format: **json**
-     - Function: Gets the current **user name**
+     - Function and return value: **return** the current **user name**
 
    - `findCurrentUserId`
 
@@ -46,8 +44,7 @@
      ```
 
      - HTTP request type: **get**
-     - Response data format: **json**
-     - Function: Gets the current **user ID**
+     - Function and return value: **return** the current **user ID**
 
    - `login`
 
@@ -58,8 +55,7 @@
      ```
 
      - HTTP request type: **get**
-     - Response data format: **json**
-     - Function: 
+     - Function and return value: **return** whether the user has login
 
    - `login`
 
@@ -71,7 +67,7 @@
 
      - HTTP request type: **post**
 
-     - Function: 
+     - Function and return value: **return** whether the user input valid **username** and **password**
 
    - `signup`
 
@@ -82,8 +78,7 @@
      ```
 
      - HTTP request type: **get**
-     - Response data format: **json**
-     - Function: 
+     - Function and return value: **return** whether the user need to login or signup
 
    - `signup`
 
@@ -95,7 +90,7 @@
 
      - HTTP request type: **post**
 
-     - Function: 
+     - Function and return value: **return** whether username, password, phone meet the reqirement
 
    - `logout`
 
@@ -107,7 +102,7 @@
 
      - HTTP request type: **delete**
 
-     - Function: 
+     - Function and return value: delete the cookies and **return** successfuly logout
 
 2. `usercontroller`
 
@@ -128,15 +123,14 @@
      ```
 
      - HTTP request type: **get**
-     - Response data format: **json**
 
      - Request Parameter:
 
        `lastPostId`:The ID of the last post 
 
-       `limit`:Limit how many the latest posts you can get
+       `limit`: Limit how many the latest posts you can get
 
-     - Function:  Get the latest *limit* **posts**
+     - Function and return value:  **return** the latest *limit* **posts**
 
    - `findHotPostInPage`
 
@@ -146,17 +140,16 @@
      ```
 
      - HTTP request type: **get**
-     - Response data format: **json**
 
      - Request Parameter:
 
        `lastPostId`:The ID of the hottest post
 
-       `limit`:Limit how many the hottest posts you can get
+       `limit`: Limit how many the hottest posts you can get
 
-     - Function:  Get the hottest *limit* **posts**
+     - Function and return value:  **return** the hottest *limit* **posts**
 
-   -  `searchPost`
+   - `searchPost`
 
      ```java
      @PostMapping("/homepage/search")
@@ -165,9 +158,9 @@
 
      - HTTP request type: **post**
 
-     - Request Body: 
+     - Request Body:  a list of filters(self-define objects), indicating restrictions for searching the posts
 
-     - Function:  
+     - Function and return value: **return** the posts that meet the restrictions
 
    - `findYourPostInPage`, `findMyPost`
 
@@ -180,6 +173,7 @@
      ```
 
      - HTTP request type: **get**
+
      - Response data format: **json**
 
      - Request Parameter:
@@ -188,7 +182,7 @@
 
        `limit`:Limit how many your latest posts you can get
 
-     - Function:  Get your latest *limit* **posts**
+     - Function and return value:  **return** your latest *limit* **posts**
 
    - `findMyReplyPost`
 
@@ -200,7 +194,7 @@
      - HTTP request type: **get**
      - Response data format: **json**
 
-     - Function:  Get the your **Reply** **posts**
+     - Function and return value:  **return** the your **Reply** **posts**
 
    - `sendPosts`
 
@@ -213,7 +207,7 @@
 
      - Request Body: 
 
-     - Function:  Post articles
+     - Function and return value:  Post articles and **return** 1 if succeeds
 
    - `uploadPic`
 
@@ -224,8 +218,8 @@
 
      - HTTP request type: **post**
 
-     - Request Body: 
-     - Path Variable: 
+     - Request Body: a file(which can be video or picture)
+     - Path Variable: a subdirectory indicating that the files belong to the specified user
 
      - Function:  Upload picture when post
 
@@ -237,9 +231,7 @@
      ```
 
      - HTTP request type: **get**
-     - Response data format: **json**
-
-     - Function:  Find the content of my all reply
+     - Function and return value:  **return** all my replies
 
    - `findReplyByPost`
 
@@ -250,13 +242,11 @@
 
      - HTTP request type: **get**
 
-     - Response data format: **json**
-
-     - Request Param: 
+     - Request Parameter: 
 
        `id`: The corresponding post id
 
-     - Function:  Find the reply of the corresponding post
+     - Function and return value:  **return** the reply of the corresponding post id
 
    - `sendReplies`
 
@@ -267,9 +257,9 @@
 
      - HTTP request type: **post**
 
-     - Request Body: 
+     - Request Body: All information need to store in replies
 
-     - Function:  Send replies
+     - Function:  Send replies and **return** 1 if succeeds.
 
    - `starReply`
 
@@ -280,9 +270,9 @@
 
      - HTTP request type: **post**
 
-     - Request Param: the id of the corresponding reply
+     - Request Parameter: the id of the corresponding reply
 
-     - Function:  Star the corresponding reply
+     - Function:  Star the corresponding reply and **return** 1 if succeeds.
 
    - `likePost`
 
@@ -296,6 +286,17 @@
      - Request Body:
      - Function:  Like post
 
+   - `unLike`
+
+     ```
+     @DeleteMapping("/user/like")
+     public int unLike(@RequestParam("postId") long postId, HttpServletRequest request, HttpServletResponse response)
+     ```
+
+     - HTTP request type: **delete**
+     - Request Param: the id of the corresponding liked post
+     - Function and return value: un like the corresponding post, **return** 1 if succeed.
+
    - `checkLikes`
 
      ```java
@@ -304,8 +305,6 @@
      ```
 
      - HTTP request type: **get**
-
-     - Response data format: **json**
      - Function:  Get the liked posts
 
    - `favorPost`
@@ -317,8 +316,19 @@
 
      - HTTP request type: **post**
 
-     - Request Body:
+     - Request Body: the postId which is favored
      - Function:  Favorite post
+
+   - `unFavorite`
+
+     ```
+     @DeleteMapping("/user/favorite")
+     public int unFavorite(@RequestParam("postId") long postId, HttpServletRequest request, HttpServletResponse response)
+     ```
+
+     - HTTP request type: **delete**
+     - Request Param: the id of the corresponding favorited post
+     - Function and return value: un favorite the corresponding post, **return** 1 if succeed.
 
    - `checkFavors`
 
@@ -327,7 +337,8 @@
      public List<Posts> checkFavors(HttpServletRequest request, HttpServletResponse response)
      ```
 
-     
+     - HTTP request type: **get**
+     - Function and return value:  **return** the favorited posts
 
    - `sharePost`
 
@@ -337,21 +348,111 @@
      ```
 
      - HTTP request type: **post**
-
-     - Request Body:
-     - Function:  Share post
+     - Request Body: the postId which is shared
+     - Function and return value: Share post, **return** success
 
    - `unSharePost`
 
-     ```java
+     ```
      @DeleteMapping("/user/share")
      public String unSharePost(@RequestParam("postId") long originalPostId, HttpServletRequest request, HttpServletResponse response)
      ```
 
      - HTTP request type: **delete**
-
      - Request Param: the id of the corresponding post
-     - Function: un Share the corresponding post
+     - Function and return value: Revoke sharing the corresponding post and **return** success
+
+   - `checkShares`
+
+     ```
+     @GetMapping("/user/share")
+     public List<Posts> checkShares(HttpServletRequest request, HttpServletResponse response)
+     ```
+
+     - HTTP request type: **get**
+     - Function and return value: **return** your shared posts
+
+   - `findShareIds`
+
+     ```
+     @GetMapping("user/share/ids")
+     public List<Long> findShareIds(HttpServletRequest request, HttpServletResponse response)
+     ```
+
+     - HTTP request type: **get**
+     - Function and return value: **return** the id of your shared posts
+
+   - `follow`
+
+     ```
+     @PostMapping("/user/follow")
+     public int follow(@RequestBody FollowUserWrapper fuw, HttpServletRequest request, HttpServletResponse response)
+     ```
+
+     - HTTP request type: **post**
+     - Request Body: the followed userid 
+     - Function and return value: Follow users and **return** 1 if succeed
+
+   - `unfollow`
+
+     ```
+     @DeleteMapping("/user/follow")
+     public int unfollow(@RequestParam("followigid") long followigid, HttpServletRequest request, HttpServletResponse response)
+     ```
+
+     - HTTP request type: **delete**
+     - Request Param: the corresponding id of the followed users
+     - Function and return value: un follow the corresponding users, **return** 1 if succeed
+
+   - `findFollow`
+
+     ```
+     @GetMapping("/user/follow")
+     public List<Users> findFollow(HttpServletRequest request, HttpServletResponse response, @RequestParam("offset") long offset,
+     @RequestParam("limit") long limit)
+     ```
+
+     - HTTP request type: **get**
+
+     - Request Param:
+
+       `offest`: how many users has been got
+
+       `limit`: how many users are needed in this request
+
+     - Function and return value: **return** your followed users
+
+   - `findFollowIds`
+
+     ```
+     @GetMapping("user/follow/ids")
+     public List<Long> findFollowIds(HttpServletRequest request, HttpServletResponse response)
+     ```
+
+     - HTTP request type: **get**
+     - Function and return value: **return** the id of your followed users
+
+   - `shield`
+
+     ```
+     @PostMapping("/user/shield")
+     public int shield(@RequestBody ShieldUserWrapper fuw, HttpServletRequest request, HttpServletResponse response)
+     ```
+
+     - HTTP request type: **post**
+     - Request Body: the id you need to shield
+     - Function and return value: Shield users, **return** 1 if succeed
+
+   - `unshield`
+
+     ```
+     @DeleteMapping("/user/shield")
+     public int unshield(@RequestParam("shieldid") long shieldid, HttpServletRequest request, HttpServletResponse response)
+     ```
+
+     - HTTP request type: **delete**
+     - Request Param: the corresponding id of the shielded users
+     - Function and return value: un shield the corresponding users, **return** 1 if succeed
 
 
 
@@ -424,6 +525,7 @@
        ```
 
      - store the filepath in the database
+
      - when get the posts from the back-end, the from-end also get the filepath, hence it can access the file and show it
 
    - Multi-parameter search function
@@ -476,6 +578,34 @@
        response.addCookie(cookie);
        ```
 
+   - IP analysis
+
+     The city of a post and country should not detemine by user, but how to get the city of the posting place?
+
+     - add dependency in `pom.xml`
+
+       ```xml
+       <dependency>
+           <groupId>com.maxmind.geoip2</groupId>
+           <artifactId>geoip2</artifactId>
+           <version>2.13.1</version>
+       </dependency>
+       ```
+
+     - Search the ip in the front-end and wrap it in the data send to the back-end
+
+       ```js
+       axios.get('https://api.ipify.org?format=json',{withCredentials: false}
+       )
+       .then(response => {
+           ip = response.data.ip;
+       }
+       ```
+
+     - install `Geaolite2-city.mmdb`
+
+     - use `Geaolite2-city.mmdb` to map an ip to a city
+
 3. Technology stack introduction: **(task 3 & 4 & 6)**
 
    - Backend: `springboot`
@@ -503,4 +633,3 @@
    ```
 
    
-
