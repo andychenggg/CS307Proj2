@@ -499,6 +499,58 @@
 
 2. Enhance the usability of the APIs **(task 2)**
 
+   - Speak anonymously
+
+     - We allow users post or comment anonymously.
+
+     - When users post or comment or reply comment, they can choose public or anonymous by a switch
+
+     - Once it is anonymous, others users can't see who send the post or the comment.
+
+     How to achieve anonymity?
+
+     - Actually, in the database, the true information of poster or replier are still be registered. But we record whether it is anonymous.
+
+       **post anonymously**
+
+       ```java
+       @Insert("insert into posts(title, content, postingtime, authorid, city, country, senderid, anonymous, originpostid, filePath, issenderanonymous) " +"values (#{title}, #{content}, #{postingTime}, #{authorId}, #{city}, #{country}, #{senderId}, #{anonymous}, #{postId}, #{filepath}, #{issenderanonymous}) returning postid")
+       ```
+
+       `anonymous` is used to record the author of the post whether is anonymous or not
+
+       `issenderanonymous` is used to record the sender of the post whether is anonymous or not
+
+       when we need to show the post, we do Query from database, and then judge the two attributes to render the front-end interface.
+
+       ```vue
+       <el-tag type="success" style="margin-right: 10px">{{!this.post.anonymous ? post.senderName : "anonymous"}}</el-tag>
+       ```
+
+       ```vue
+       <el-tag type="success" style="margin-right: 10px">{{!this.post.issenderanonymous ? post.authorName 
+       ```
+
+       **comment anonymously**
+
+       ```java
+       @Insert("insert into replies(toreplyid, topostid, content, stars, authorid, anonymous, orginalanonymous) " + "VALUES (#{toreplyid}, #{topostid}, #{content}, #{stars}, #{authorid}, #{anonymous}, #{orginalanonymous})")
+       ```
+
+       `anonymous` is used to record the author of the reply whether is anonymous or not
+
+       `orginalanonymous` is used to to record the author of the original reply the author replied whether is anonymous or not
+
+       when we need to show the reply, we do Query from database, and then judge the two attributes to render the front-end interface.
+
+       ```vue
+       <el-tag type="success" style="margin-right: 10px">{{item.anonymous ? "anonymous" : item.authorName}}</el-tag>
+       ```
+
+       ```vue
+       <el-tag type="success" style="margin-right: 10px" v-if="item.toUserName">{{item.orginalanonymous ? "anonymous" : item.toUserName }}</el-tag>
+       ```
+
    - picture and video upload
 
      - use `el-upload` component in `element-ui`
@@ -526,7 +578,67 @@
 
      - store the filepath in the database
 
-     - when get the posts from the back-end, the from-end also get the filepath, hence it can access the file and show it
+     - when get the posts from the back-end, the from-end also get the file path, hence it can access the file and show it
+
+   - shield
+
+     - we allow the users to shield other users
+
+     - When user want to shield other users, search it in all users and then click the switch the state of shield
+
+     - There is a table to record other users the user have shield
+
+       ```java
+       @Insert("insert into shieldby(userID, shieldID) values(#{userid}, #{shieldigid});")
+       ```
+
+     - when we need to show the post, we do Query from database, filter authors and senders who are not shield by current users.
+
+       ```java
+       @Select("select p.*, u.username authorname, v.username sendername \n" +
+                   "from posts p join users u on p.authorid = u.userid join users v on p.senderid = v.userid \n" +
+                   "where postid <= #{lastPostId} and postid > #{lastPostId} - #{limit} \n" +
+                   "and u.userID not in (select shieldID from shieldby where userID = #{userid})\n" +
+                   "and v.userID not in (select shieldID from shieldby where userID = #{userid})\n" +
+                   "order by p.postid desc;")
+       ```
+
+       Here we only show the code of homepage where we show the posts. Actually, other pages like like posts or share posts or hot posts are as the same as the codes beyond. 
+
+   - Hot search list
+
+     - we show the 50th hottest posts in the hot post page
+
+     - we define a formula to represent the hot: hot = comments * 1 + likes * 2 + favorites * 3 + shares * 4
+
+     - when we need to get the hot posts, we filter in the query sentences.
+
+       ```java
+       @Select("select p.*, u.username authorname, v.username sendername, " +
+                   "(SELECT COUNT(*) FROM replies c WHERE c.topostid = p.postid) +\n" +
+                   "(SELECT COUNT(*) FROM likes l WHERE l.postid = p.postid) * 2 +\n" +
+                   "(SELECT COUNT(*) FROM favorites f WHERE f.postid = p.postid) * 3 +\n" +
+                   "(SELECT COUNT(*) FROM shares s WHERE s.postid = p.postid) * 4 AS hot\n" +
+                   "from posts p join users u on p.authorid = u.userid join users v on p.senderid = v.userid " +
+                   "and u.userID not in (select shieldID from shieldby where userID = #{userid})\n" +
+                   "and v.userID not in (select shieldID from shieldby where userID = #{userid})\n" +
+                   "order by hot desc;")
+       ```
+
+       We get the hot of the post and rank the display in descending order based on the hot of the post
+
+     - When we like or unlike and so on, we change the data of the front-end, then refresh the page, get hot posts from back-end again, complete the change of hot. Here is an example below.
+
+       ```java
+       toggleShare() {
+           ...
+           this.post.hot += 4;    
+       }
+       toggleUnShare(){
+           ...
+           this.post.hot -= 4; 
+       }
+       ```
 
    - Multi-parameter search function
 
@@ -633,3 +745,4 @@
    ```
 
    
+
